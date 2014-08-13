@@ -1,0 +1,7 @@
+[INFO] 2014-08-13 18:36:00,501 ==> Inicia
+    [INFO] 2014-08-13 18:36:00,501 ==> Hello world!!
+    [DEBUG] 2014-08-13 18:36:00,501 ==> Hello world debug!!
+    [DEBUG] 2014-08-13 18:36:00,501 ==> Hello world debug222!!
+    [ERROR] 2014-08-13 18:36:00,501 ==> error
+    [INFO] 2014-08-13 18:36:00,501 ==> Termina
+    
