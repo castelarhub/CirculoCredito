@@ -1,11 +1,12 @@
-package com.maxcom.mpm.bi.service;
+package com.maxcom.mpm.dao;
 
 import com.maxcom.mpm.dto.TransaccionTO;
 
 /**
  *
- * @author operador
+ * @author Nelson C.
  */
-public interface BitacoraService {
+public interface BitacoraDao {
     public void guardarSolicitud(TransaccionTO transaccion);
+    
 }
