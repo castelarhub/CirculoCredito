@@ -22,7 +22,7 @@ public class HelloWorld {
         log.debug("Hello world debug!!");
         log.debug("Hello world debug222!!");
         log.error("error");
-        log.info("Termina");
+        log.info("Termina ok");
     }
     
 }
