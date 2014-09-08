@@ -64,7 +64,7 @@
         <comment>Comentarios adicionales de la transacción</comment>
       </column>
     </property>
-    <set fetch="select" inverse="true" lazy="true" name="mpmTcobranzaSapDetas" table="MPM_TCOBRANZA_SAP_DETA">
+    <set fetch="select" inverse="true" lazy="true" name="mpmTcobranzaSapDetas" cascade="all" table="MPM_TCOBRANZA_SAP_DETA">
       <key>
         <column name="ID_COBRANZA" not-null="true" precision="10" scale="0"/>
       </key>

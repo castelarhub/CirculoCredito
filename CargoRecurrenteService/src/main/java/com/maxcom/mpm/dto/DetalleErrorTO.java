@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "DetalleError")
 public class DetalleErrorTO {
     private long idCobranzaDetalle;
-    private int idEstatus;
+    private String idEstatus;
     private String observaciones;
     private CargoTO cargo;
 
@@ -28,20 +28,6 @@ public class DetalleErrorTO {
      */
     public void setIdCobranzaDetalle(long idCobranzaDetalle) {
         this.idCobranzaDetalle = idCobranzaDetalle;
-    }
-
-    /**
-     * @return the idEstatus
-     */
-    public int getIdEstatus() {
-        return idEstatus;
-    }
-
-    /**
-     * @param idEstatus the idEstatus to set
-     */
-    public void setIdEstatus(int idEstatus) {
-        this.idEstatus = idEstatus;
     }
 
     /**
@@ -70,6 +56,20 @@ public class DetalleErrorTO {
      */
     public void setCargo(CargoTO cargo) {
         this.cargo = cargo;
+    }
+
+    /**
+     * @return the idEstatus
+     */
+    public String getIdEstatus() {
+        return idEstatus;
+    }
+
+    /**
+     * @param idEstatus the idEstatus to set
+     */
+    public void setIdEstatus(String idEstatus) {
+        this.idEstatus = idEstatus;
     }
     
     

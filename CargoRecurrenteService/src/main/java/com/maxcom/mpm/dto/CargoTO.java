@@ -6,8 +6,10 @@
 
 package com.maxcom.mpm.dto;
 
+import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -21,10 +23,13 @@ public class CargoTO {
     private String nombreCliente;
     private String cuenta;
     private String email;
-    private double importe;
+    private BigDecimal importe;
     private int tipoCuenta;
     private int marcaTarjeta;
-    private int entidadFinanciera;        
+    private int entidadFinanciera;
+    
+    @XmlTransient
+    private long idDetalle;    
 
     /**
      * @return the referencia
@@ -85,14 +90,14 @@ public class CargoTO {
     /**
      * @return the importe
      */
-    public double getImporte() {
+    public BigDecimal getImporte() {
         return importe;
     }
 
     /**
      * @param importe the importe to set
      */
-    public void setImporte(double importe) {
+    public void setImporte(BigDecimal importe) {
         this.importe = importe;
     }
 
@@ -136,5 +141,19 @@ public class CargoTO {
      */
     public void setEntidadFinanciera(int entidadFinanciera) {
         this.entidadFinanciera = entidadFinanciera;
+    }
+
+    /**
+     * @return the idDetalle
+     */
+    public long getIdDetalle() {
+        return idDetalle;
+    }
+
+    /**
+     * @param idDetalle the idDetalle to set
+     */
+    public void setIdDetalle(long idDetalle) {
+        this.idDetalle = idDetalle;
     }
 }
