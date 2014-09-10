@@ -16,7 +16,7 @@ import com.maxcom.mpm.dto.AutenticacionTO;
 public class AutenticacionServiceImpl implements AutenticacionService{
 
     @Override
-    public boolean isAutenticacionValida(AutenticacionTO autenticacion) {
+    public boolean isAutenticacionValida(AutenticacionTO autenticacion) throws Exception{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

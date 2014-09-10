@@ -10,7 +10,7 @@ import com.maxcom.mpm.dto.TransaccionTO;
 public class CargoRecurrenteServiceImpl implements CargoRecurrenteService {
 
     @Override
-    public void actualizarEstatus(TransaccionTO transaccion) {
+    public void actualizarEstatus(TransaccionTO transaccion) throws Exception{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

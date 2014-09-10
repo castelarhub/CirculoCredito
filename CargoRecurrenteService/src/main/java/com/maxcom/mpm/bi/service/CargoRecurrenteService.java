@@ -13,5 +13,5 @@ import com.maxcom.mpm.dto.TransaccionTO;
  * @author operador
  */
 public interface CargoRecurrenteService {
-    public void actualizarEstatus(TransaccionTO transaccion);
+    public void actualizarEstatus(TransaccionTO transaccion) throws Exception;
 }

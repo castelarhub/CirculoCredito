@@ -1,5 +1,6 @@
 package com.maxcom.mpm.util;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,9 +40,26 @@ public class Utilerias {
         return matcher.find();
     }    
     
+    /**
+     * Valida si la cadena de entrada corresponde a un nombre de cliente valido
+     * @param name
+     * @return 
+     */
     public static boolean isValidCustomerName(String name){
         Matcher matcher = VALID_CUSTOMER_NAME_REGEX .matcher(name);
         return matcher.find();
+    }
+    
+    /**
+     * Obtiene el periodo de acuerdo a la fecha actual
+     * @return Una cadena con el periodo en formato mm-aaaa
+     */
+    public static String getCurrentPeriodo(){
+        Calendar cal = Calendar.getInstance();
+        int mes = cal.get(Calendar.MONTH)+1;
+        int anio = cal.get(Calendar.YEAR);                
+        
+        return ((mes>9)?mes+"":("0"+mes))+"-"+ anio ;
     }
       
     

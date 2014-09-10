@@ -14,6 +14,7 @@ import static com.maxcom.mpm.util.Utilerias.isValidList;
 import static com.maxcom.mpm.util.Utilerias.isValidString;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -29,6 +30,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
     List<CargoTO> listCargosAceptados = null;
     List<CargoTO> listCargosRechazados = null;
     List<DetalleErrorTO> listDetalleError = null;
+    HashMap<Long,Long> hmRelCargosIdDetalle = null;
     RespuestaTO respuesta = null;
     long idOrden = 0;
     static final Logger logger = Logger.getLogger(CargoRecurrenteFacade.class);
@@ -44,16 +46,17 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             }
 
             //Persistir la solicitud de entrada
-            idOrden = guardarBitacoraSolicitud(transaccion);
-            transaccion.setIdOrden(idOrden);
+            this.guardarBitacoraSolicitud(transaccion);
 
             //Validando datos minimos requeridos
             if (!this.isTransaccionCompleta(transaccion)) {
+                this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
             }
 
             //Validando credenciales de la solicitud
             if (!this.isAutenticacionValida(transaccion)) {
+                this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
             }
 
@@ -65,11 +68,14 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
                 this.revisarErrorDetalleCargos(this.listCargosRechazados);
             }
 
-            //Si no hay un solo cargo aceptado
+            //Validando que exista al menos un cargo valido
             if (this.listCargosAceptados.isEmpty()) {
                 this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdSAP(),
                         "504", "Error - Todos los cargos enviados son invalidos",
                         Calendar.getInstance(), listDetalleError);
+                
+                this.guardarBitacoraRespuesta(this.respuesta);                
+                
                 return this.respuesta;
             }
 
@@ -83,15 +89,23 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdSAP(),
                     "200", observaciones.toString(),
                     Calendar.getInstance(), listDetalleError);
+            
+            this.guardarBitacoraRespuesta(this.respuesta);
+            
             return this.respuesta;
 
         } catch (Exception e) {
             logger.error("Error - " + e.getMessage());
+            
+            //Agregar notificaciones de mail en caso de error
+            
+            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdSAP(),
+                                            "500", "Error en el aplicativo - Servicio de CargoRecurrente - Favor de reportar.",
+                                            Calendar.getInstance(), listDetalleError);
+            return this.respuesta;
         } finally {
             logger.info("Procesar orden - Fin");
         }
-
-        return respuesta;
 
     }
         
@@ -102,9 +116,13 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
      */
     private void revisarDetalleCargos(TransaccionTO transaccion) {
         this.listCargosAceptados = new ArrayList<CargoTO>();
-        this.listCargosRechazados = new ArrayList<CargoTO>();
+        this.listCargosRechazados = new ArrayList<CargoTO>();        
         
+        long count =0;        
         for (CargoTO cargo : transaccion.getCargos()) {
+            
+            //Agregando una clave unica a cada cargo recibido
+            cargo.setUniqueIdDetail(++count);
             
             //Revisando campos minimos requeridos
             if (!isValidString(cargo.getCuenta())
@@ -113,7 +131,11 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
                     || cargo.getImporte().doubleValue() <= 0.0
                     || cargo.getMarcaTarjeta() <= 0
                     || cargo.getTipoCuenta() <= 0
-                    || cargo.getEntidadFinanciera() <= 0) {
+                    //|| cargo.getEntidadFinanciera() <= 0
+                    ) {
+                
+                cargo.setIdPersistence(hmRelCargosIdDetalle.get(cargo.getUniqueIdDetail()));
+                
                 this.listCargosRechazados.add(cargo);
             }else{                
                 //Revisando formato campos
@@ -167,9 +189,9 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             }
             
             //0 ; 1
-            if (cargo.getEntidadFinanciera() <=0){
-                sb.append("Entidad financiera invalida - ");
-            }
+            //if (cargo.getEntidadFinanciera() <=0){
+            //    sb.append("Entidad financiera invalida - ");
+            //}
             
             detalle.setObservaciones(sb.toString());
             detalle.setCargo(cargo);
@@ -247,7 +269,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
         }
 
         if (!isValidList(transaccion.getCargos())) {
-            detalleError.append("El campo cargos es obligatorio, debe tener mas de un elemento");
+            detalleError.append("El campo cargos es obligatorio, debe tener al menos un elemento");
         }
         
         if (detalleError.length() > 0) {
@@ -260,13 +282,15 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
         return true;
     } 
     
-    private long guardarBitacoraSolicitud(TransaccionTO transaccion){
+    private void guardarBitacoraSolicitud(TransaccionTO transaccion) throws Exception{
         bitacoraService = new BitacoraServiceImpl();
-        return 10;
+        hmRelCargosIdDetalle = bitacoraService.guardarSolicitud(transaccion);
     }
     
-    private long guardarBitacoraRespuesta(TransaccionTO transaccion){
-        return 0;        
+    private long guardarBitacoraRespuesta(RespuestaTO respuesta) throws Exception{
+        bitacoraService = new BitacoraServiceImpl();
+        bitacoraService.guardarRespuesta(respuesta);        
+        return 0;       
     }
     
 }

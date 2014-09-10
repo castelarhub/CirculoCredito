@@ -7,5 +7,5 @@ import com.maxcom.mpm.dto.AutenticacionTO;
  * @author operador
  */
 public interface AutenticacionService {
-    public boolean isAutenticacionValida(AutenticacionTO autenticacion);
+    public boolean isAutenticacionValida(AutenticacionTO autenticacion) throws Exception;;
 }

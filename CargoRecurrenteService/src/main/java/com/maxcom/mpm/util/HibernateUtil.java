@@ -10,7 +10,7 @@ import org.hibernate.service.ServiceRegistryBuilder;
  * Hibernate Utility class with a convenient method to get Session Factory
  * object.
  *
- * @author operador
+ * @author Nelson C.
  */
 public class HibernateUtil {
     

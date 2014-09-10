@@ -1,6 +1,7 @@
 package com.maxcom.mpm.ws;
 
 import com.maxcom.mpm.bi.CargoRecurrenteFacade;
+import com.maxcom.mpm.bi.CargoRecurrenteI;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import javax.jws.WebMethod;
@@ -27,9 +28,11 @@ public class CargoRecurrente {
     @WebResult(name = "respuesta")
     public RespuestaTO procesarCargos(@WebParam(name = "transaccion") @XmlElement(required=true) TransaccionTO transaccion ){        
         
-        CargoRecurrenteFacade cargoRecurrenteFacade = new CargoRecurrenteFacade();
+        CargoRecurrenteI cargoRecurrenteI = null;
         
-        respuesta = cargoRecurrenteFacade.procesar(transaccion);
+        cargoRecurrenteI = new CargoRecurrenteFacade();
+        
+        respuesta = cargoRecurrenteI.procesar(transaccion);
         
         return respuesta;
     }

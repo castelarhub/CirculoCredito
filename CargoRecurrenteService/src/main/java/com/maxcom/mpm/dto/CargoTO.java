@@ -26,10 +26,12 @@ public class CargoTO {
     private BigDecimal importe;
     private int tipoCuenta;
     private int marcaTarjeta;
-    private int entidadFinanciera;
+    private boolean entidadFinanciera;
     
     @XmlTransient
-    private long idDetalle;    
+    private long idPersistence; 
+    @XmlTransient
+    private long uniqueIdDetail; 
 
     /**
      * @return the referencia
@@ -132,28 +134,43 @@ public class CargoTO {
     /**
      * @return the entidadFinanciera
      */
-    public int getEntidadFinanciera() {
+    public boolean isEntidadFinanciera() {
         return entidadFinanciera;
     }
 
     /**
      * @param entidadFinanciera the entidadFinanciera to set
      */
-    public void setEntidadFinanciera(int entidadFinanciera) {
+    public void setEntidadFinanciera(boolean entidadFinanciera) {
         this.entidadFinanciera = entidadFinanciera;
     }
 
     /**
-     * @return the idDetalle
+     * @return the uniqueIdDetail
      */
-    public long getIdDetalle() {
-        return idDetalle;
+    public long getUniqueIdDetail() {
+        return uniqueIdDetail;
     }
 
     /**
-     * @param idDetalle the idDetalle to set
+     * @param uniqueIdDetail the uniqueIdDetail to set
      */
-    public void setIdDetalle(long idDetalle) {
-        this.idDetalle = idDetalle;
+    public void setUniqueIdDetail(long uniqueIdDetail) {
+        this.uniqueIdDetail = uniqueIdDetail;
     }
+
+    /**
+     * @return the idPersistence
+     */
+    public long getIdPersistence() {
+        return idPersistence;
+    }
+
+    /**
+     * @param idPersistence the idPersistence to set
+     */
+    public void setIdPersistence(long idPersistence) {
+        this.idPersistence = idPersistence;
+    }
+
 }
