@@ -20,8 +20,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
+ * La clase CargoRecurrenteFacade implementa las operaciones para trabajar 
+ * con los cargos recurrentes en el MPM. <br>
  * 
- * @author Nelson C.
+ * @author Nelson Castelar
+ * @version 1.0
  */
 public class CargoRecurrenteFacade implements CargoRecurrenteI {
         
@@ -36,6 +39,12 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
     long idOrden = 0;
     static final Logger logger = Logger.getLogger(CargoRecurrenteFacade.class);
     
+    /**
+     * Procesa la transaccion especificada
+     * @param transaccion Transaccion a procesar
+     * @return Regresa la respuesta que resulto del procesamiento. Un objeto de tipo RespuestaTO.
+     * @since 1.0
+     */
     @Override
     public RespuestaTO procesar(TransaccionTO transaccion) {
         StringBuilder observaciones = null;
@@ -43,6 +52,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             logger.info("Procesar orden - Inicio");
             
             if (!this.isTransaccionValida(transaccion)) {
+                this.respuesta = new RespuestaTO(0, "-","501", "Error - Transaccion nula", Calendar.getInstance().getTime(), null);
                 return respuesta;
             }
             
@@ -58,10 +68,6 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             }
             
             if(isTransaccionExistente(transaccion)){
-                //this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdSAP(),
-                //        "ESAP", "Error - Ya existe una transaccion con el idSAP:" + transaccion.getIdSAP(),
-                //        Calendar.getInstance().getTime(), null);
-                
                 return this.respuesta;                
             }
             
@@ -69,7 +75,12 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             this.guardarBitacoraSolicitud(transaccion);
 
             //Validando credenciales de la solicitud
-            if (!this.isAutenticacionValida(transaccion)) {
+            if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {
+                
+                this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdSAP(),
+                                                "ESAP", "Error - Credenciales invalidas",
+                                                Calendar.getInstance().getTime(), null);
+                
                 this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
             }
@@ -88,8 +99,10 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
                 return this.respuesta;
             }
             
-            observaciones = new StringBuilder("");
-            observaciones.append("Orden aceptada. Cargos aceptados:"+this.listCargosAceptados.size());
+            observaciones = new StringBuilder("");            
+            observaciones.append("Orden aceptada. Cargos aceptados:");
+            observaciones.append(this.listCargosAceptados.size());
+            
             if (this.listCargosRechazados.size() > 0) {
                 observaciones.append(" Cargos rechazados:" + this.listCargosRechazados.size() + ", ver detalleError para mas informacion.");
             }
@@ -135,9 +148,12 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
     }
     
     /**
-     * Se detalla la razon de cada rechazo realizado.
-     *
-     * @param lCargoRechazados
+     * Analiza cada uno de los cargos enviados en la transaccion, separando los cargos en dos grupos:<br>
+     * - Lista de cargos aceptados<b>
+     * - Lista de cargos rechazados
+     * buscando 
+     * @param lCargos Lista de cargos a analizar
+     * @throws Exception Si algun error inesperado ocurre
      */
     private void revisarDetalleCargos(List<CargoTO> lCargos) throws Exception {
 
@@ -157,10 +173,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
                 
                 sb = new StringBuilder();
                 detalle = new DetalleErrorTO();
-
-                /**
-                 * ***Validando datos minimos requeridos****
-                 */
+                
                 sb = revisarDatosMinimosRequeridosCargo(cargo);
 
                 if (sb.length() > 0) {
@@ -173,10 +186,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
                     listCargosRechazados.add(cargo);
                     continue;
                 }
-
-                /**
-                 * ***Validando formato de los campos****
-                 */
+                
                 sb = revisarFormatoDatosCargo(cargo);
 
                 if (sb.length() > 0) {
@@ -194,11 +204,8 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
                 /**
                  * Validaciones adicionales*
                  */
-                /**
-                 * *Cargo aceptados**
-                 */
+                
                 listCargosAceptados.add(cargo);
-
             }
 
         } catch (Exception e) {
@@ -208,6 +215,11 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
 
     }
     
+    /**
+     * Agrega un identidicador unico a cada uno de los cargos enviados en la lista.
+     * @param lCargos Lista de cargos a procesar.
+     * @throws Exception Si algun error inesperado ocurre.
+     */
     private void agregarIdUnico(List<CargoTO> lCargos) throws Exception {
         long count = 1;
         try {
@@ -223,9 +235,10 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
     }   
     
     /**
-     * Valida que los campos del cargo tengan el formato requerido
-     * @param cargo
-     * @return 
+     * Valida si los datos del cargo tienen el formato requerido para su procesamiento.
+     * @param cargo Cargo a validar
+     * @return Regresa una cadena que indica los campos que no cumplen con el formato.
+     * Si la cadena esta vacia el formato de todos los campos es correcto.
      */
     private StringBuilder revisarFormatoDatosCargo(CargoTO cargo){
             StringBuilder sb = new StringBuilder();
@@ -239,9 +252,10 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
     }
     
     /**
-     * Valida que el cargo tenga los datos minimos requeridos.
-     * @param cargo
-     * @return 
+     * Valida si el cargo tiene los datos minimos requeridos para su procesamiento.
+     * @param cargo Cargo a validar.
+     * @return Regresa una cadena que indica los campos faltantes. 
+     * Si la cadena esta vacia ningun campo falta.
      */
     private StringBuilder revisarDatosMinimosRequeridosCargo(CargoTO cargo){
         
@@ -283,28 +297,19 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
     }    
     
     /**
-     * Valida que los datos de autenticacion sean correctos.
-     * @param transaccion
-     * @return 
+     * Valida que las credenciales de autenticacion sean validas.
+     * @param autenticacion Credenciales a validar.
+     * @return True - Si la autentucación es satisfactoria.
+     * @throws Exception Si algun error inesperado ocurre
      */
-    private boolean isAutenticacionValida(TransaccionTO transaccion) throws Exception {
+    private boolean isAutenticacionValida(AutenticacionTO autenticacion) throws Exception {
         try {
             logger.info("   CargoRecurrenteFacade:isAutenticacionValida(E)");
-            AutenticacionTO autenticacion = transaccion.getAutenticacion();
             autenticacionService = new AutenticacionServiceImpl();
             
             if(autenticacionService.isAutenticacionValida(autenticacion)){
                 return true;
-            }
-            /*
-            if (autenticacion.getClaveServicio().equals("RC")) {
-                return true;
-            }
-            */
-            
-            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdSAP(),
-                    "ESAP", "Error - Credenciales invalidas",
-                    Calendar.getInstance().getTime(), null);
+            }            
             
         } catch (Exception e) {
             logger.error(" Error en CargoRecurrenteFacade:isAutenticacionValida - "+ e.getMessage());
@@ -316,13 +321,12 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
     }
     
     /**
-     * Valida que si se recibio una transaccion.
-     * @param transaccion
-     * @return True - Si la transaccion no es nula.
+     * Valida si la transaccion es valida. Una transaccion es valida si no es nula.
+     * @param transaccion Transaccion a validar
+     * @return True - Si la transaccion es valida.
      */
     private boolean isTransaccionValida(TransaccionTO transaccion){
-        if(transaccion == null){
-            this.respuesta = new RespuestaTO(0, "-","501", "Error - Transaccion nula", Calendar.getInstance().getTime(), null);
+        if(transaccion == null){            
             return false;
         }
         
@@ -330,9 +334,9 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
     }
     
     /**
-     * Valida que la transaccion contenga la informacion minima requerida.
-     * @param transaccion
-     * @return True - Si cumple con los campos minimos.
+     * Valida si la transaccion tiene la informacion minima requerida para su procesamiento.
+     * @param transaccion Transaccion a procesar.
+     * @return True - Si la transaccion cuenta con la informacion minima para su procesamiento.
      */
     private boolean isTransaccionCompleta(TransaccionTO transaccion) {
         StringBuilder detalleError = new StringBuilder();
@@ -368,17 +372,32 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
         return true;
     } 
     
+    /**
+     * Guarda la transaccion en bitacora antes de ser procesada.
+     * @param transaccion Transaccion a guardar.
+     * @throws Exception Si algun error inesperado ocurre
+     */
     private void guardarBitacoraSolicitud(TransaccionTO transaccion) throws Exception{
         bitacoraService = new BitacoraServiceImpl();
         hmRelCargosIdDetalle = bitacoraService.guardarSolicitud(transaccion);
     }
     
-    private long guardarBitacoraRespuesta(RespuestaTO respuesta) throws Exception{
+    /**
+     * Guarda en bitacora el resultado de la transaccion tras haber sido procesada.
+     * @param respuesta Respuesta de la transaccion
+     * @throws Exception Si algun error inesperado ocurre
+     */
+    private void guardarBitacoraRespuesta(RespuestaTO respuesta) throws Exception{
         bitacoraService = new BitacoraServiceImpl();
-        bitacoraService.guardarRespuesta(respuesta);        
-        return 0;       
+        bitacoraService.guardarRespuesta(respuesta);
     }
     
+    /**
+     * Valida si la transaccion ya se habia enviado/procesado anteriormente.
+     * @param transaccion Transaccion a validar
+     * @return True - Si la transaccion ya se habia enviando anteriormente
+     * @throws Exception Si algun error inesperado ocurre
+     */
     private boolean isTransaccionExistente(TransaccionTO transaccion) throws Exception{
         respuesta = new RespuestaTO();
         bitacoraService = new BitacoraServiceImpl();
@@ -386,6 +405,6 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
         
         return idSolicitud>0;
         
-    }    
+    }
     
 }
