@@ -11,19 +11,19 @@
         <param name="sequence">MPM_TCOBRANZA_SAP_DETA_SEQ1</param>
       </generator>
     </id>
-    <many-to-one class="com.maxcom.mpm.model.MpmCtiposCuentas" fetch="select" name="mpmCtiposCuentas">
+    <many-to-one class="com.maxcom.mpm.model.MpmCtiposCuentas" fetch="select" lazy="false" name="mpmCtiposCuentas">
       <column name="ID_TIPO_CUENTA" precision="10" scale="0"/>
     </many-to-one>
-    <many-to-one class="com.maxcom.mpm.model.MpmCrespuestasCargos" fetch="select" name="mpmCrespuestasCargos">
+    <many-to-one class="com.maxcom.mpm.model.MpmCrespuestasCargos" fetch="select" lazy="false" name="mpmCrespuestasCargos">
       <column length="5" name="ID_RESPUESTA_CARGO"/>
     </many-to-one>
     <many-to-one class="com.maxcom.mpm.model.MpmTcobranzaSap" fetch="select" name="mpmTcobranzaSap">
       <column name="ID_COBRANZA" not-null="true" precision="10" scale="0"/>
     </many-to-one>
-    <many-to-one class="com.maxcom.mpm.model.MpmCmarcasTarjetas" fetch="select" name="mpmCmarcasTarjetas">
+    <many-to-one class="com.maxcom.mpm.model.MpmCmarcasTarjetas" fetch="select" lazy="false" name="mpmCmarcasTarjetas">
       <column name="ID_MARCA_TARJETA" precision="10" scale="0"/>
     </many-to-one>
-    <many-to-one class="com.maxcom.mpm.model.MpmCestados" fetch="select" name="mpmCestados">
+    <many-to-one class="com.maxcom.mpm.model.MpmCestados" fetch="select" lazy="false" name="mpmCestados">
       <column length="5" name="ID_ESTADO" not-null="true"/>
     </many-to-one>
     <many-to-one class="com.maxcom.mpm.model.MpmTlotesCargoAutomatico" fetch="select" name="mpmTlotesCargoAutomatico">

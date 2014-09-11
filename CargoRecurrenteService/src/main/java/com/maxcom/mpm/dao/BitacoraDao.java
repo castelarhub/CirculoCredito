@@ -13,4 +13,6 @@ public interface BitacoraDao {
     
     public long actualizarTransaccion(MpmTcobranzaSap orden) throws Exception;
     
+    public MpmTcobranzaSap getTransaccionByIdSAP(String idSAP) throws Exception;
+    
 }

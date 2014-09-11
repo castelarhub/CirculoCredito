@@ -25,5 +25,9 @@
     <mapping resource="com/maxcom/mpm/model/MpmTcobranzaSapDeta.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/model/MpmTlotesCargoAutomatico.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/model/MpmTprocesos.hbm.xml"/>
+    
+    <!--Adicionales-->
+    <mapping resource="com/maxcom/mpm/model/MpmCusersWs.hbm.xml"/>
+    
   </session-factory>
 </hibernate-configuration>

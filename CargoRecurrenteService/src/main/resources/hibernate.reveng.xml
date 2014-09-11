@@ -14,4 +14,7 @@
   <table-filter match-name="MPM_TPROCESOS"/>
   <table-filter match-name="MPM_CGRUPOS_COBRANZA"/>
   <table-filter match-name="MPM_CTIPOS_RESPUESTAS"/>
+  <!--Adicionales-->
+  <table-filter match-name="MPM_CUSERS_WS"/>
+  
 </hibernate-reverse-engineering>

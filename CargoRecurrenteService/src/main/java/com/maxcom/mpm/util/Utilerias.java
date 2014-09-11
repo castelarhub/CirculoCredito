@@ -46,6 +46,7 @@ public class Utilerias {
      * @return 
      */
     public static boolean isValidCustomerName(String name){
+        name = name.trim();
         Matcher matcher = VALID_CUSTOMER_NAME_REGEX .matcher(name);
         return matcher.find();
     }

@@ -4,9 +4,12 @@ import com.maxcom.mpm.dao.BitacoraDao;
 import com.maxcom.mpm.dto.TransaccionTO;
 import com.maxcom.mpm.model.MpmTcobranzaSap;
 import com.maxcom.mpm.util.HibernateUtil;
+import java.util.List;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -74,9 +77,14 @@ public class BitacoraDaoImpl implements BitacoraDao{
         try{
             session = HibernateUtil.getSessionFactoryOracle().openSession();
             
-            orden = (MpmTcobranzaSap) session.get(MpmTcobranzaSap.class, idCobranza);           
+            orden = (MpmTcobranzaSap) session.get(MpmTcobranzaSap.class, idCobranza);
+            
+            
+            
+            session.flush();
         }catch(Exception e){
-            logger.info("   Error en BitacoraDaoImpl:getTransaccionById - "+e.getMessage());
+            logger.error("   Error en BitacoraDaoImpl:getTransaccionById - "+e.getMessage());
+            throw e;
         }finally{
             if(session!=null){
                 session.close();
@@ -111,6 +119,43 @@ public class BitacoraDaoImpl implements BitacoraDao{
             logger.info("   BitacoraDaoImpl:actualizarTransaccion(S)");
         }
         return orden.getIdCobranza();
+    }
+
+    @Override
+    public MpmTcobranzaSap getTransaccionByIdSAP(String idSAP) throws Exception {        
+        logger.info("   BitacoraDaoImpl:getTransaccionByIdSAP(E)");
+        MpmTcobranzaSap orden = null;
+        Session session = null;
+        try{
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            
+            Criteria cr = session.createCriteria(MpmTcobranzaSap.class);
+            cr.add(Restrictions.eq("idsap", idSAP));
+            List<MpmTcobranzaSap> list = cr.list();
+            
+            logger.info("BitacoraDaoImpl:getTransaccionByIdSAP  idSAP lista -> "+list.size());
+            
+            if(list.size()>1){
+                logger.error("Error - Error - Hay solicitudes repetidas con el mismo idSAP");
+                throw new Exception("Error - Hay solicitudes repetidas con el mismo idSAP");
+            }else if(list.size()==1){
+                orden = (MpmTcobranzaSap) list.get(0);
+                return orden;
+            }     
+            
+            //Si la solicitud/transaccion no existe
+        }catch(Exception e){
+            logger.error("   Error en BitacoraDaoImpl:getTransaccionByIdSAP - "+e.getMessage());
+            throw e;
+        }finally{
+            if(session!=null){
+                session.flush();
+                session.close();
+            }
+            logger.info("   BitacoraDaoImpl:getTransaccionByIdSAP(S)");
+        }
+        //Si no existe se regresa nulo
+        return null;        
     }
     
 }

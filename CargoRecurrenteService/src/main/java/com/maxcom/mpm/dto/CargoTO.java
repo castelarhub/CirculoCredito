@@ -23,7 +23,7 @@ public class CargoTO {
     private String nombreCliente;
     private String cuenta;
     private String email;
-    private BigDecimal importe;
+    private double importe;
     private int tipoCuenta;
     private int marcaTarjeta;
     private boolean entidadFinanciera;
@@ -92,14 +92,14 @@ public class CargoTO {
     /**
      * @return the importe
      */
-    public BigDecimal getImporte() {
+    public double getImporte() {
         return importe;
     }
 
     /**
      * @param importe the importe to set
      */
-    public void setImporte(BigDecimal importe) {
+    public void setImporte(double importe) {
         this.importe = importe;
     }
 

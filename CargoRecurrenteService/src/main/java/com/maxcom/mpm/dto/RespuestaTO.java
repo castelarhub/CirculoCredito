@@ -6,6 +6,7 @@
 package com.maxcom.mpm.dto;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,13 +24,13 @@ public class RespuestaTO {
     private String idSap;
     private String idEstatus;
     private String observaciones;
-    private Calendar fecha;
+    private Date fecha;
     private List<DetalleErrorTO> detalleError;
     
     public RespuestaTO(){}
 
     public RespuestaTO(long idCobranza, String idSap, String idEstatus, 
-                       String observaciones, Calendar fecha, 
+                       String observaciones, Date fecha, 
                        List<DetalleErrorTO> detalleError) {
         this.idCobranza = idCobranza;
         this.idSap = idSap;
@@ -98,14 +99,14 @@ public class RespuestaTO {
     /**
      * @return the fecha
      */
-    public Calendar getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
     /**
      * @param fecha the fecha to set
      */
-    public void setFecha(Calendar fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 

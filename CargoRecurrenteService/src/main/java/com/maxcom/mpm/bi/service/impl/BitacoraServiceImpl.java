@@ -4,10 +4,12 @@ import com.maxcom.mpm.bi.service.BitacoraService;
 import com.maxcom.mpm.dao.BitacoraDao;
 import com.maxcom.mpm.dao.impl.BitacoraDaoImpl;
 import com.maxcom.mpm.dto.CargoTO;
+import com.maxcom.mpm.dto.DetalleErrorTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import com.maxcom.mpm.model.MpmCestados;
 import com.maxcom.mpm.model.MpmCmarcasTarjetas;
+import com.maxcom.mpm.model.MpmCrespuestasCargos;
 import com.maxcom.mpm.model.MpmCtiposCuentas;
 import com.maxcom.mpm.model.MpmTcobranzaSap;
 import com.maxcom.mpm.model.MpmTcobranzaSapDeta;
@@ -15,6 +17,8 @@ import com.maxcom.mpm.util.Constantes;
 import static com.maxcom.mpm.util.Utilerias.getCurrentPeriodo;
 import static com.maxcom.mpm.util.Utilerias.isValidList;
 import static com.maxcom.mpm.util.Utilerias.isValidString;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,7 +81,7 @@ public class BitacoraServiceImpl implements BitacoraService {
                     detalle.setReferencia(cargoAux.getReferencia());
                     detalle.setNombreCliente(cargoAux.getNombreCliente());
                     detalle.setCuenta(cargoAux.getCuenta());
-                    detalle.setImporte(cargoAux.getImporte());
+                    detalle.setImporte(new BigDecimal(cargoAux.getImporte()));
                     detalle.setEmail(cargoAux.getEmail());
                     detalle.setEntidadFinanciera(cargoAux.isEntidadFinanciera());
                     detalle.setCreadoPor(Constantes.CREADO_POR_DETALLE);
@@ -135,30 +139,112 @@ public class BitacoraServiceImpl implements BitacoraService {
             
             //Estatus inicial de la orden
             MpmCestados mpmCestadosOrden = new MpmCestados();
-            mpmCestadosOrden.setIdEstado("RSAP");
+            mpmCestadosOrden.setIdEstado(respuesta.getIdEstatus());
             orden.setMpmCestados(mpmCestadosOrden);
-
+            
             orden.setObservaciones(respuesta.getObservaciones());
             orden.setFechaModificacion(new Date());
             orden.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);
+                        
+            //Mapa de los cargos con error
+            HashMap<Long,DetalleErrorTO> hmDetalleErrorTO = new HashMap<Long,DetalleErrorTO>();
             
+            if (respuesta.getDetalleError() != null) {
+                for (DetalleErrorTO error : respuesta.getDetalleError()) {
+                    hmDetalleErrorTO.put(error.getIdCobranzaDetalle(), error);
+                }
+            }
+            
+            MpmCrespuestasCargos mpmCrespuestasCargos = null;
+            MpmCestados mpmCestadosDetalle = null;
+            
+            long idCobranzaDetalle = 0;
             //Actualizando detalle
             for(MpmTcobranzaSapDeta detalle : orden.getMpmTcobranzaSapDetas()){
                 //detalle.getIdCobranzadeta()
                 detalle.setModificadoPor(Constantes.MODIFICADO_POR_DETALLE);
                 detalle.setFechaModificacion(new Date());
+                
+                idCobranzaDetalle = detalle.getIdCobranzadeta();
+                
+                //Estatus de la respuesta de los cargos con error
+                if(hmDetalleErrorTO.containsKey(idCobranzaDetalle)){                    
+                    //
+                    mpmCrespuestasCargos = new MpmCrespuestasCargos();
+                    mpmCrespuestasCargos.setIdRespuestaCargo(hmDetalleErrorTO.get(idCobranzaDetalle).getIdEstatus());
+                    detalle.setMpmCrespuestasCargos(mpmCrespuestasCargos);
+                    
+                    //Colocando estatus de rechazado
+                    mpmCestadosDetalle = new MpmCestados();
+                    mpmCestadosDetalle.setIdEstado("REJ");
+                    detalle.setMpmCestados(mpmCestadosDetalle);
+                    
+                }                
             }
 
             id = bitacora.actualizarTransaccion(orden);
+            
         } catch (Exception e) {
-            logger.error("   Error en BitacoraServiceImpl:guardarRespuesta - " + e.getMessage());
             e.printStackTrace();
+            logger.error("   Error en BitacoraServiceImpl:guardarRespuesta - " + e.toString());
             throw e;
         } finally {
             logger.info("   BitacoraServiceImpl:guardarRespuesta(S)");
         }
 
         return id;
+    }
+    
+    @Override
+    public long buscarTransaccion(TransaccionTO transaccion, RespuestaTO respuesta) throws Exception {
+        MpmTcobranzaSap orden = bitacora.getTransaccionByIdSAP(transaccion.getIdSAP());
+        
+        if(null!=orden){
+            respuesta.setObservaciones(orden.getObservaciones());
+            respuesta.setIdCobranza(orden.getIdCobranza());
+            respuesta.setFecha(orden.getFechaCreacion());
+            respuesta.setIdSap(orden.getIdsap());
+            respuesta.setIdEstatus("DUPLICATED-"+orden.getMpmCestados().getIdEstado());
+            //Pendiente el detalle de los errores
+            
+            if(orden.getMpmTcobranzaSapDetas()!=null){
+                List<DetalleErrorTO> listdetalleError = new ArrayList<DetalleErrorTO>();
+                DetalleErrorTO detalleError= null;
+                CargoTO cargo = null;
+                for(MpmTcobranzaSapDeta detalle: orden.getMpmTcobranzaSapDetas()){
+                    
+                    if(detalle.getMpmCestados().getIdEstado().equalsIgnoreCase("NEW")){
+                        continue;
+                    }
+                    
+                    detalleError= new DetalleErrorTO();
+                    cargo = new CargoTO();
+                    
+                    detalleError.setIdCobranzaDetalle(detalle.getIdCobranzadeta());
+                    detalleError.setIdEstatus(detalle.getMpmCrespuestasCargos().getIdRespuestaCargo());
+                    detalleError.setObservaciones(detalle.getMpmCrespuestasCargos().getDescripcion());
+                    
+                    cargo.setCuenta(detalle.getCuenta());
+                    cargo.setEmail(detalle.getEmail());
+                    cargo.setEntidadFinanciera(detalle.isEntidadFinanciera());
+                    cargo.setImporte(detalle.getImporte().doubleValue());
+                    cargo.setMarcaTarjeta((int)detalle.getMpmCmarcasTarjetas().getIdMarcaTarjeta());
+                    cargo.setNombreCliente(detalle.getNombreCliente());
+                    cargo.setReferencia(detalle.getReferencia());
+                    cargo.setTipoCuenta((int)detalle.getMpmCtiposCuentas().getIdTipoCuenta());
+                    
+                    detalleError.setCargo(cargo);
+                    
+                    listdetalleError.add(detalleError);
+                }
+                respuesta.setDetalleError(listdetalleError);
+            }
+            
+            return orden.getIdCobranza();
+        }
+        
+        return 0;
+        
     }
 
 }
