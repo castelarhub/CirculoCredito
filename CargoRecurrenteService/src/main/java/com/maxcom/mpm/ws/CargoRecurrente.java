@@ -11,26 +11,30 @@ import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * Clase que provee el servicio de cargos recurrentes.
- * @author Nelson C.
+ * Clase que provee el servicio de cargos recurrentes en el MPM.
+ * @author Nelson Castelar
+ * @version 1.0
  */
 @WebService(serviceName = "CargoRecurrente")
 public class CargoRecurrente {
     
     RespuestaTO respuesta;
     
+    CargoRecurrenteI cargoRecurrenteI = null;
+    
+    public CargoRecurrente(){
+        //Agregar DI
+        cargoRecurrenteI = new CargoRecurrenteFacade();
+    }
+    
     /**
-     * 
-     * @param transaccion 
-     * @return
+     * Procesa la transaccion enviada
+     * @param transaccion Transaccion a procesar
+     * @return Regresa la respuesta que resulto del procesamiento. Un objeto de tipo RespuestaTO.
      */
     @WebMethod(operationName = "procesarCargos")
     @WebResult(name = "respuesta")
     public RespuestaTO procesarCargos(@WebParam(name = "transaccion") @XmlElement(required=true) TransaccionTO transaccion ){        
-        
-        CargoRecurrenteI cargoRecurrenteI = null;
-        
-        cargoRecurrenteI = new CargoRecurrenteFacade();
         
         respuesta = cargoRecurrenteI.procesar(transaccion);
         

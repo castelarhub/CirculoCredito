@@ -21,23 +21,37 @@ import org.apache.log4j.Logger;
 
 /**
  * La clase CargoRecurrenteFacade implementa las operaciones para trabajar 
- * con los cargos recurrentes en el MPM. <br>
+ * con los cargos recurrentes en el MPM.
  * 
  * @author Nelson Castelar
  * @version 1.0
  */
 public class CargoRecurrenteFacade implements CargoRecurrenteI {
         
-    BitacoraService bitacoraService = null;
-    CargoRecurrenteService cargoRecurrenteService = null;
-    AutenticacionService autenticacionService = null;
-    List<CargoTO> listCargosAceptados = null;
-    List<CargoTO> listCargosRechazados = null;
-    List<DetalleErrorTO> listDetalleError = new ArrayList<DetalleErrorTO>();    
-    HashMap<Long,Long> hmRelCargosIdDetalle = null;
-    RespuestaTO respuesta = null;
-    long idOrden = 0;
+    BitacoraService bitacoraService;
+    CargoRecurrenteService cargoRecurrenteService;
+    AutenticacionService autenticacionService;
+    
+    List<CargoTO> listCargosAceptados;
+    List<CargoTO> listCargosRechazados;
+    List<DetalleErrorTO> listDetalleError;
+    HashMap<Long,Long> hmRelCargosIdDetalle;
+    RespuestaTO respuesta;
+    long idOrden;
     static final Logger logger = Logger.getLogger(CargoRecurrenteFacade.class);
+    
+    /**
+     * Constructor default de la clase
+     */
+    public CargoRecurrenteFacade(){
+        //Agregar DI
+        bitacoraService = new BitacoraServiceImpl();
+        cargoRecurrenteService = null;
+        autenticacionService = new AutenticacionServiceImpl();
+        
+        listDetalleError = new ArrayList<DetalleErrorTO>();
+    }
+    
     
     /**
      * Procesa la transaccion especificada
@@ -47,9 +61,9 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
      */
     @Override
     public RespuestaTO procesar(TransaccionTO transaccion) {
-        StringBuilder observaciones = null;
+        StringBuilder observaciones;
         try {
-            logger.info("Procesar orden - Inicio");
+            logger.info("CargoRecurrenteFacade:procesar(E)");
             
             if (!this.isTransaccionValida(transaccion)) {
                 this.respuesta = new RespuestaTO(0, "-","501", "Error - Transaccion nula", Calendar.getInstance().getTime(), null);
@@ -104,7 +118,9 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             observaciones.append(this.listCargosAceptados.size());
             
             if (this.listCargosRechazados.size() > 0) {
-                observaciones.append(" Cargos rechazados:" + this.listCargosRechazados.size() + ", ver detalleError para mas informacion.");
+                observaciones.append(" Cargos rechazados:");
+                observaciones.append(this.listCargosRechazados.size());
+                observaciones.append(", ver detalleError para mas informacion.");
             }
             
             this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdSAP(),
@@ -116,17 +132,13 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             return this.respuesta;
 
         } catch (Exception e) {
-            logger.error("Error en el aplicativo - " + e.toString());
+            logger.error("Error en CargoRecurrenteFacade:procesar - " + e.toString());
             
             e.printStackTrace();
             
             StringBuilder detalleErrorApp = new StringBuilder("");
             
             detalleErrorApp.append("Error en el aplicativo - Servicio de CargoRecurrente - Favor de reportar.");
-            //detalleErrorApp.append(e.toString());            
-            //if(detalleErrorApp.length()>250){
-            //    detalleErrorApp.substring(0, 200);
-            //}
             
             //Agregar notificaciones de mail en caso de error
             
@@ -142,16 +154,15 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             
             return this.respuesta;
         } finally {
-            logger.info("Procesar orden - Fin");
+            logger.info("CargoRecurrenteFacade:procesar(S)");
         }
 
     }
     
     /**
-     * Analiza cada uno de los cargos enviados en la transaccion, separando los cargos en dos grupos:<br>
-     * - Lista de cargos aceptados<b>
+     * Analiza cada uno de los cargos enviados en la transaccion, separando los cargos en dos grupos:
+     * - Lista de cargos aceptados
      * - Lista de cargos rechazados
-     * buscando 
      * @param lCargos Lista de cargos a analizar
      * @throws Exception Si algun error inesperado ocurre
      */
@@ -162,16 +173,15 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
             this.listCargosAceptados = new ArrayList<CargoTO>();
             this.listCargosRechazados = new ArrayList<CargoTO>();
 
-            StringBuilder sb = null;
-            DetalleErrorTO detalle = null;
+            StringBuilder sb;
+            DetalleErrorTO detalle;
             listDetalleError = new ArrayList<DetalleErrorTO>();
-            long idTemp = 0;
+            long idTemp;
             for (CargoTO cargo : lCargos) {
                 //Agregando la clave unica de persistencia
                 idTemp = cargo.getUniqueIdDetail();
-                cargo.setIdPersistence(hmRelCargosIdDetalle.get(new Long(idTemp)));
+                cargo.setIdPersistence(hmRelCargosIdDetalle.get(idTemp));
                 
-                sb = new StringBuilder();
                 detalle = new DetalleErrorTO();
                 
                 sb = revisarDatosMinimosRequeridosCargo(cargo);
@@ -201,9 +211,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
 
                 }
 
-                /**
-                 * Validaciones adicionales*
-                 */
+                /*Validaciones adicionales...*/
                 
                 listCargosAceptados.add(cargo);
             }
@@ -304,8 +312,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
      */
     private boolean isAutenticacionValida(AutenticacionTO autenticacion) throws Exception {
         try {
-            logger.info("   CargoRecurrenteFacade:isAutenticacionValida(E)");
-            autenticacionService = new AutenticacionServiceImpl();
+            logger.info("   CargoRecurrenteFacade:isAutenticacionValida(E)");            
             
             if(autenticacionService.isAutenticacionValida(autenticacion)){
                 return true;
@@ -326,11 +333,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
      * @return True - Si la transaccion es valida.
      */
     private boolean isTransaccionValida(TransaccionTO transaccion){
-        if(transaccion == null){            
-            return false;
-        }
-        
-        return true;
+        return transaccion != null;
     }
     
     /**
@@ -377,8 +380,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
      * @param transaccion Transaccion a guardar.
      * @throws Exception Si algun error inesperado ocurre
      */
-    private void guardarBitacoraSolicitud(TransaccionTO transaccion) throws Exception{
-        bitacoraService = new BitacoraServiceImpl();
+    private void guardarBitacoraSolicitud(TransaccionTO transaccion) throws Exception{        
         hmRelCargosIdDetalle = bitacoraService.guardarSolicitud(transaccion);
     }
     
@@ -387,8 +389,7 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
      * @param respuesta Respuesta de la transaccion
      * @throws Exception Si algun error inesperado ocurre
      */
-    private void guardarBitacoraRespuesta(RespuestaTO respuesta) throws Exception{
-        bitacoraService = new BitacoraServiceImpl();
+    private void guardarBitacoraRespuesta(RespuestaTO respuesta) throws Exception{        
         bitacoraService.guardarRespuesta(respuesta);
     }
     
@@ -400,7 +401,6 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
      */
     private boolean isTransaccionExistente(TransaccionTO transaccion) throws Exception{
         respuesta = new RespuestaTO();
-        bitacoraService = new BitacoraServiceImpl();
         long idSolicitud = bitacoraService.buscarTransaccion(transaccion,respuesta);
         
         return idSolicitud>0;

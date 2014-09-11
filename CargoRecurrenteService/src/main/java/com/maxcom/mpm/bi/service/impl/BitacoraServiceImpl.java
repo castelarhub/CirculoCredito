@@ -32,8 +32,13 @@ import org.apache.log4j.Logger;
  */
 public class BitacoraServiceImpl implements BitacoraService {
 
-    BitacoraDao bitacora = new BitacoraDaoImpl();
+    BitacoraDao bitacora;
     static final Logger logger = Logger.getLogger(BitacoraServiceImpl.class);
+    
+    public BitacoraServiceImpl(){
+        //Agregar DI
+        bitacora = new BitacoraDaoImpl();
+    }
 
     @Override
     public HashMap<Long, Long> guardarSolicitud(TransaccionTO transaccion) throws Exception {

@@ -12,8 +12,14 @@ import org.apache.log4j.Logger;
  * @author operador
  */
 public class AutenticacionServiceImpl implements AutenticacionService{
-    
+            
     static final Logger logger = Logger.getLogger(AutenticacionServiceImpl.class);
+    AutenticacionDao autenticacionDao;
+    
+    public AutenticacionServiceImpl(){
+        //Agregar DI
+        autenticacionDao = new AutenticacionDaoImpl();
+    }
 
     @Override
     public boolean isAutenticacionValida(AutenticacionTO autenticacion) throws Exception{
@@ -21,7 +27,6 @@ public class AutenticacionServiceImpl implements AutenticacionService{
         boolean isValid = false;
         try{
             
-            AutenticacionDao autenticacionDao = new AutenticacionDaoImpl();
             MpmCusersWs usuario = new MpmCusersWs();
             
             usuario.setServicio(autenticacion.getClaveServicio());
