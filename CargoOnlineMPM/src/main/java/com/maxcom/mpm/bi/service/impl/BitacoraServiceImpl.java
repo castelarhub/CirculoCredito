@@ -17,11 +17,9 @@ import com.maxcom.mpm.util.Constantes;
 import static com.maxcom.mpm.util.Utilerias.getCurrentPeriodo;
 import static com.maxcom.mpm.util.Utilerias.isValidString;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 
@@ -46,10 +44,10 @@ public class BitacoraServiceImpl implements BitacoraService {
         MpmTcobranzaSap orden = new MpmTcobranzaSap();        
         try {            
             
-            if (!isValidString(transaccion.getIdOrigen())) {
+            if (!isValidString(transaccion.getIdTransaccion())) {
                 orden.setIdsap("-");
             } else {
-                orden.setIdsap(transaccion.getIdOrigen());
+                orden.setIdsap(transaccion.getIdTransaccion());
             }
             
             orden.setComponente(Constantes.COMPONENTE_ORDEN);
@@ -83,10 +81,8 @@ public class BitacoraServiceImpl implements BitacoraService {
                     detalle.setIdUniqueDetalle(cargoAux.getUniqueIdDetail());
                     detalle.setReferencia(cargoAux.getReferencia());
                     detalle.setNombreCliente(cargoAux.getNombreCliente());
-                    detalle.setCuenta(cargoAux.getCuenta());
-                    detalle.setImporte(new BigDecimal(cargoAux.getImporte()));
-                    detalle.setEmail(cargoAux.getEmail());
-                    detalle.setEntidadFinanciera(cargoAux.isEntidadFinanciera());
+                    detalle.setCuenta(cargoAux.getNumeroTarjeta());
+                    detalle.setImporte(new BigDecimal(cargoAux.getMonto()));
                     detalle.setCreadoPor(Constantes.CREADO_POR_DETALLE);
                     detalle.setFechaCreacion(new Date());
                     detalle.setSistema(Constantes.SISTEMA_DETALLE);
@@ -96,12 +92,10 @@ public class BitacoraServiceImpl implements BitacoraService {
                     
                     //Tipo de cuenta
                     MpmCtiposCuentas mpmCtiposCuentas = new MpmCtiposCuentas();
-                    mpmCtiposCuentas.setIdTipoCuenta(cargoAux.getTipoCuenta());
                     detalle.setMpmCtiposCuentas(mpmCtiposCuentas);
                     
                     //Marca tarjeta
                     MpmCmarcasTarjetas mpmCmarcasTarjetas = new MpmCmarcasTarjetas();
-                    mpmCmarcasTarjetas.setIdMarcaTarjeta(cargoAux.getMarcaTarjeta());
                     detalle.setMpmCmarcasTarjetas(mpmCmarcasTarjetas);
                     
                     //Detalle
@@ -137,7 +131,7 @@ public class BitacoraServiceImpl implements BitacoraService {
         long id = 0;
         
         try {
-            orden = bitacora.getTransaccionById(respuesta.getIdCobranza());
+            orden = bitacora.getTransaccionById(respuesta.getIdCobranzaOnline());
             
             //Estatus inicial de la orden
             MpmCestados mpmCestadosOrden = new MpmCestados();
@@ -199,13 +193,13 @@ public class BitacoraServiceImpl implements BitacoraService {
     
     @Override
     public long buscarTransaccion(TransaccionTO transaccion, RespuestaTO respuesta) throws Exception {
-        MpmTcobranzaSap orden = bitacora.getTransaccionByIdSAP(transaccion.getIdOrigen());
+        MpmTcobranzaSap orden = bitacora.getTransaccionByIdSAP(transaccion.getIdTransaccion());
         
         if(null!=orden){
             respuesta.setObservaciones(orden.getObservaciones());
-            respuesta.setIdCobranza(orden.getIdCobranza());
+            respuesta.setIdCobranzaOnline(orden.getIdCobranza());
             respuesta.setFecha(orden.getFechaCreacion());
-            respuesta.setIdOrigen(orden.getIdsap());
+            respuesta.setIdTransaccion(orden.getIdsap());
             respuesta.setIdEstatus("DUPLICATED-"+orden.getMpmCestados().getIdEstado());
             //Pendiente el detalle de los errores
             
@@ -226,14 +220,8 @@ public class BitacoraServiceImpl implements BitacoraService {
                     detalleError.setIdEstatus(detalle.getMpmCrespuestasCargos().getIdRespuestaCargo());
                     detalleError.setObservaciones(detalle.getMpmCrespuestasCargos().getDescripcion());
                     
-                    cargo.setCuenta(detalle.getCuenta());
-                    cargo.setEmail(detalle.getEmail());
-                    cargo.setEntidadFinanciera(detalle.isEntidadFinanciera());
-                    cargo.setImporte(detalle.getImporte().doubleValue());
-                    cargo.setMarcaTarjeta((int)detalle.getMpmCmarcasTarjetas().getIdMarcaTarjeta());
                     cargo.setNombreCliente(detalle.getNombreCliente());
                     cargo.setReferencia(detalle.getReferencia());
-                    cargo.setTipoCuenta((int)detalle.getMpmCtiposCuentas().getIdTipoCuenta());
                     
                     detalleError.setCargo(cargo);
                     

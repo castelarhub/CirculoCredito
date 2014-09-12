@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
 public class TransaccionTO {
     
     @XmlElement(required=true)
-    private String idOrigen;
+    private String idTransaccion;
     @XmlElement(required=true)
     private CargoTO cargo;
     @XmlElement(required=true)
@@ -23,33 +23,19 @@ public class TransaccionTO {
    
     @XmlTransient
     private long idOrden;    
-    
+
     /**
-     * @return the autenticacion
+     * @return the idTransaccion
      */
-    public AutenticacionTO getAutenticacion() {
-        return autenticacion;
+    public String getIdTransaccion() {
+        return idTransaccion;
     }
 
     /**
-     * @param autenticacion the autenticacion to set
+     * @param idTransaccion the idTransaccion to set
      */
-    public void setAutenticacion(AutenticacionTO autenticacion) {
-        this.autenticacion = autenticacion;
-    }    
-
-    /**
-     * @return the idOrden
-     */
-    public long getIdOrden() {
-        return idOrden;
-    }
-
-    /**
-     * @param idOrden the idOrden to set
-     */
-    public void setIdOrden(long idOrden) {
-        this.idOrden = idOrden;
+    public void setIdTransaccion(String idTransaccion) {
+        this.idTransaccion = idTransaccion;
     }
 
     /**
@@ -67,17 +53,31 @@ public class TransaccionTO {
     }
 
     /**
-     * @return the idOrigen
+     * @return the autenticacion
      */
-    public String getIdOrigen() {
-        return idOrigen;
+    public AutenticacionTO getAutenticacion() {
+        return autenticacion;
     }
 
     /**
-     * @param idOrigen the idOrigen to set
+     * @param autenticacion the autenticacion to set
      */
-    public void setIdOrigen(String idOrigen) {
-        this.idOrigen = idOrigen;
+    public void setAutenticacion(AutenticacionTO autenticacion) {
+        this.autenticacion = autenticacion;
+    }
+
+    /**
+     * @return the idOrden
+     */
+    public long getIdOrden() {
+        return idOrden;
+    }
+
+    /**
+     * @param idOrden the idOrden to set
+     */
+    public void setIdOrden(long idOrden) {
+        this.idOrden = idOrden;
     }
     
 }

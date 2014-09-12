@@ -6,15 +6,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- *
- * @author operador
+ * Nelson Castelar
+ * @author 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Respuesta")
 public class RespuestaTO {
     
-    private long idCobranza;
-    private String idOrigen;
+    private long idCobranzaOnline;
+    private String idTransaccion;
     private String idEstatus;
     private String observaciones;
     private Date fecha;
@@ -25,8 +25,8 @@ public class RespuestaTO {
     public RespuestaTO(long idCobranza, String idSap, String idEstatus, 
                        String observaciones, Date fecha, 
                        DetalleErrorTO detalleError) {
-        this.idCobranza = idCobranza;
-        this.idOrigen = idSap;
+        this.idCobranzaOnline = idCobranza;
+        this.idTransaccion = idSap;
         this.idEstatus = idEstatus;
         this.observaciones = observaciones;
         this.fecha = fecha;
@@ -34,17 +34,17 @@ public class RespuestaTO {
     }
 
     /**
-     * @return the idCobranza
+     * @return the idCobranzaOnline
      */
-    public long getIdCobranza() {
-        return idCobranza;
+    public long getIdCobranzaOnline() {
+        return idCobranzaOnline;
     }
 
     /**
-     * @param idCobranza the idCobranza to set
+     * @param idCobranzaOnline the idCobranzaOnline to set
      */
-    public void setIdCobranza(long idCobranza) {
-        this.idCobranza = idCobranza;
+    public void setIdCobranzaOnline(long idCobranzaOnline) {
+        this.idCobranzaOnline = idCobranzaOnline;
     }
 
     /**
@@ -104,17 +104,17 @@ public class RespuestaTO {
     }
 
     /**
-     * @return the idOrigen
+     * @return the idTransaccion
      */
-    public String getIdOrigen() {
-        return idOrigen;
+    public String getIdTransaccion() {
+        return idTransaccion;
     }
 
     /**
-     * @param idOrigen the idOrigen to set
+     * @param idTransaccion the idTransaccion to set
      */
-    public void setIdOrigen(String idOrigen) {
-        this.idOrigen = idOrigen;
+    public void setIdTransaccion(String idTransaccion) {
+        this.idTransaccion = idTransaccion;
     }
 
 

@@ -64,6 +64,15 @@ public class CargoOnlineFacade implements CargoOnlineI {
         try {
             logger.info("CargoRecurrenteFacade:procesar(E)");
             
+            if(1==1){
+            this.respuesta = new RespuestaTO(1, "T011",
+                    "RSAP", "OK",
+                    Calendar.getInstance().getTime(), listDetalleError);
+            
+            
+            return this.respuesta;
+            }
+            
             if (!this.isTransaccionValida(transaccion)) {
                 this.respuesta = new RespuestaTO(0, "-","501", "Error - Transaccion nula", Calendar.getInstance().getTime(), null);
                 return respuesta;
@@ -90,7 +99,7 @@ public class CargoOnlineFacade implements CargoOnlineI {
             //Validando credenciales de la solicitud
             if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {
                 
-                this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdOrigen(),
+                this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
                                                 "ESAP", "Error - Credenciales invalidas",
                                                 Calendar.getInstance().getTime(), null);
                 
@@ -103,7 +112,7 @@ public class CargoOnlineFacade implements CargoOnlineI {
             
             //Validando que exista al menos un cargo valido
             if (this.listCargosAceptados.isEmpty()) {
-                this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdOrigen(),
+                this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
                         "ESAP", "Error - Todos los cargos enviados son invalidos",
                         Calendar.getInstance().getTime(), listDetalleError);
                 
@@ -122,7 +131,7 @@ public class CargoOnlineFacade implements CargoOnlineI {
                 observaciones.append(", ver detalleError para mas informacion.");
             }
             
-            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdOrigen(),
+            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
                     "RSAP", observaciones.toString(),
                     Calendar.getInstance().getTime(), listDetalleError);
             
@@ -141,7 +150,7 @@ public class CargoOnlineFacade implements CargoOnlineI {
             
             //Agregar notificaciones de mail en caso de error
             
-            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdOrigen(),
+            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
                                             "EAPP", detalleErrorApp.toString() ,
                                             Calendar.getInstance().getTime(), listDetalleError);
             
@@ -263,8 +272,8 @@ public class CargoOnlineFacade implements CargoOnlineI {
         
             StringBuilder sb = new StringBuilder();
         
-            if (!isValidString(cargo.getCuenta())) {
-                sb.append("Se requiere el campo cuenta - ");
+            if (!isValidString(cargo.getNumeroTarjeta())) {
+                sb.append("Se requiere el campo numeroTarjeta - ");
             }
             
             if (!isValidString(cargo.getNombreCliente())) {
@@ -275,24 +284,9 @@ public class CargoOnlineFacade implements CargoOnlineI {
                 sb.append("Se requiere el campo referencia - ");
             }
             
-            if (cargo.getImporte()<= 0.0 ) {
-                sb.append("Se requiere un importe mayor a 0.0 - ");
+            if (cargo.getMonto()<= 0.0 ) {
+                sb.append("Se requiere un monto mayor a 0.0 - ");
             }
-            
-            //2 | 3 | 4
-            if (cargo.getMarcaTarjeta() <= 0) {
-                sb.append("Numero de tarjeta invalido - ");
-            }
-            
-            //2 | 3 | 4
-            if (cargo.getTipoCuenta() <=0){
-                sb.append("Numero de cuenta invalido - ");
-            }
-            
-            //0 | 1
-            //if (cargo.getEntidadFinanciera() <=0){
-            //    sb.append("Entidad financiera invalida - ");
-            //}
             
             return sb;
             
@@ -337,7 +331,7 @@ public class CargoOnlineFacade implements CargoOnlineI {
      */
     private boolean isTransaccionCompleta(TransaccionTO transaccion) {
         StringBuilder detalleError = new StringBuilder();
-        if (!isValidString(transaccion.getIdOrigen())) {
+        if (!isValidString(transaccion.getIdTransaccion())) {
             detalleError.append("El campo idOrigen es obligatorio - ");
         }
 
@@ -360,7 +354,7 @@ public class CargoOnlineFacade implements CargoOnlineI {
         }
         
         if (detalleError.length() > 0) {
-            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdOrigen(),
+            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
                     "ESAP", "Error - Transaccion incompleta ->"+detalleError.toString(),
                     Calendar.getInstance().getTime(), null);
             return false;

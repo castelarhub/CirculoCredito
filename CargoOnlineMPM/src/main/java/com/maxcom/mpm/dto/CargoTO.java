@@ -2,6 +2,7 @@ package com.maxcom.mpm.dto;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
@@ -12,14 +13,22 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Cargo")
 public class CargoTO {
+    @XmlElement(required=true)
     private String referencia;
+    @XmlElement(required=true)
     private String nombreCliente;
-    private String cuenta;
-    private String email;
-    private double importe;
-    private int tipoCuenta;
-    private int marcaTarjeta;
-    private boolean entidadFinanciera;
+    @XmlElement(required=true)
+    private String tipoTarjeta;
+    @XmlElement(required=true)
+    private String numeroTarjeta;
+    @XmlElement(name="mesExpiracion",required=true)
+    private int mesExpiracionTarjeta;
+    @XmlElement(name="anioExpiracion",required=true)
+    private int anioExpiracionTarjeta;
+    @XmlElement(name="codigoseguridad",required=true)
+    private String codigoSeguridadTarjeta;
+    @XmlElement(required=true)
+    private double monto;
     
     @XmlTransient
     private long idPersistence; 
@@ -55,87 +64,87 @@ public class CargoTO {
     }
 
     /**
-     * @return the cuenta
+     * @return the numeroTarjeta
      */
-    public String getCuenta() {
-        return cuenta;
+    public String getNumeroTarjeta() {
+        return numeroTarjeta;
     }
 
     /**
-     * @param cuenta the cuenta to set
+     * @param numeroTarjeta the numeroTarjeta to set
      */
-    public void setCuenta(String cuenta) {
-        this.cuenta = cuenta;
+    public void setNumeroTarjeta(String numeroTarjeta) {
+        this.numeroTarjeta = numeroTarjeta;
     }
 
     /**
-     * @return the email
+     * @return the mesExpiracionTarjeta
      */
-    public String getEmail() {
-        return email;
+    public int getMesExpiracionTarjeta() {
+        return mesExpiracionTarjeta;
     }
 
     /**
-     * @param email the email to set
+     * @param mesExpiracionTarjeta the mesExpiracionTarjeta to set
      */
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMesExpiracionTarjeta(int mesExpiracionTarjeta) {
+        this.mesExpiracionTarjeta = mesExpiracionTarjeta;
     }
 
     /**
-     * @return the importe
+     * @return the anioExpiracionTarjeta
      */
-    public double getImporte() {
-        return importe;
+    public int getAnioExpiracionTarjeta() {
+        return anioExpiracionTarjeta;
     }
 
     /**
-     * @param importe the importe to set
+     * @param anioExpiracionTarjeta the anioExpiracionTarjeta to set
      */
-    public void setImporte(double importe) {
-        this.importe = importe;
+    public void setAnioExpiracionTarjeta(int anioExpiracionTarjeta) {
+        this.anioExpiracionTarjeta = anioExpiracionTarjeta;
     }
 
     /**
-     * @return the tipoCuenta
+     * @return the codigoSeguridadTarjeta
      */
-    public int getTipoCuenta() {
-        return tipoCuenta;
+    public String getCodigoSeguridadTarjeta() {
+        return codigoSeguridadTarjeta;
     }
 
     /**
-     * @param tipoCuenta the tipoCuenta to set
+     * @param codigoSeguridadTarjeta the codigoSeguridadTarjeta to set
      */
-    public void setTipoCuenta(int tipoCuenta) {
-        this.tipoCuenta = tipoCuenta;
+    public void setCodigoSeguridadTarjeta(String codigoSeguridadTarjeta) {
+        this.codigoSeguridadTarjeta = codigoSeguridadTarjeta;
     }
 
     /**
-     * @return the marcaTarjeta
+     * @return the monto
      */
-    public int getMarcaTarjeta() {
-        return marcaTarjeta;
+    public double getMonto() {
+        return monto;
     }
 
     /**
-     * @param marcaTarjeta the marcaTarjeta to set
+     * @param monto the monto to set
      */
-    public void setMarcaTarjeta(int marcaTarjeta) {
-        this.marcaTarjeta = marcaTarjeta;
+    public void setMonto(double monto) {
+        this.monto = monto;
     }
 
     /**
-     * @return the entidadFinanciera
+     * @return the idPersistence
      */
-    public boolean isEntidadFinanciera() {
-        return entidadFinanciera;
+    public long getIdPersistence() {
+        return idPersistence;
     }
 
     /**
-     * @param entidadFinanciera the entidadFinanciera to set
+     * @param idPersistence the idPersistence to set
      */
-    public void setEntidadFinanciera(boolean entidadFinanciera) {
-        this.entidadFinanciera = entidadFinanciera;
+    public void setIdPersistence(long idPersistence) {
+        this.idPersistence = idPersistence;
     }
 
     /**
@@ -153,17 +162,17 @@ public class CargoTO {
     }
 
     /**
-     * @return the idPersistence
+     * @return the tipoTarjeta
      */
-    public long getIdPersistence() {
-        return idPersistence;
+    public String getTipoTarjeta() {
+        return tipoTarjeta;
     }
 
     /**
-     * @param idPersistence the idPersistence to set
+     * @param tipoTarjeta the tipoTarjeta to set
      */
-    public void setIdPersistence(long idPersistence) {
-        this.idPersistence = idPersistence;
+    public void setTipoTarjeta(String tipoTarjeta) {
+        this.tipoTarjeta = tipoTarjeta;
     }
 
 }
