@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Nelson Castelar
  * @version 1.0
  */
-@WebService(serviceName = "CargoRecurrente")
+@WebService(serviceName = "CargoRecurrenteService")
 public class CargoRecurrente {
     
     RespuestaTO respuesta;
