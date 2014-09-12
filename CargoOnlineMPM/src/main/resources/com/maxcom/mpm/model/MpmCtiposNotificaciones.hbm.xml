@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 05-sep-2014 15:58:11 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class name="com.maxcom.mpm.model.MpmCtiposNotificaciones" schema="ADMIN_MPM" table="MPM_CTIPOS_NOTIFICACIONES">
+    <comment>Tabla que clasifica el tipo de notificación, por su grado de criticidad o de finalidad. ** NOTA: Al realizar insert tener precaución de emplear
+        secuencia correspondiente: MPM_CTIPO_NOTIFICACION_SEQ1</comment>
+    <id name="idTipoNotificacion" type="long">
+      <column name="ID_TIPO_NOTIFICACION" precision="10" scale="0"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="prefijo" type="string">
+      <column length="50" name="PREFIJO">
+        <comment>Permite definir un prefijo del subject del correo que permite identificar el tipo de correo</comment>
+      </column>
+    </property>
+    <property name="postfijo" type="string">
+      <column length="50" name="POSTFIJO">
+        <comment>Permite definir un postfijo del subject del correo que permite identificar el tipo de correo</comment>
+      </column>
+    </property>
+    <property name="descripcion" type="string">
+      <column length="200" name="DESCRIPCION" not-null="true">
+        <comment>Describe el tipo de notificación</comment>
+      </column>
+    </property>
+    <property name="tipoMail" type="string">
+      <column length="25" name="TIPO_MAIL">
+        <comment>Identifica el tipo de correo en el lenguaje que se esta desarrollando.</comment>
+      </column>
+    </property>
+    <property name="creadoPor" type="string">
+      <column length="30" name="CREADO_POR" not-null="true">
+        <comment>Atributo de auditoria, usuario que realizó acción de inserción del registro.</comment>
+      </column>
+    </property>
+    <property name="fechaCreacion" type="date">
+      <column length="7" name="FECHA_CREACION" not-null="true">
+        <comment>Atributo de auditoria, fecha, hora de creación del registro</comment>
+      </column>
+    </property>
+    <property name="sistema" type="string">
+      <column length="30" name="SISTEMA" not-null="true">
+        <comment>Atributo de auditoria, sistema que realizó la inserción del registro en la tabla.</comment>
+      </column>
+    </property>
+    <property name="modificadoPor" type="string">
+      <column length="30" name="MODIFICADO_POR">
+        <comment>Atributo de auditoria, nombre del usuario que realizó la ultima modificación al registro.</comment>
+      </column>
+    </property>
+    <property name="fechaModificacion" type="date">
+      <column length="7" name="FECHA_MODIFICACION">
+        <comment>Atributo de auditoria, fecha y hora de ultima modificación realizada en el registro.</comment>
+      </column>
+    </property>
+    <property name="activo" type="boolean">
+      <column name="ACTIVO" not-null="true" precision="1" scale="0">
+        <comment>Bandera (campo booleano), que indica si el registro esta activo 1, o desactivado 0.</comment>
+      </column>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="mpmCnotificacioneses" table="MPM_CNOTIFICACIONES">
+      <key>
+        <column name="ID_TIPO_NOTIFICACION" not-null="true" precision="10" scale="0"/>
+      </key>
+      <one-to-many class="com.maxcom.mpm.model.MpmCnotificaciones"/>
+    </set>
+  </class>
+</hibernate-mapping>

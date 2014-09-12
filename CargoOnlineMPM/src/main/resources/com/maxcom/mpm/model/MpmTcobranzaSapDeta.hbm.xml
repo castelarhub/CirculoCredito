@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 05-sep-2014 15:58:11 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class name="com.maxcom.mpm.model.MpmTcobranzaSapDeta" schema="ADMIN_MPM" table="MPM_TCOBRANZA_SAP_DETA">
+    <comment>Entidad empleada para persistir cada cargo que se debe enviar como cargo automático (cargo recurrente) a la Entidad Financiera. ** NOTA: Al realizar insert
+        tener precaución de emplear secuencia correspondiente: MPM_TCOBRANZA_SAP_DETA_SEQ1</comment>
+    <id name="idCobranzadeta" type="long">
+      <column name="ID_COBRANZADETA" precision="10" scale="0"/>
+      <generator class="sequence" >
+        <param name="sequence">MPM_TCOBRANZA_SAP_DETA_SEQ1</param>
+      </generator>
+    </id>
+    <many-to-one class="com.maxcom.mpm.model.MpmCtiposCuentas" fetch="select" lazy="false" name="mpmCtiposCuentas">
+      <column name="ID_TIPO_CUENTA" precision="10" scale="0"/>
+    </many-to-one>
+    <many-to-one class="com.maxcom.mpm.model.MpmCrespuestasCargos" fetch="select" lazy="false" name="mpmCrespuestasCargos">
+      <column length="5" name="ID_RESPUESTA_CARGO"/>
+    </many-to-one>
+    <many-to-one class="com.maxcom.mpm.model.MpmTcobranzaSap" fetch="select" name="mpmTcobranzaSap">
+      <column name="ID_COBRANZA" not-null="true" precision="10" scale="0"/>
+    </many-to-one>
+    <many-to-one class="com.maxcom.mpm.model.MpmCmarcasTarjetas" fetch="select" lazy="false" name="mpmCmarcasTarjetas">
+      <column name="ID_MARCA_TARJETA" precision="10" scale="0"/>
+    </many-to-one>
+    <many-to-one class="com.maxcom.mpm.model.MpmCestados" fetch="select" lazy="false" name="mpmCestados">
+      <column length="5" name="ID_ESTADO" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="com.maxcom.mpm.model.MpmTlotesCargoAutomatico" fetch="select" name="mpmTlotesCargoAutomatico">
+      <column name="ID_LOTE" precision="10" scale="0"/>
+    </many-to-one>
+    <property name="referencia" type="string">
+      <column length="40" name="REFERENCIA">
+        <comment>Identificación unica de cada cobro a realizar al cliente.</comment>
+      </column>
+    </property>
+    <property name="nombreCliente" type="string">
+      <column length="200" name="NOMBRE_CLIENTE">
+        <comment>Nombre del cliente Maxcom a quien se le realizara el cobro correspondiente.</comment>
+      </column>
+    </property>
+    <property name="cuenta" type="string">
+      <column length="50" name="CUENTA">
+        <comment>Cuenta a la que se le realizara el cobro correspondiente al cliente.</comment>
+      </column>
+    </property>
+    <property name="importe" type="big_decimal">
+      <column name="IMPORTE" precision="10">
+        <comment>Importe del cargo a realizar</comment>
+      </column>
+    </property>
+    <property name="email" type="string">
+      <column length="40" name="EMAIL">
+        <comment>Dirección de correo electronico a donde será enviada la notificación del cobro.</comment>
+      </column>
+    </property>
+    <property name="entidadFinanciera" type="boolean">
+      <column name="ENTIDAD_FINANCIERA" not-null="true" precision="1" scale="0">
+        <comment>Indica si la entidad financiera emisora es la misma con quien se procesan los cargos automáticos: 1 en caso de ser la misma y un 0 en caso de ser
+                cualquier otra.</comment>
+      </column>
+    </property>
+    <property name="creadoPor" type="string">
+      <column length="30" name="CREADO_POR" not-null="true">
+        <comment>Atributo de auditoria, usuario que realizó acción de inserción del registro.</comment>
+      </column>
+    </property>
+    <property name="fechaCreacion" type="date">
+      <column length="7" name="FECHA_CREACION" not-null="true">
+        <comment>Atributo de auditoria, fecha, hora de creación del registro.</comment>
+      </column>
+    </property>
+    <property name="sistema" type="string">
+      <column length="30" name="SISTEMA" not-null="true">
+        <comment>Atributo de auditoria, sistema que realizó la inserción del registro en la tabla.</comment>
+      </column>
+    </property>
+    <property name="modificadoPor" type="string">
+      <column length="30" name="MODIFICADO_POR">
+        <comment>Atributo de auditoria, nombre del usuario que realizó la ultima modificación al registro.</comment>
+      </column>
+    </property>
+    <property name="fechaModificacion" type="date">
+      <column length="7" name="FECHA_MODIFICACION">
+        <comment>Atributo de auditoria, fecha y hora de ultima modificación realizada en el registro.</comment>
+      </column>
+    </property>
+    <property name="fechaRespuesta" type="date">
+      <column length="7" name="FECHA_RESPUESTA">
+        <comment>Fecha de registro de la respuesta de la entidad financiera</comment>
+      </column>
+    </property>
+    <property name="fechaNotificacion" type="date">
+      <column length="7" name="FECHA_NOTIFICACION">
+        <comment>Fecha de envío de respuesta a SAP</comment>
+      </column>
+    </property>
+    <property name="acuseSap" type="string">
+      <column length="250" name="ACUSE_SAP">
+        <comment>Respuesta SAP</comment>
+      </column>
+    </property>
+  </class>
+</hibernate-mapping>

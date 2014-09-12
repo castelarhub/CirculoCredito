@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+    <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+    <!--<property name="hibernate.connection.url">jdbc:oracle:thin:@172.16.4.50:1521:maxdb01</property>-->
+    <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>
+    <property name="hibernate.connection.username">ADMIN_MPM</property>
+    <property name="hibernate.connection.password">am1np4g05</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+    <property name="hibernate.connection.zeroDateTimeBehavior">convertToNull</property>
+    
+    <mapping resource="com/maxcom/mpm/model/MpmCestados.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCgruposCobranza.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCmarcasTarjetas.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCnotificaciones.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCrespuestasCargos.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCtiposCuentas.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCtiposNotificaciones.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCtiposRespuestas.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmTcobranzaSap.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmTcobranzaSapDeta.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmTlotesCargoAutomatico.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmTprocesos.hbm.xml"/>
+    
+    <!--Adicionales-->
+    <mapping resource="com/maxcom/mpm/model/MpmCusersWs.hbm.xml"/>
+    
+  </session-factory>
+</hibernate-configuration>

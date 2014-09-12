@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-sep-2014 19:15:59 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="com.maxcom.mpm.model.MpmCusersWs" schema="ADMIN_MPM" table="MPM_CUSERS_WS">
+        
+        <id name="id" type="short">
+            <column name="ID" precision="3" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="userLogin" type="string">
+            <column name="USER_LOGIN" length="50" not-null="true" unique="true">
+                <comment>Nombre de usuario</comment>
+            </column>
+        </property>
+        <property name="userPass" type="string">
+            <column name="USER_PASS" length="50" not-null="true">
+                <comment>Contrasenia del ususuario</comment>
+            </column>
+        </property>
+        <property name="servicio" type="string">
+            <column name="SERVICIO" length="50" not-null="true">
+                <comment>Clave del servicio</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

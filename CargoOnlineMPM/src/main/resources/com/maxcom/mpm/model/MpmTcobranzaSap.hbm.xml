@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 05-sep-2014 15:58:11 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class name="com.maxcom.mpm.model.MpmTcobranzaSap" schema="ADMIN_MPM" table="MPM_TCOBRANZA_SAP">
+    <comment>Cada petición que realice SAP a componente del modulo de pagos Maxcom, sera regitrada como una petición de cobranza, y cada cobro solicitado (cobranza)
+        se integraran en un lote de cobros SAP. ** NOTA: Al realizar insert tener precaución de emplear secuencia correspondiente: MPM_TCOBRANZA_SAP_SEQ1</comment>
+    <id name="idCobranza" type="long">
+      <column name="ID_COBRANZA" precision="10" scale="0"/>
+      <generator class="sequence" >
+        <param name="sequence">MPM_TCOBRANZA_SAP_SEQ1</param>
+      </generator>
+    </id>
+    <many-to-one class="com.maxcom.mpm.model.MpmCestados" fetch="select" name="mpmCestados">
+      <column length="5" name="ID_ESTADO" not-null="true"/>
+    </many-to-one>
+    <property name="producto" type="string">
+      <column length="100" name="PRODUCTO" not-null="true">
+        <comment>Se inidica que producto esta solicitando el cargo automático en la Entidad Financiera</comment>
+      </column>
+    </property>
+    <property name="componente" type="string">
+      <column length="50" name="COMPONENTE" not-null="true">
+        <comment>Identificador del componente de software a través del cual se ha solicitado el cargo automático.</comment>
+      </column>
+    </property>
+    <property name="periodo" type="string">
+      <column length="30" name="PERIODO" not-null="true">
+        <comment>Periodo de facturación a la cual corresponde la cobranza solicitada por SAP</comment>
+      </column>
+    </property>
+    <property name="creadoPor" type="string">
+      <column length="30" name="CREADO_POR" not-null="true">
+        <comment>Atributo de auditoria, usuario que realizó acción de inserción del registro.</comment>
+      </column>
+    </property>
+    <property name="fechaCreacion" type="date">
+      <column length="7" name="FECHA_CREACION" not-null="true">
+        <comment>Atributo de auditoria, fecha y hora de creación del registro</comment>
+      </column>
+    </property>
+    <property name="sistema" type="string">
+      <column length="30" name="SISTEMA" not-null="true">
+        <comment>Atributo de auditoria, sistema que realizó la inserción del registro en la tabla.</comment>
+      </column>
+    </property>
+    <property name="modificadoPor" type="string">
+      <column length="30" name="MODIFICADO_POR">
+        <comment>Atributo de auditoria, nombre del usuario que realizó la ultima modificación al registro.</comment>
+      </column>
+    </property>
+    <property name="fechaModificacion" type="date">
+      <column length="7" name="FECHA_MODIFICACION">
+        <comment>Atributo de auditoria, fecha y hora de ultima modificación realizada en el registro.</comment>
+      </column>
+    </property>
+    <property name="idsap" type="string">
+      <column length="30" name="IDSAP" not-null="true" unique="true">
+        <comment>Identificador unico de la transacción con SAP</comment>
+      </column>
+    </property>
+    <property name="observaciones" type="string">
+      <column length="250" name="OBSERVACIONES">
+        <comment>Comentarios adicionales de la transacción</comment>
+      </column>
+    </property>
+    <set fetch="select" inverse="true" lazy="false" name="mpmTcobranzaSapDetas" cascade="all" table="MPM_TCOBRANZA_SAP_DETA">
+      <key>
+        <column name="ID_COBRANZA" not-null="true" precision="10" scale="0"/>
+      </key>
+      <one-to-many class="com.maxcom.mpm.model.MpmTcobranzaSapDeta"/>
+    </set>
+  </class>
+</hibernate-mapping>

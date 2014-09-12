@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 05-sep-2014 15:58:11 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class name="com.maxcom.mpm.model.MpmCrespuestasCargos" schema="ADMIN_MPM" table="MPM_CRESPUESTAS_CARGOS">
+    <comment>Entidad que representa el catalogo de posibles respuestas que puede ser emitido para una solicitud de cobranza.</comment>
+    <id name="idRespuestaCargo" type="string">
+      <column length="5" name="ID_RESPUESTA_CARGO"/>
+      <generator class="assigned"/>
+    </id>
+    <many-to-one class="com.maxcom.mpm.model.MpmCtiposRespuestas" fetch="select" name="mpmCtiposRespuestas">
+      <column name="ID_TIPO_RESPUESTA" not-null="true" precision="10" scale="0"/>
+    </many-to-one>
+    <property name="descripcion" type="string">
+      <column length="120" name="DESCRIPCION" not-null="true">
+        <comment>Descripción del codigo de respuesta a solicitud de cargo automatico.</comment>
+      </column>
+    </property>
+    <property name="origen" type="string">
+      <column length="400" name="ORIGEN">
+        <comment>Campo que describe de manera detallada lo que origino el error reportado.</comment>
+      </column>
+    </property>
+    <property name="accionReintento" type="boolean">
+      <column name="ACCION_REINTENTO" not-null="true" precision="1" scale="0">
+        <comment>Indica de acuerdo al codigo si se debe reintentar el cargo al día siguiente hábil. Un 0 indica no reintentar más y un 1 indica reintentar
+                en el mismo periodo y 9 reintentar al siguiente periodo.</comment>
+      </column>
+    </property>
+    <property name="creadoPor" type="string">
+      <column length="30" name="CREADO_POR" not-null="true">
+        <comment>Atributo de auditoria, usuario que realizó acción de inserción del registro.</comment>
+      </column>
+    </property>
+    <property name="fechaCreacion" type="date">
+      <column length="7" name="FECHA_CREACION" not-null="true">
+        <comment>Atributo de auditoria, fecha, hora de creación del registro</comment>
+      </column>
+    </property>
+    <property name="sistema" type="string">
+      <column length="30" name="SISTEMA" not-null="true">
+        <comment>Atributo de auditoria, sistema que realizó la inserción del registro en la tabla.</comment>
+      </column>
+    </property>
+    <property name="modificadoPor" type="string">
+      <column length="30" name="MODIFICADO_POR">
+        <comment>Atributo de auditoria, nombre del usuario que realizó la ultima modificación al registro.</comment>
+      </column>
+    </property>
+    <property name="fechaModificacion" type="date">
+      <column length="7" name="FECHA_MODIFICACION">
+        <comment>Atributo de auditoria, fecha y hora de ultima modificación realizada en el registro.</comment>
+      </column>
+    </property>
+    <property name="activo" type="boolean">
+      <column name="ACTIVO" not-null="true" precision="1" scale="0">
+        <comment>Bandera (campo booleano), que indica si el registro esta activo 1, o desactivado 0.</comment>
+      </column>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="mpmTcobranzaSapDetas" table="MPM_TCOBRANZA_SAP_DETA">
+      <key>
+        <column length="5" name="ID_RESPUESTA_CARGO"/>
+      </key>
+      <one-to-many class="com.maxcom.mpm.model.MpmTcobranzaSapDeta"/>
+    </set>
+  </class>
+</hibernate-mapping>
