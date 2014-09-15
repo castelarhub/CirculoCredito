@@ -1,7 +1,7 @@
 package com.maxcom.mpm.ws;
 
 import com.maxcom.mpm.bi.CargoOnlineFacade;
-import com.maxcom.mpm.bi.CargoOnlineI;
+import com.maxcom.mpm.bi.ICargoOnline;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import javax.jws.WebMethod;
@@ -20,11 +20,11 @@ public class CargoOnline {
     
     RespuestaTO respuesta;
     
-    CargoOnlineI cargoOnlineI = null;
+    ICargoOnline IcargoOnline = null;
     
     public CargoOnline(){
         //Agregar DI
-        cargoOnlineI = new CargoOnlineFacade();
+        IcargoOnline = new CargoOnlineFacade();
     }
     
     /**
@@ -36,7 +36,7 @@ public class CargoOnline {
     @WebResult(name = "respuesta")
     public RespuestaTO procesarCargos(@WebParam(name = "transaccion") @XmlElement(required=true) TransaccionTO transaccion ){        
         
-        respuesta = cargoOnlineI.procesar(transaccion);
+        respuesta = IcargoOnline.procesar(transaccion);
         
         return respuesta;
     }

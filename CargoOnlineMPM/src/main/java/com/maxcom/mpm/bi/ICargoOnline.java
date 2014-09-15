@@ -4,13 +4,13 @@ import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 
 /**
- * La interfaz CargoOnlineI define el punto de entrada para trabajar 
+ * La interfaz ICargoOnline define el punto de entrada para trabajar 
  con los cargos recurrentes en el MPM. <br>
  * 
  * @author Nelson Castelar
  * @version 1.0
  */
-public interface CargoOnlineI {
+public interface ICargoOnline {
     
     /**
      * Procesa la transaccion especificada

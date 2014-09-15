@@ -22,9 +22,9 @@ public class CargoTO {
     @XmlElement(required=true)
     private String numeroTarjeta;
     @XmlElement(name="mesExpiracion",required=true)
-    private int mesExpiracionTarjeta;
+    private String mesExpiracionTarjeta;
     @XmlElement(name="anioExpiracion",required=true)
-    private int anioExpiracionTarjeta;
+    private String anioExpiracionTarjeta;
     @XmlElement(name="codigoseguridad",required=true)
     private String codigoSeguridadTarjeta;
     @XmlElement(required=true)
@@ -75,34 +75,6 @@ public class CargoTO {
      */
     public void setNumeroTarjeta(String numeroTarjeta) {
         this.numeroTarjeta = numeroTarjeta;
-    }
-
-    /**
-     * @return the mesExpiracionTarjeta
-     */
-    public int getMesExpiracionTarjeta() {
-        return mesExpiracionTarjeta;
-    }
-
-    /**
-     * @param mesExpiracionTarjeta the mesExpiracionTarjeta to set
-     */
-    public void setMesExpiracionTarjeta(int mesExpiracionTarjeta) {
-        this.mesExpiracionTarjeta = mesExpiracionTarjeta;
-    }
-
-    /**
-     * @return the anioExpiracionTarjeta
-     */
-    public int getAnioExpiracionTarjeta() {
-        return anioExpiracionTarjeta;
-    }
-
-    /**
-     * @param anioExpiracionTarjeta the anioExpiracionTarjeta to set
-     */
-    public void setAnioExpiracionTarjeta(int anioExpiracionTarjeta) {
-        this.anioExpiracionTarjeta = anioExpiracionTarjeta;
     }
 
     /**
@@ -173,6 +145,34 @@ public class CargoTO {
      */
     public void setTipoTarjeta(String tipoTarjeta) {
         this.tipoTarjeta = tipoTarjeta;
+    }
+
+    /**
+     * @return the mesExpiracionTarjeta
+     */
+    public String getMesExpiracionTarjeta() {
+        return mesExpiracionTarjeta;
+    }
+
+    /**
+     * @param mesExpiracionTarjeta the mesExpiracionTarjeta to set
+     */
+    public void setMesExpiracionTarjeta(String mesExpiracionTarjeta) {
+        this.mesExpiracionTarjeta = mesExpiracionTarjeta;
+    }
+
+    /**
+     * @return the anioExpiracionTarjeta
+     */
+    public String getAnioExpiracionTarjeta() {
+        return anioExpiracionTarjeta;
+    }
+
+    /**
+     * @param anioExpiracionTarjeta the anioExpiracionTarjeta to set
+     */
+    public void setAnioExpiracionTarjeta(String anioExpiracionTarjeta) {
+        this.anioExpiracionTarjeta = anioExpiracionTarjeta;
     }
 
 }

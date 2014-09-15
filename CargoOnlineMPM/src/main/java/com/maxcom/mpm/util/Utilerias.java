@@ -27,6 +27,32 @@ public class Utilerias {
     }
     
     /**
+     * Valida si el año es valido. Un año es valido si es mayor o igual al actual.
+     * @param m Año a validar
+     * @return True - Si el año enviado es valido
+     */
+    public static boolean isValidNumberYear(int m){
+        Calendar cal = Calendar.getInstance();
+        int anioActual = cal.get(Calendar.YEAR);        
+        return m >= anioActual;
+    }    
+    
+    public static boolean isValidNumberMonth(int m){
+        return m>=1 && m<=12;
+    }
+    
+    public static boolean isValidIntegerNumber(String n){
+        Integer numero;
+        boolean bValido = true;
+        try{
+            numero = Integer.valueOf(n);
+        }catch(NumberFormatException e){
+            bValido = false;
+        }
+        return bValido;
+    }    
+    
+    /**
      * Valida si una lista es nulla o esta vacia.
      * @param l Lista a validar
      * @return True - Si la lista no es nula y tiene al menos un elemento
