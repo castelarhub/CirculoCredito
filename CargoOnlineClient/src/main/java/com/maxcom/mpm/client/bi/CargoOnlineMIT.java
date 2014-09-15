@@ -13,13 +13,14 @@ public class CargoOnlineMIT implements CargoOnlineBanco{
     }
 
     @Override
-    public RespuestaBancoTO realizarCargo(TransaccionBancoTO transaccion) {        
+    public RespuestaBancoTO realizarCargo(TransaccionBancoTO transaccion) throws Exception{        
         RespuestaBancoTO respuestaBanco=null;
         try {
             respuestaBanco = clienteCobro.realizarPago(transaccion);
             
         } catch (Exception ex) {
             ex.printStackTrace();
+            throw ex;
         }        
         return respuestaBanco;
     }
