@@ -41,6 +41,7 @@ public class CargoOnlineFacade implements ICargoOnline {
     HashMap<Long,Long> hmRelCargosIdDetalle;
     RespuestaTO respuesta;
     long idOrden;
+    
     static final Logger logger = Logger.getLogger(CargoOnlineFacade.class);
     
     /**
@@ -133,10 +134,10 @@ public class CargoOnlineFacade implements ICargoOnline {
             RespuestaBancoTO respuestaBanco = cargoOnline.realizarCargo(pagoSolicitado);
             
             observaciones = new StringBuilder("");
-            observaciones.append("Orden procesada.");
+            observaciones.append("Transaccion procesada, ver respuesta.");
             
             this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                    "RSAP", observaciones.toString(),
+                    "RPOR", observaciones.toString(),
                     Calendar.getInstance().getTime(), null);            
             
             this.respuesta.setReferencia(respuestaBanco.getReference());
@@ -162,7 +163,8 @@ public class CargoOnlineFacade implements ICargoOnline {
             
             this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
                                             "EAPP", detalleErrorApp.toString() ,
-                                            Calendar.getInstance().getTime(), (listDetalleError!=null)?listDetalleError.get(0):null);
+                                            Calendar.getInstance().getTime(), null);
+            //(listDetalleError!=null)?listDetalleError.get(0):null
             
             try{
                 this.guardarBitacoraRespuesta(this.respuesta);
@@ -192,7 +194,7 @@ public class CargoOnlineFacade implements ICargoOnline {
             long idTemp;
             //Agregando la clave unica de persistencia
             idTemp = cargo.getUniqueIdDetail();
-            cargo.setIdPersistence(hmRelCargosIdDetalle.get(idTemp));
+            //cargo.setIdPersistence(hmRelCargosIdDetalle.get(idTemp));
             
             detalle = new DetalleErrorTO();
             
@@ -283,9 +285,10 @@ public class CargoOnlineFacade implements ICargoOnline {
                 sb.append("Se requiere el campo nombreCliente - ");
             }
             
+            /*
             if (!isValidString(cargo.getTipoTarjeta())) {
                 sb.append("Se requiere el campo tipoTarjeta - ");
-            }            
+            } */           
             
             if (!isValidString(cargo.getNumeroTarjeta())) {
                 sb.append("Se requiere el campo numeroTarjeta - ");
@@ -363,7 +366,7 @@ public class CargoOnlineFacade implements ICargoOnline {
             }
         }
         
-        if (transaccion.getCargo()!=null) {
+        if (transaccion.getCargo()==null) {
             detalleError.append("El campo cargo es obligatorio.");
         }
         

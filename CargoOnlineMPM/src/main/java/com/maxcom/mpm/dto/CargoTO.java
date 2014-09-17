@@ -18,8 +18,6 @@ public class CargoTO {
     @XmlElement(required=true)
     private String nombreCliente;
     @XmlElement(required=true)
-    private String tipoTarjeta;
-    @XmlElement(required=true)
     private String numeroTarjeta;
     @XmlElement(name="mesExpiracion",required=true)
     private String mesExpiracionTarjeta;
@@ -131,20 +129,6 @@ public class CargoTO {
      */
     public void setUniqueIdDetail(long uniqueIdDetail) {
         this.uniqueIdDetail = uniqueIdDetail;
-    }
-
-    /**
-     * @return the tipoTarjeta
-     */
-    public String getTipoTarjeta() {
-        return tipoTarjeta;
-    }
-
-    /**
-     * @param tipoTarjeta the tipoTarjeta to set
-     */
-    public void setTipoTarjeta(String tipoTarjeta) {
-        this.tipoTarjeta = tipoTarjeta;
     }
 
     /**
