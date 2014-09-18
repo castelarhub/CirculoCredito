@@ -11,7 +11,7 @@ public class Constantes {
     public static final String CREADO_POR_ORDEN="NCM";
     public static final String PRODUCTO_ORDEN="PRODUCTO_X";
     public static final String SYSTEMA_ORDEN="SISTEMA_X";
-    public static final String MODIFICADO_POR_ORDEN="COMPONENTE_X";
+    public static final String MODIFICADO_POR_ORDEN="NCM";
     
     /*Constantes para el detalle de la orden*/
     public static final String CREADO_POR_DETALLE="NCM";
