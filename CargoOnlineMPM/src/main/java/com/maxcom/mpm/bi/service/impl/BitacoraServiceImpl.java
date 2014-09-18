@@ -78,7 +78,7 @@ public class BitacoraServiceImpl implements BitacoraService {
                 
                     detalle = new MpmTcobranzaSapDeta();
                     
-                    detalle.setIdUniqueDetalle(cargoAux.getUniqueIdDetail());
+                    //detalle.setIdUniqueDetalle(cargoAux.getUniqueIdDetail());
                     detalle.setReferencia(cargoAux.getReferencia());
                     detalle.setNombreCliente(cargoAux.getNombreCliente());
                     detalle.setCuenta(cargoAux.getNumeroTarjeta());
@@ -216,7 +216,7 @@ public class BitacoraServiceImpl implements BitacoraService {
                     detalleError= new DetalleErrorTO();
                     cargo = new CargoTO();
                     
-                    detalleError.setIdCobranzaDetalle(detalle.getIdCobranzadeta());
+                    detalleError.setIdCobranzaOnlineDetalle(detalle.getIdCobranzadeta());
                     detalleError.setIdEstatus(detalle.getMpmCrespuestasCargos().getIdRespuestaCargo());
                     detalleError.setObservaciones(detalle.getMpmCrespuestasCargos().getDescripcion());
                     

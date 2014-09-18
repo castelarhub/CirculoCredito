@@ -11,23 +11,23 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DetalleError")
 public class DetalleErrorTO {
-    private long idCobranzaDetalle;
+    private long idCobranzaOnlineDetalle;
     private String idEstatus;
     private String observaciones;
     private CargoTO cargo;
 
     /**
-     * @return the idCobranzaDetalle
+     * @return the idCobranzaOnlineDetalle
      */
-    public long getIdCobranzaDetalle() {
-        return idCobranzaDetalle;
+    public long getIdCobranzaOnlineDetalle() {
+        return idCobranzaOnlineDetalle;
     }
 
     /**
-     * @param idCobranzaDetalle the idCobranzaDetalle to set
+     * @param idCobranzaOnlineDetalle the idCobranzaOnlineDetalle to set
      */
-    public void setIdCobranzaDetalle(long idCobranzaDetalle) {
-        this.idCobranzaDetalle = idCobranzaDetalle;
+    public void setIdCobranzaOnlineDetalle(long idCobranzaOnlineDetalle) {
+        this.idCobranzaOnlineDetalle = idCobranzaOnlineDetalle;
     }
 
     /**

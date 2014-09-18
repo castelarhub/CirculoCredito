@@ -30,8 +30,6 @@ public class CargoTO {
     
     @XmlTransient
     private long idPersistence; 
-    @XmlTransient
-    private long uniqueIdDetail; 
 
     /**
      * @return the referencia
@@ -115,20 +113,6 @@ public class CargoTO {
      */
     public void setIdPersistence(long idPersistence) {
         this.idPersistence = idPersistence;
-    }
-
-    /**
-     * @return the uniqueIdDetail
-     */
-    public long getUniqueIdDetail() {
-        return uniqueIdDetail;
-    }
-
-    /**
-     * @param uniqueIdDetail the uniqueIdDetail to set
-     */
-    public void setUniqueIdDetail(long uniqueIdDetail) {
-        this.uniqueIdDetail = uniqueIdDetail;
     }
 
     /**

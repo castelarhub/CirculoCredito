@@ -22,9 +22,7 @@ public class CargoOnline {
     
     ICargoOnline IcargoOnline = null;
     
-    public CargoOnline(){
-        //Agregar DI
-        IcargoOnline = new CargoOnlineFacade();
+    public CargoOnline(){        
     }
     
     /**
@@ -35,8 +33,12 @@ public class CargoOnline {
     @WebMethod(operationName = "procesarCargo")
     @WebResult(name = "respuesta")
     public RespuestaTO procesarCargos(@WebParam(name = "transaccion") @XmlElement(required=true) TransaccionTO transaccion ){        
-        
+        //Agregar DI
+        IcargoOnline = new CargoOnlineFacade();
+                
         respuesta = IcargoOnline.procesar(transaccion);
+        
+        IcargoOnline = null;
         
         return respuesta;
     }

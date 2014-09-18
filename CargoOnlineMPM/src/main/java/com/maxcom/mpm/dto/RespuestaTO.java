@@ -13,18 +13,19 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Respuesta")
 public class RespuestaTO {
     
-    private long idCobranzaOnline;
-    private String idTransaccion;
-    private String idEstatus;
-    private String respuesta;
-    private String referencia;
-    private String autorizacion;
-    private String monto;
-    private String folioCPagos;
+    private long idCobranzaOnline;//identificador unico del MPM para los pagos en linea. Se regresa como acuse.
+    private String idTransaccion;//identificador unico recibido.    
     
-    private String observaciones;
-    private Date fecha;
-    private DetalleErrorTO detalleError;
+    private String idEstatus;//Estatus interno del MPM.
+    private String observaciones;//Descripcion general de la respuesta.
+    private Date fecha;//Fecha y hora en que se realizo la operacion.    
+    private DetalleErrorTO detalleError;//
+    
+    private String respuesta;//Resultado de la transaccion del banco que envia el banco. Esta puede ser: aprobada, rechazada o error.
+    private String referencia;//Numero de referencia de la transaccion. Debe corresponder al enviado.
+    private String autorizacion;//Numero de autorizacion del banco.
+    private String monto;//Importe de la transaccion que cobro el banco.
+    private String folioCPagos;//Numero asignado de la operacion del banco.    
     
     public RespuestaTO(){}
 

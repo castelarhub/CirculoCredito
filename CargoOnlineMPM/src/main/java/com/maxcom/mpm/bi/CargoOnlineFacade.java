@@ -5,20 +5,19 @@ import com.maxcom.mpm.bi.service.BitacoraService;
 import com.maxcom.mpm.bi.service.CargoOnlineService;
 import com.maxcom.mpm.bi.service.impl.AutenticacionServiceImpl;
 import com.maxcom.mpm.bi.service.impl.BitacoraServiceImpl;
-import com.maxcom.mpm.client.bi.CargoOnlineBanco;
-import com.maxcom.mpm.client.bi.CargoOnlineMIT;
-import com.maxcom.mpm.client.dto.RespuestaBancoTO;
-import com.maxcom.mpm.client.dto.TransaccionBancoTO;
+import com.maxcom.mpm.bi.service.impl.CargoOnlineServiceImpl;
 import com.maxcom.mpm.dto.AutenticacionTO;
 import com.maxcom.mpm.dto.CargoTO;
 import com.maxcom.mpm.dto.DetalleErrorTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import static com.maxcom.mpm.util.Utilerias.isValidCustomerName;
+import static com.maxcom.mpm.util.Utilerias.isValidIntegerNumber;
+import static com.maxcom.mpm.util.Utilerias.isValidNumberMonth;
+import static com.maxcom.mpm.util.Utilerias.isValidNumberYear;
 import static com.maxcom.mpm.util.Utilerias.isValidString;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -31,16 +30,16 @@ import org.apache.log4j.Logger;
  */
 public class CargoOnlineFacade implements ICargoOnline {
     
-    BitacoraService bitacoraService;
-    CargoOnlineService cargoOnlineService;
-    AutenticacionService autenticacionService;
+    private BitacoraService bitacoraService;
+    private CargoOnlineService cargoOnlineService;
+    private AutenticacionService autenticacionService;
     
-    List<CargoTO> listCargosAceptados;
-    List<CargoTO> listCargosRechazados;
-    List<DetalleErrorTO> listDetalleError;
-    HashMap<Long,Long> hmRelCargosIdDetalle;
-    RespuestaTO respuesta;
-    long idOrden;
+    private List<CargoTO> listCargosAceptados;
+    private List<CargoTO> listCargosRechazados;
+    private List<DetalleErrorTO> listDetalleError;
+    private RespuestaTO respuesta;
+    //private long idOrden;
+    
     
     static final Logger logger = Logger.getLogger(CargoOnlineFacade.class);
     
@@ -50,7 +49,7 @@ public class CargoOnlineFacade implements ICargoOnline {
     public CargoOnlineFacade(){
         //Agregar DI
         this.bitacoraService = new BitacoraServiceImpl();
-        this.cargoOnlineService = null;
+        this.cargoOnlineService = new CargoOnlineServiceImpl();
         this.autenticacionService = new AutenticacionServiceImpl();        
         this.listDetalleError = new ArrayList<DetalleErrorTO>();
         this.listCargosAceptados = new ArrayList<CargoTO>();
@@ -66,18 +65,13 @@ public class CargoOnlineFacade implements ICargoOnline {
      */
     @Override
     public RespuestaTO procesar(TransaccionTO transaccion) {
-        StringBuilder observaciones;
+        //StringBuilder observaciones =;
         try {
             logger.info("CargoOnlineFacade:procesar(E)");
             
             if (!this.isTransaccionValida(transaccion)) {
-                this.respuesta = new RespuestaTO(0, "-","501", "Error - Transaccion nula", Calendar.getInstance().getTime(), null);
+                this.respuesta = new RespuestaTO(0, "-","500", "Error - Transaccion nula", Calendar.getInstance().getTime(), null);
                 return respuesta;
-            }
-            
-            //Identificando a cada cargo enviado en la orden
-            if(transaccion.getCargo()!=null){
-                this.agregarIdUnico(transaccion.getCargo());
             }
             
             //Validando datos minimos requeridos
@@ -94,7 +88,6 @@ public class CargoOnlineFacade implements ICargoOnline {
             this.guardarBitacoraSolicitud(transaccion);
 
             //Validando credenciales de la solicitud
-            /*
             if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {
                 
                 this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
@@ -104,7 +97,6 @@ public class CargoOnlineFacade implements ICargoOnline {
                 this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
             }
-            */
             
             //Revisando los datos cargo por cargo
             this.revisarDetalleCargo(transaccion.getCargo());
@@ -112,44 +104,18 @@ public class CargoOnlineFacade implements ICargoOnline {
             //Validando que exista al menos un cargo valido
             if (this.listCargosAceptados.isEmpty()) {
                 this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                        "ESAP", "Error - El cargo enviado es invalido, ver detalleError para mas informacion.",
+                        "500", "Error - El cargo enviado es invalido, ver detalleError para mas informacion.",
                         Calendar.getInstance().getTime(), listDetalleError.get(0));
                 this.guardarBitacoraRespuesta(this.respuesta);                
                 return this.respuesta;
             }
             
-            CargoTO cargo = transaccion.getCargo();
-            
-            CargoOnlineBanco cargoOnline = new CargoOnlineMIT();
-            TransaccionBancoTO pagoSolicitado = new TransaccionBancoTO();
-            
-            pagoSolicitado.setAnioExpiracionTarjeta(cargo.getAnioExpiracionTarjeta());
-            pagoSolicitado.setCodigoSeguridadTarjeta(cargo.getCodigoSeguridadTarjeta());
-            pagoSolicitado.setMesExpiracionTarjeta(cargo.getMesExpiracionTarjeta());
-            pagoSolicitado.setMonto(cargo.getMonto());
-            pagoSolicitado.setNombreCliente(cargo.getNombreCliente());
-            pagoSolicitado.setNumeroTarjeta(cargo.getNumeroTarjeta());
-            pagoSolicitado.setReferencia(cargo.getReferencia());
-            
-            RespuestaBancoTO respuestaBanco = cargoOnline.realizarCargo(pagoSolicitado);
-            
-            observaciones = new StringBuilder("");
-            observaciones.append("Transaccion procesada, ver respuesta.");
-            
-            this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                    "RPOR", observaciones.toString(),
-                    Calendar.getInstance().getTime(), null);            
-            
-            this.respuesta.setReferencia(respuestaBanco.getReference());
-            this.respuesta.setAutorizacion(respuestaBanco.getAuth());
-            this.respuesta.setMonto(respuestaBanco.getAmount());
-            this.respuesta.setRespuesta(respuestaBanco.getResponse());
-            this.respuesta.setFolioCPagos(respuestaBanco.getFoliocpagos());
+            this.respuesta = this.cargoOnlineService.procesarCargo(transaccion);
             
             this.guardarBitacoraRespuesta(this.respuesta);
             
             return this.respuesta;
-
+            
         } catch (Exception e) {
             logger.error("Error en CargoOnlineFacade:procesar - " + e.toString());
             
@@ -160,7 +126,6 @@ public class CargoOnlineFacade implements ICargoOnline {
             detalleErrorApp.append("Error en el aplicativo - Servicio de CargoOnline - Favor de reportar.");
             
             //Agregar notificaciones de mail en caso de error
-            
             this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
                                             "EAPP", detalleErrorApp.toString() ,
                                             Calendar.getInstance().getTime(), null);
@@ -187,23 +152,16 @@ public class CargoOnlineFacade implements ICargoOnline {
      * @throws Exception Si algun error inesperado ocurre
      */
     private void revisarDetalleCargo(CargoTO cargo) throws Exception {
-        try {            
-            
+        try {
             StringBuilder sb;
-            DetalleErrorTO detalle;            
-            long idTemp;
-            //Agregando la clave unica de persistencia
-            idTemp = cargo.getUniqueIdDetail();
-            //cargo.setIdPersistence(hmRelCargosIdDetalle.get(idTemp));
-            
-            detalle = new DetalleErrorTO();
+            DetalleErrorTO detalle = new DetalleErrorTO();
             
             sb = revisarDatosMinimosRequeridosCargo(cargo);
             
-            if (sb.length() > 0) {
+            if (null != sb && sb.length() > 0) {
                 detalle.setObservaciones(sb.toString());
                 detalle.setCargo(cargo);
-                detalle.setIdCobranzaDetalle(cargo.getIdPersistence());
+                detalle.setIdCobranzaOnlineDetalle(cargo.getIdPersistence());
                 detalle.setIdEstatus("*01");
                 listDetalleError.add(detalle);
                 listCargosRechazados.add(cargo);
@@ -212,10 +170,10 @@ public class CargoOnlineFacade implements ICargoOnline {
 
             sb = revisarFormatoDatosCargo(cargo);
 
-            if (sb.length() > 0) {
+            if (null != sb && sb.length() > 0) {
                 detalle.setObservaciones(sb.toString());
                 detalle.setCargo(cargo);
-                detalle.setIdCobranzaDetalle(cargo.getIdPersistence());
+                detalle.setIdCobranzaOnlineDetalle(cargo.getIdPersistence());
                 detalle.setIdEstatus("*02");
                 listDetalleError.add(detalle);
                 listCargosRechazados.add(cargo);
@@ -223,6 +181,8 @@ public class CargoOnlineFacade implements ICargoOnline {
             }
 
             /*Validaciones adicionales...*/
+            
+            //El cargo fue aceptado para su procesamiento
             listCargosAceptados.add(cargo);
 
         } catch (Exception e) {
@@ -231,24 +191,6 @@ public class CargoOnlineFacade implements ICargoOnline {
         }
 
     }
-    
-    /**
-     * Agrega un identidicador unico al cargo enviado.
-     * @param cargo Cargo a actualizar
-     * @throws Exception si ocurre un error inesperado
-     */
-    private void agregarIdUnico(CargoTO cargo) throws Exception {
-        long count = 1;
-        try {
-            if(cargo!=null){
-                cargo.setUniqueIdDetail(++count);
-            }
-        } catch (Exception e) {
-            logger.error("Error en CargoOnlineFacade:agregarIdUnico" + e);
-            throw e;
-        }
-
-    }   
     
     /**
      * Valida si los datos del cargo tienen el formato requerido para su procesamiento.
@@ -261,6 +203,27 @@ public class CargoOnlineFacade implements ICargoOnline {
             
             if(!isValidCustomerName(cargo.getNombreCliente())){
                 sb.append("Formato de dato incorrecto para el campo nombreCliente, solo se aceptan caracteres alfanumericos y espacios. ");
+            }
+            
+            if(!isValidIntegerNumber(cargo.getMesExpiracionTarjeta())){
+                sb.append("Solo se permiten caracteres numericos en el campo mesExpiracion. ");
+            }else{
+                
+                if(cargo.getMesExpiracionTarjeta().length()>2){
+                    sb.append("Valor invalido en el campo mesExpiracion. Solo se aceptan dos caracteres numericos. Ejem: 09");
+                }else if(!isValidNumberMonth(Integer.parseInt(cargo.getMesExpiracionTarjeta()))){
+                    sb.append("Valor invalido en el campo mesExpiracion. Solo se aceptan valores en el rango de 01-12. ");
+                }
+            }
+            
+            if(!isValidIntegerNumber(cargo.getAnioExpiracionTarjeta())){
+                sb.append("Solo se permiten caracteres numericos en el campo anioExpiracion");
+            }else{
+                if(cargo.getAnioExpiracionTarjeta().length()>2){
+                    sb.append("Valor invalido en el campo anioExpiracion. Solo se aceptan dos caracteres numericos, los ultimos dos del año. Ejem: 15");
+                }else if(!isValidNumberYear(Integer.parseInt("20"+cargo.getAnioExpiracionTarjeta()))){
+                    sb.append("Valor invalido en el campo anioExpiracion. El valor no puede ser menor al año actual");
+                }
             }
             
             return sb;
@@ -285,21 +248,21 @@ public class CargoOnlineFacade implements ICargoOnline {
                 sb.append("Se requiere el campo nombreCliente - ");
             }
             
-            /*
-            if (!isValidString(cargo.getTipoTarjeta())) {
-                sb.append("Se requiere el campo tipoTarjeta - ");
-            } */           
-            
             if (!isValidString(cargo.getNumeroTarjeta())) {
                 sb.append("Se requiere el campo numeroTarjeta - ");
             }
             
-            /*
             if (!isValidString(cargo.getMesExpiracionTarjeta())) {
                 sb.append("Se requiere el campo mesExpiracion - ");
-            }*/
+            }            
             
+            if (!isValidString(cargo.getAnioExpiracionTarjeta())) {
+                sb.append("Se requiere el campo anioExpiracion - ");
+            }
             
+            if (!isValidString(cargo.getCodigoSeguridadTarjeta())) {
+                sb.append("Se requiere el campo codigoSeguridad - ");
+            }            
             
             if (cargo.getMonto()<= 0.0 ) {
                 sb.append("Se requiere un monto mayor a 0.0 - ");
@@ -347,32 +310,32 @@ public class CargoOnlineFacade implements ICargoOnline {
      * @return True - Si la transaccion cuenta con la informacion minima para su procesamiento.
      */
     private boolean isTransaccionCompleta(TransaccionTO transaccion) {
-        StringBuilder detalleError = new StringBuilder();
+        StringBuilder error = new StringBuilder();
         if (!isValidString(transaccion.getIdTransaccion())) {
-            detalleError.append("El campo idTransaccion es obligatorio - ");
+            error.append("El campo idTransaccion es obligatorio - ");
         }
         
         if (transaccion.getAutenticacion() == null) {
-            detalleError.append("El campo autenticacion es obligatorio - ");
+            error.append("El campo autenticacion es obligatorio - ");
         }else{
             if (!isValidString(transaccion.getAutenticacion().getClaveServicio())) {
-                detalleError.append("El campo claveServicio es obligatorio - ");
+                error.append("El campo claveServicio es obligatorio - ");
             }
             if (!isValidString(transaccion.getAutenticacion().getUsuario())) {
-                detalleError.append("El campo usuario es obligatorio - ");
+                error.append("El campo usuario es obligatorio - ");
             }
             if (!isValidString(transaccion.getAutenticacion().getContrasenia())) {
-                detalleError.append("El campo contrasenia es obligatorio - ");
+                error.append("El campo contrasenia es obligatorio - ");
             }
         }
         
         if (transaccion.getCargo()==null) {
-            detalleError.append("El campo cargo es obligatorio.");
+            error.append("El campo cargo es obligatorio.");
         }
         
-        if (detalleError.length() > 0) {
+        if (error.length() > 0) {
             this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                    "ESAP", "Error - Transaccion incompleta ->"+detalleError.toString(),
+                    "ESAP", "Error - Transaccion incompleta ->"+error.toString(),
                     Calendar.getInstance().getTime(), null);
             return false;
         }

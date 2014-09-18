@@ -6,6 +6,7 @@
 
 package com.maxcom.mpm.bi.service;
 
+import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 
 /**
@@ -13,5 +14,5 @@ import com.maxcom.mpm.dto.TransaccionTO;
  * @author operador
  */
 public interface CargoOnlineService {
-    public void actualizarEstatus(TransaccionTO transaccion) throws Exception;
+    public RespuestaTO procesarCargo(TransaccionTO transaccion) throws Exception;
 }
