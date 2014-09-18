@@ -18,10 +18,6 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(serviceName = "CargoOnlineService")
 public class CargoOnline {
     
-    RespuestaTO respuesta;
-    
-    ICargoOnline IcargoOnline = null;
-    
     public CargoOnline(){        
     }
     
@@ -34,11 +30,11 @@ public class CargoOnline {
     @WebResult(name = "respuesta")
     public RespuestaTO procesarCargos(@WebParam(name = "transaccion") @XmlElement(required=true) TransaccionTO transaccion ){        
         //Agregar DI
-        IcargoOnline = new CargoOnlineFacade();
-                
-        respuesta = IcargoOnline.procesar(transaccion);
+        ICargoOnline icargoOnline = new CargoOnlineFacade();
         
-        IcargoOnline = null;
+        RespuestaTO  respuesta = icargoOnline.procesar(transaccion);
+        
+        icargoOnline = null;
         
         return respuesta;
     }

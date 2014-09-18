@@ -13,21 +13,13 @@
     <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
     <property name="hibernate.connection.zeroDateTimeBehavior">convertToNull</property>
     
-    <mapping resource="com/maxcom/mpm/model/MpmCestados.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmCgruposCobranza.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmCmarcasTarjetas.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmCnotificaciones.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmCrespuestasCargos.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmCtiposCuentas.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmCtiposNotificaciones.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmCtiposRespuestas.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmTcobranzaSap.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmTcobranzaSapDeta.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmTlotesCargoAutomatico.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/model/MpmTprocesos.hbm.xml"/>
-    
-    <!--Adicionales-->
+    <mapping resource="com/maxcom/mpm/model/MpmTbitacoraCargoOnline.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/model/MpmCusersWs.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCnotificaciones.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCestados.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCtiposRespuestas.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCtiposNotificaciones.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmCrespuestasCargos.hbm.xml"/>
     
   </session-factory>
 </hibernate-configuration>

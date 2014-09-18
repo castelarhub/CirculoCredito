@@ -1,62 +1,63 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 05-sep-2014 15:58:11 by Hibernate Tools 3.6.0 -->
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-sep-2014 9:04:02 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
-  <class name="com.maxcom.mpm.model.MpmCnotificaciones" schema="ADMIN_MPM" table="MPM_CNOTIFICACIONES">
-    <comment>Entidad de las notificaciones que la aplicación enviara cuando algun escenario o condicion se compla. ** NOTA: Al realizar insert tener precaución de
+    <class name="com.maxcom.mpm.model.MpmCnotificaciones" table="MPM_CNOTIFICACIONES" schema="ADMIN_MPM">
+        <comment>Entidad de las notificaciones que la aplicaci&#243;n enviara cuando algun escenario o condicion se compla. ** NOTA: Al realizar insert tener precauci&#243;n de
         emplear secuencia correspondiente: MPM_CNOTIFICACIONES_SEQ1</comment>
-    <id name="idNotificacion" type="long">
-      <column name="ID_NOTIFICACION" precision="10" scale="0"/>
-      <generator class="assigned"/>
-    </id>
-    <many-to-one class="com.maxcom.mpm.model.MpmCtiposNotificaciones" fetch="select" name="mpmCtiposNotificaciones">
-      <column name="ID_TIPO_NOTIFICACION" not-null="true" precision="10" scale="0"/>
-    </many-to-one>
-    <property name="subject" type="string">
-      <column length="200" name="SUBJECT" not-null="true">
-        <comment>Subject del correo de notificación</comment>
-      </column>
-    </property>
-    <property name="body" type="string">
-      <column length="2000" name="BODY" not-null="true">
-        <comment>Formato de correo electonico de la notificación</comment>
-      </column>
-    </property>
-    <property name="creadoPor" type="string">
-      <column length="30" name="CREADO_POR" not-null="true">
-        <comment>Atributo de auditoria, usuario que realizó acción de inserción del registro.</comment>
-      </column>
-    </property>
-    <property name="fechaCreacion" type="date">
-      <column length="7" name="FECHA_CREACION" not-null="true">
-        <comment>Atributo de auditoria, fecha, hora de creación del registro</comment>
-      </column>
-    </property>
-    <property name="sistema" type="string">
-      <column length="30" name="SISTEMA" not-null="true">
-        <comment>Atributo de auditoria, sistema que realizó la inserción del registro en la tabla.</comment>
-      </column>
-    </property>
-    <property name="modificadoPor" type="string">
-      <column length="30" name="MODIFICADO_POR">
-        <comment>Atributo de auditoria, nombre del usuario que realizó la ultima modificación al registro.</comment>
-      </column>
-    </property>
-    <property name="fechaModificacion" type="date">
-      <column length="7" name="FECHA_MODIFICACION">
-        <comment>Atributo de auditoria, fecha y hora de ultima modificación realizada en el registro.</comment>
-      </column>
-    </property>
-    <property name="activo" type="boolean">
-      <column name="ACTIVO" not-null="true" precision="1" scale="0">
-        <comment>Bandera (campo booleano), que indica si el registro esta activo 1, o desactivado 0.</comment>
-      </column>
-    </property>
-    <set fetch="select" inverse="true" lazy="true" name="mpmCestadoses" table="MPM_CESTADOS">
-      <key>
-        <column name="ID_NOTIFICACION" precision="10" scale="0"/>
-      </key>
-      <one-to-many class="com.maxcom.mpm.model.MpmCestados"/>
-    </set>
-  </class>
+        <id name="idNotificacion" type="long">
+            <column name="ID_NOTIFICACION" precision="10" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="mpmCtiposNotificaciones" class="com.maxcom.mpm.model.MpmCtiposNotificaciones" fetch="select">
+            <column name="ID_TIPO_NOTIFICACION" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="subject" type="string">
+            <column name="SUBJECT" length="200" not-null="true">
+                <comment>Subject del correo de notificaci&#243;n</comment>
+            </column>
+        </property>
+        <property name="body" type="string">
+            <column name="BODY" length="2000" not-null="true">
+                <comment>Formato de correo electonico de la notificaci&#243;n</comment>
+            </column>
+        </property>
+        <property name="creadoPor" type="string">
+            <column name="CREADO_POR" length="30" not-null="true">
+                <comment>Atributo de auditoria, usuario que realiz&#243; acci&#243;n de inserci&#243;n del registro.</comment>
+            </column>
+        </property>
+        <property name="fechaCreacion" type="date">
+            <column name="FECHA_CREACION" length="7" not-null="true">
+                <comment>Atributo de auditoria, fecha, hora de creaci&#243;n del registro</comment>
+            </column>
+        </property>
+        <property name="sistema" type="string">
+            <column name="SISTEMA" length="30" not-null="true">
+                <comment>Atributo de auditoria, sistema que realiz&#243; la inserci&#243;n del registro en la tabla.</comment>
+            </column>
+        </property>
+        <property name="modificadoPor" type="string">
+            <column name="MODIFICADO_POR" length="30">
+                <comment>Atributo de auditoria, nombre del usuario que realiz&#243; la ultima modificaci&#243;n al registro.</comment>
+            </column>
+        </property>
+        <property name="fechaModificacion" type="date">
+            <column name="FECHA_MODIFICACION" length="7">
+                <comment>Atributo de auditoria, fecha y hora de ultima modificaci&#243;n realizada en el registro.</comment>
+            </column>
+        </property>
+        <property name="activo" type="boolean">
+            <column name="ACTIVO" precision="1" scale="0" not-null="true">
+                <comment>Bandera (campo booleano), que indica si el registro esta activo 1, o desactivado 0.</comment>
+            </column>
+        </property>
+        <set name="mpmCestadoses" table="MPM_CESTADOS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_NOTIFICACION" precision="10" scale="0" />
+            </key>
+            <one-to-many class="com.maxcom.mpm.model.MpmCestados" />
+        </set>
+    </class>
 </hibernate-mapping>

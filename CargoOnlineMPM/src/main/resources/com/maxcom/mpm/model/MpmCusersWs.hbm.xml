@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 10-sep-2014 19:15:59 by Hibernate Tools 3.6.0 -->
+<!-- Generated 18-sep-2014 9:04:02 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
-    <class name="com.maxcom.mpm.model.MpmCusersWs" schema="ADMIN_MPM" table="MPM_CUSERS_WS">
-        
+    <class name="com.maxcom.mpm.model.MpmCusersWs" table="MPM_CUSERS_WS" schema="ADMIN_MPM">
         <id name="id" type="short">
             <column name="ID" precision="3" scale="0" />
             <generator class="assigned" />

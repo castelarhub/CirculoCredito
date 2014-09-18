@@ -6,6 +6,7 @@ import com.maxcom.mpm.client.bi.CargoOnlineMIT;
 import com.maxcom.mpm.client.dto.RespuestaBancoTO;
 import com.maxcom.mpm.client.dto.TransaccionBancoTO;
 import com.maxcom.mpm.dto.CargoTO;
+import com.maxcom.mpm.dto.DetalleErrorTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import java.util.Calendar;
@@ -45,18 +46,18 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
         switch(resultadoBanco){
             case "APPROVED":
                 resultadoWS = "APROBADA";//Transacción aprobada por el banco emisor. 
-                observaciones.append("Transaccion procesada. Cobro aprobado.");
+                observaciones.append("Transaccion procesada. Cargo aprobado.");
                 break;
             case "DENIED":
                 resultadoWS = "RECHAZADA";//Transacción rechazada por el banco emisor. 
-                observaciones.append("Transaccion procesada. Cobro rechazado.");
+                observaciones.append("Transaccion procesada. Cargo rechazado.");
                 break;
             case "ERROR":
                 resultadoWS = "ERROR";//Error en la información proporcionada al solicitar el servicio web.
-                observaciones.append("Transaccion procesada. Error en el cobro. Ver detalle del error.");
+                observaciones.append("Transaccion procesada. Error en el cargo. Ver detalle del error.");
                 break;
             default: 
-                observaciones.append("Transaccion procesada. Error, estatus del cobro desconocido, favor de reportar.");
+                observaciones.append("Transaccion procesada. Error, estatus del cargo desconocido, favor de reportar.");
                 resultadoWS = "DESCONOCIDA";
         }        
         

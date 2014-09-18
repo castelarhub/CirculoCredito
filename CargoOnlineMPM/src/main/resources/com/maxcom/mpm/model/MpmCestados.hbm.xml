@@ -1,84 +1,67 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 05-sep-2014 15:58:11 by Hibernate Tools 3.6.0 -->
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-sep-2014 9:04:02 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
-  <class name="com.maxcom.mpm.model.MpmCestados" schema="ADMIN_MPM" table="MPM_CESTADOS">
-    <comment>Entidad de los estatus de los diferentes objetos</comment>
-    <id name="idEstado" type="string">
-      <column length="5" name="ID_ESTADO"/>
-      <generator class="assigned"/>
-    </id>
-    <many-to-one class="com.maxcom.mpm.model.MpmCnotificaciones" fetch="select" name="mpmCnotificaciones">
-      <column name="ID_NOTIFICACION" precision="10" scale="0"/>
-    </many-to-one>
-    <property name="descripcion" type="string">
-      <column length="120" name="DESCRIPCION" not-null="true">
-        <comment>Describe el estado especificado por las siglas (clave primaria)</comment>
-      </column>
-    </property>
-    <property name="nombre" type="string">
-      <column length="40" name="NOMBRE">
-        <comment>Representa el nombre largo del estatus</comment>
-      </column>
-    </property>
-    <property name="estadoFinal" type="java.lang.Boolean">
-      <column name="ESTADO_FINAL" precision="1" scale="0">
-        <comment>Por omision tiene 0 que indica que no es un estado final, si tiene un 1, indica que tiene un estado final.</comment>
-      </column>
-    </property>
-    <property name="creadoPor" type="string">
-      <column length="30" name="CREADO_POR" not-null="true">
-        <comment>Atributo de auditoria, usuario que realizó acción de inserción del registro.</comment>
-      </column>
-    </property>
-    <property name="fechaCreacion" type="date">
-      <column length="7" name="FECHA_CREACION" not-null="true">
-        <comment>Atributo de auditoria, fecha, hora de creación del registro</comment>
-      </column>
-    </property>
-    <property name="sistema" type="string">
-      <column length="30" name="SISTEMA" not-null="true">
-        <comment>Atributo de auditoria, sistema que realizó la inserción del registro en la tabla.</comment>
-      </column>
-    </property>
-    <property name="modificadoPor" type="string">
-      <column length="30" name="MODIFICADO_POR">
-        <comment>Atributo de auditoria, nombre del usuario que realizó la ultima modificación al registro.</comment>
-      </column>
-    </property>
-    <property name="fechaModificacion" type="date">
-      <column length="7" name="FECHA_MODIFICACION">
-        <comment>Atributo de auditoria, fecha y hora de ultima modificación realizada en el registro.</comment>
-      </column>
-    </property>
-    <property name="activo" type="boolean">
-      <column name="ACTIVO" not-null="true" precision="1" scale="0">
-        <comment>Bandera (campo booleano), que indica si el registro esta activo 1, o desactivado 0.</comment>
-      </column>
-    </property>
-    <set fetch="select" inverse="true" lazy="true" name="mpmTcobranzaSaps" table="MPM_TCOBRANZA_SAP">
-      <key>
-        <column length="5" name="ID_ESTADO" not-null="true"/>
-      </key>
-      <one-to-many class="com.maxcom.mpm.model.MpmTcobranzaSap"/>
-    </set>
-    <set fetch="select" inverse="true" lazy="true" name="mpmTprocesoses" table="MPM_TPROCESOS">
-      <key>
-        <column length="5" name="ID_ESTADO" not-null="true"/>
-      </key>
-      <one-to-many class="com.maxcom.mpm.model.MpmTprocesos"/>
-    </set>
-    <set fetch="select" inverse="true" lazy="true" name="mpmTcobranzaSapDetas" table="MPM_TCOBRANZA_SAP_DETA">
-      <key>
-        <column length="5" name="ID_ESTADO" not-null="true"/>
-      </key>
-      <one-to-many class="com.maxcom.mpm.model.MpmTcobranzaSapDeta"/>
-    </set>
-    <set fetch="select" inverse="true" lazy="true" name="mpmTlotesCargoAutomaticos" table="MPM_TLOTES_CARGO_AUTOMATICO">
-      <key>
-        <column length="5" name="ID_ESTADO" not-null="true"/>
-      </key>
-      <one-to-many class="com.maxcom.mpm.model.MpmTlotesCargoAutomatico"/>
-    </set>
-  </class>
+    <class name="com.maxcom.mpm.model.MpmCestados" table="MPM_CESTADOS" schema="ADMIN_MPM">
+        <comment>Entidad de los estatus de los diferentes objetos</comment>
+        <id name="idEstado" type="string">
+            <column name="ID_ESTADO" length="5" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="mpmCnotificaciones" class="com.maxcom.mpm.model.MpmCnotificaciones" fetch="select">
+            <column name="ID_NOTIFICACION" precision="10" scale="0" />
+        </many-to-one>
+        <property name="descripcion" type="string">
+            <column name="DESCRIPCION" length="120" not-null="true">
+                <comment>Describe el estado especificado por las siglas (clave primaria)</comment>
+            </column>
+        </property>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" length="40">
+                <comment>Representa el nombre largo del estatus</comment>
+            </column>
+        </property>
+        <property name="estadoFinal" type="java.lang.Boolean">
+            <column name="ESTADO_FINAL" precision="1" scale="0">
+                <comment>Por omision tiene 0 que indica que no es un estado final, si tiene un 1, indica que tiene un estado final.</comment>
+            </column>
+        </property>
+        <property name="creadoPor" type="string">
+            <column name="CREADO_POR" length="30" not-null="true">
+                <comment>Atributo de auditoria, usuario que realiz&#243; acci&#243;n de inserci&#243;n del registro.</comment>
+            </column>
+        </property>
+        <property name="fechaCreacion" type="date">
+            <column name="FECHA_CREACION" length="7" not-null="true">
+                <comment>Atributo de auditoria, fecha, hora de creaci&#243;n del registro</comment>
+            </column>
+        </property>
+        <property name="sistema" type="string">
+            <column name="SISTEMA" length="30" not-null="true">
+                <comment>Atributo de auditoria, sistema que realiz&#243; la inserci&#243;n del registro en la tabla.</comment>
+            </column>
+        </property>
+        <property name="modificadoPor" type="string">
+            <column name="MODIFICADO_POR" length="30">
+                <comment>Atributo de auditoria, nombre del usuario que realiz&#243; la ultima modificaci&#243;n al registro.</comment>
+            </column>
+        </property>
+        <property name="fechaModificacion" type="date">
+            <column name="FECHA_MODIFICACION" length="7">
+                <comment>Atributo de auditoria, fecha y hora de ultima modificaci&#243;n realizada en el registro.</comment>
+            </column>
+        </property>
+        <property name="activo" type="boolean">
+            <column name="ACTIVO" precision="1" scale="0" not-null="true">
+                <comment>Bandera (campo booleano), que indica si el registro esta activo 1, o desactivado 0.</comment>
+            </column>
+        </property>
+        <set name="mpmTbitacoraCargoOnlines" table="MPM_TBITACORA_CARGO_ONLINE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID_ESTADO" length="5" not-null="true" />
+            </key>
+            <one-to-many class="com.maxcom.mpm.model.MpmTbitacoraCargoOnline" />
+        </set>
+    </class>
 </hibernate-mapping>

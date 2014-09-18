@@ -53,7 +53,7 @@ public class CargoOnlineFacade implements ICargoOnline {
         this.autenticacionService = new AutenticacionServiceImpl();        
         this.listDetalleError = new ArrayList<DetalleErrorTO>();
         this.listCargosAceptados = new ArrayList<CargoTO>();
-        this.listCargosRechazados = new ArrayList<CargoTO>();        
+        this.listCargosRechazados = new ArrayList<CargoTO>();
     }
     
     
@@ -104,9 +104,9 @@ public class CargoOnlineFacade implements ICargoOnline {
             //Validando que exista al menos un cargo valido
             if (this.listCargosAceptados.isEmpty()) {
                 this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                        "500", "Error - El cargo enviado es invalido, ver detalleError para mas informacion.",
+                        "500", "Error, cargo invalido. Ver detalleError para mas informacion.",
                         Calendar.getInstance().getTime(), listDetalleError.get(0));
-                this.guardarBitacoraRespuesta(this.respuesta);                
+                this.guardarBitacoraRespuesta(this.respuesta);
                 return this.respuesta;
             }
             
@@ -202,27 +202,27 @@ public class CargoOnlineFacade implements ICargoOnline {
             StringBuilder sb = new StringBuilder();
             
             if(!isValidCustomerName(cargo.getNombreCliente())){
-                sb.append("Formato de dato incorrecto para el campo nombreCliente, solo se aceptan caracteres alfanumericos y espacios. ");
+                sb.append("Formato de dato incorrecto para el campo nombreCliente, solo se aceptan caracteres alfanumericos y maximo un espacio entre las palabras - ");
             }
             
             if(!isValidIntegerNumber(cargo.getMesExpiracionTarjeta())){
-                sb.append("Solo se permiten caracteres numericos en el campo mesExpiracion. ");
+                sb.append("Solo se permiten caracteres numericos en el campo mesExpiracion - ");
             }else{
                 
                 if(cargo.getMesExpiracionTarjeta().length()>2){
-                    sb.append("Valor invalido en el campo mesExpiracion. Solo se aceptan dos caracteres numericos. Ejem: 09");
+                    sb.append("Valor invalido en el campo mesExpiracion. Solo se aceptan dos caracteres numericos. Ejem: 09 -");
                 }else if(!isValidNumberMonth(Integer.parseInt(cargo.getMesExpiracionTarjeta()))){
-                    sb.append("Valor invalido en el campo mesExpiracion. Solo se aceptan valores en el rango de 01-12. ");
+                    sb.append("Valor invalido en el campo mesExpiracion. Solo se aceptan valores en el rango de 01-12 - ");
                 }
             }
             
             if(!isValidIntegerNumber(cargo.getAnioExpiracionTarjeta())){
-                sb.append("Solo se permiten caracteres numericos en el campo anioExpiracion");
+                sb.append("Solo se permiten caracteres numericos en el campo anioExpiracion -");
             }else{
                 if(cargo.getAnioExpiracionTarjeta().length()>2){
-                    sb.append("Valor invalido en el campo anioExpiracion. Solo se aceptan dos caracteres numericos, los ultimos dos del año. Ejem: 15");
+                    sb.append("Valor invalido en el campo anioExpiracion. Solo se aceptan dos caracteres numericos, los ultimos dos del año. Ejem: 15 - ");
                 }else if(!isValidNumberYear(Integer.parseInt("20"+cargo.getAnioExpiracionTarjeta()))){
-                    sb.append("Valor invalido en el campo anioExpiracion. El valor no puede ser menor al año actual");
+                    sb.append("Valor invalido en el campo anioExpiracion. El valor no puede ser menor al año actual - ");
                 }
             }
             
