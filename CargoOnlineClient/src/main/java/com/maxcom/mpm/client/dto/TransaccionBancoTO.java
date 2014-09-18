@@ -1,6 +1,7 @@
 package com.maxcom.mpm.client.dto;
 
 public class TransaccionBancoTO {
+    
     private String referencia;
     private String nombreCliente;
     private String numeroTarjeta;
@@ -8,6 +9,22 @@ public class TransaccionBancoTO {
     private String anioExpiracionTarjeta;
     private String codigoSeguridadTarjeta;
     private double monto;
+
+    public TransaccionBancoTO(){
+    }
+    
+    public TransaccionBancoTO(String referencia, String nombreCliente, 
+                              String numeroTarjeta, String mesExpiracionTarjeta, 
+                              String anioExpiracionTarjeta, String codigoSeguridadTarjeta, 
+                              double monto) {
+        this.referencia = referencia;
+        this.nombreCliente = nombreCliente;
+        this.numeroTarjeta = numeroTarjeta;
+        this.mesExpiracionTarjeta = mesExpiracionTarjeta;
+        this.anioExpiracionTarjeta = anioExpiracionTarjeta;
+        this.codigoSeguridadTarjeta = codigoSeguridadTarjeta;
+        this.monto = monto;
+    }
 
     /**
      * @return the referencia

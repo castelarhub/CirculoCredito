@@ -27,7 +27,8 @@ public class TransaccionCobro {
     
     public RespuestaBancoTO realizarPago(TransaccionBancoTO transaccion) throws JAXBException{
         RespuestaBancoTO respuestaBancoTO= null;
-        Payment pago =formarPago(transaccion);
+        
+        Payment pago = formarPago(transaccion);
         
         String xmlPago = getPagoEnXml(pago);
         
