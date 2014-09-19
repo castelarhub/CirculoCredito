@@ -2,6 +2,7 @@ package com.maxcom.mpm.dto;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -11,7 +12,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DetalleError")
 public class DetalleErrorTO {
+    @XmlTransient
     private long idCobranzaOnlineDetalle;
+    
     private String idEstatus;
     private String observaciones;
     private CargoTO cargo;

@@ -1,5 +1,5 @@
 package com.maxcom.mpm.model;
-// Generated 05-sep-2014 15:58:10 by Hibernate Tools 3.6.0
+// Generated 18-sep-2014 9:04:00 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -23,10 +23,7 @@ public class MpmCestados  implements java.io.Serializable {
      private String modificadoPor;
      private Date fechaModificacion;
      private boolean activo;
-     private Set<MpmTcobranzaSap> mpmTcobranzaSaps = new HashSet<MpmTcobranzaSap>(0);
-     private Set<MpmTprocesos> mpmTprocesoses = new HashSet<MpmTprocesos>(0);
-     private Set<MpmTcobranzaSapDeta> mpmTcobranzaSapDetas = new HashSet<MpmTcobranzaSapDeta>(0);
-     private Set<MpmTlotesCargoAutomatico> mpmTlotesCargoAutomaticos = new HashSet<MpmTlotesCargoAutomatico>(0);
+     private Set<MpmTbitacoraCargoOnline> mpmTbitacoraCargoOnlines = new HashSet<MpmTbitacoraCargoOnline>(0);
 
     public MpmCestados() {
     }
@@ -40,7 +37,7 @@ public class MpmCestados  implements java.io.Serializable {
         this.sistema = sistema;
         this.activo = activo;
     }
-    public MpmCestados(String idEstado, MpmCnotificaciones mpmCnotificaciones, String descripcion, String nombre, Boolean estadoFinal, String creadoPor, Date fechaCreacion, String sistema, String modificadoPor, Date fechaModificacion, boolean activo, Set<MpmTcobranzaSap> mpmTcobranzaSaps, Set<MpmTprocesos> mpmTprocesoses, Set<MpmTcobranzaSapDeta> mpmTcobranzaSapDetas, Set<MpmTlotesCargoAutomatico> mpmTlotesCargoAutomaticos) {
+    public MpmCestados(String idEstado, MpmCnotificaciones mpmCnotificaciones, String descripcion, String nombre, Boolean estadoFinal, String creadoPor, Date fechaCreacion, String sistema, String modificadoPor, Date fechaModificacion, boolean activo, Set<MpmTbitacoraCargoOnline> mpmTbitacoraCargoOnlines) {
        this.idEstado = idEstado;
        this.mpmCnotificaciones = mpmCnotificaciones;
        this.descripcion = descripcion;
@@ -52,10 +49,7 @@ public class MpmCestados  implements java.io.Serializable {
        this.modificadoPor = modificadoPor;
        this.fechaModificacion = fechaModificacion;
        this.activo = activo;
-       this.mpmTcobranzaSaps = mpmTcobranzaSaps;
-       this.mpmTprocesoses = mpmTprocesoses;
-       this.mpmTcobranzaSapDetas = mpmTcobranzaSapDetas;
-       this.mpmTlotesCargoAutomaticos = mpmTlotesCargoAutomaticos;
+       this.mpmTbitacoraCargoOnlines = mpmTbitacoraCargoOnlines;
     }
    
     public String getIdEstado() {
@@ -135,33 +129,12 @@ public class MpmCestados  implements java.io.Serializable {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-    public Set<MpmTcobranzaSap> getMpmTcobranzaSaps() {
-        return this.mpmTcobranzaSaps;
+    public Set<MpmTbitacoraCargoOnline> getMpmTbitacoraCargoOnlines() {
+        return this.mpmTbitacoraCargoOnlines;
     }
     
-    public void setMpmTcobranzaSaps(Set<MpmTcobranzaSap> mpmTcobranzaSaps) {
-        this.mpmTcobranzaSaps = mpmTcobranzaSaps;
-    }
-    public Set<MpmTprocesos> getMpmTprocesoses() {
-        return this.mpmTprocesoses;
-    }
-    
-    public void setMpmTprocesoses(Set<MpmTprocesos> mpmTprocesoses) {
-        this.mpmTprocesoses = mpmTprocesoses;
-    }
-    public Set<MpmTcobranzaSapDeta> getMpmTcobranzaSapDetas() {
-        return this.mpmTcobranzaSapDetas;
-    }
-    
-    public void setMpmTcobranzaSapDetas(Set<MpmTcobranzaSapDeta> mpmTcobranzaSapDetas) {
-        this.mpmTcobranzaSapDetas = mpmTcobranzaSapDetas;
-    }
-    public Set<MpmTlotesCargoAutomatico> getMpmTlotesCargoAutomaticos() {
-        return this.mpmTlotesCargoAutomaticos;
-    }
-    
-    public void setMpmTlotesCargoAutomaticos(Set<MpmTlotesCargoAutomatico> mpmTlotesCargoAutomaticos) {
-        this.mpmTlotesCargoAutomaticos = mpmTlotesCargoAutomaticos;
+    public void setMpmTbitacoraCargoOnlines(Set<MpmTbitacoraCargoOnline> mpmTbitacoraCargoOnlines) {
+        this.mpmTbitacoraCargoOnlines = mpmTbitacoraCargoOnlines;
     }
 
 

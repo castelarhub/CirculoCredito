@@ -70,7 +70,7 @@ public class CargoOnlineFacade implements ICargoOnline {
             logger.info("CargoOnlineFacade:procesar(E)");
             
             if (!this.isTransaccionValida(transaccion)) {
-                this.respuesta = new RespuestaTO(0, "-","500", "Error - Transaccion nula", Calendar.getInstance().getTime(), null);
+                this.respuesta = new RespuestaTO(0, "-","ETRAN", "Error - Transaccion nula", Calendar.getInstance().getTime(), null);
                 return respuesta;
             }
             
@@ -91,7 +91,7 @@ public class CargoOnlineFacade implements ICargoOnline {
             if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {
                 
                 this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                                                "502", "Error - Credenciales invalidas",
+                                                "ETRAN", "Error - Credenciales invalidas",
                                                 Calendar.getInstance().getTime(), null);
                 
                 this.guardarBitacoraRespuesta(this.respuesta);
@@ -104,7 +104,7 @@ public class CargoOnlineFacade implements ICargoOnline {
             //Validando que exista al menos un cargo valido
             if (this.listCargosAceptados.isEmpty()) {
                 this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                        "500", "Error, cargo invalido. Ver detalleError para mas informacion.",
+                        "ETRAN", "Error, cargo invalido. Ver detalleError para mas informacion.",
                         Calendar.getInstance().getTime(), listDetalleError.get(0));
                 this.guardarBitacoraRespuesta(this.respuesta);
                 return this.respuesta;
@@ -335,7 +335,7 @@ public class CargoOnlineFacade implements ICargoOnline {
         
         if (error.length() > 0) {
             this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                    "ESAP", "Error - Transaccion incompleta ->"+error.toString(),
+                    "ETRAN", "Error - Transaccion incompleta ->"+error.toString(),
                     Calendar.getInstance().getTime(), null);
             return false;
         }
@@ -348,9 +348,9 @@ public class CargoOnlineFacade implements ICargoOnline {
      * @param transaccion Transaccion a guardar.
      * @throws Exception Si algun error inesperado ocurre
      */
-    private void guardarBitacoraSolicitud(TransaccionTO transaccion) throws Exception{
-        return;
-        //hmRelCargosIdDetalle = bitacoraService.guardarSolicitud(transaccion);
+    private void guardarBitacoraSolicitud(TransaccionTO transaccion) throws Exception{        
+        bitacoraService.guardarSolicitud(transaccion);
+        
     }
     
     /**
@@ -359,8 +359,7 @@ public class CargoOnlineFacade implements ICargoOnline {
      * @throws Exception Si algun error inesperado ocurre
      */
     private void guardarBitacoraRespuesta(RespuestaTO respuesta) throws Exception{
-        return;
-        //Pendiente de BD bitacoraService.guardarRespuesta(respuesta);
+        bitacoraService.guardarRespuesta(respuesta);
     }
     
     /**

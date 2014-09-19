@@ -6,7 +6,9 @@
     <class name="com.maxcom.mpm.model.MpmTbitacoraCargoOnline" table="MPM_TBITACORA_CARGO_ONLINE" schema="ADMIN_MPM">
         <id name="idBitacora" type="long">
             <column name="ID_BITACORA" precision="16" scale="0" />
-            <generator class="assigned" />
+            <generator class="sequence" >
+              <param name="sequence">MPM_TBITACORA_ONLINE_SEQ1</param>
+            </generator>
         </id>
         <many-to-one name="mpmCrespuestasCargos" class="com.maxcom.mpm.model.MpmCrespuestasCargos" fetch="select">
             <column name="ID_RESPUESTA_CARGO" length="5" />
@@ -68,11 +70,14 @@
         <property name="fechaModificacion" type="date">
             <column name="FECHA_MODIFICACION" length="7" />
         </property>
-        <property name="solicitudXml" type="clob">
+        <property name="solicitudXml" type="string">
             <column name="SOLICITUD_XML" />
         </property>
-        <property name="respuestaXml" type="clob">
+        <property name="respuestaXml" type="string">
             <column name="RESPUESTA_XML" />
         </property>
+        <property name="observaciones" type="string">
+          <column length="250" name="OBSERVACIONES"/>
+        </property>        
     </class>
 </hibernate-mapping>

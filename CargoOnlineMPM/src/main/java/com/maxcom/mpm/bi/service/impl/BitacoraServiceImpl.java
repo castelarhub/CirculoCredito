@@ -4,23 +4,15 @@ import com.maxcom.mpm.bi.service.BitacoraService;
 import com.maxcom.mpm.dao.BitacoraDao;
 import com.maxcom.mpm.dao.impl.BitacoraDaoImpl;
 import com.maxcom.mpm.dto.CargoTO;
-import com.maxcom.mpm.dto.DetalleErrorTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import com.maxcom.mpm.model.MpmCestados;
-import com.maxcom.mpm.model.MpmCmarcasTarjetas;
 import com.maxcom.mpm.model.MpmCrespuestasCargos;
-import com.maxcom.mpm.model.MpmCtiposCuentas;
-import com.maxcom.mpm.model.MpmTcobranzaSap;
-import com.maxcom.mpm.model.MpmTcobranzaSapDeta;
+import com.maxcom.mpm.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.util.Constantes;
-import static com.maxcom.mpm.util.Utilerias.getCurrentPeriodo;
 import static com.maxcom.mpm.util.Utilerias.isValidString;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
@@ -38,147 +30,97 @@ public class BitacoraServiceImpl implements BitacoraService {
     }
 
     @Override
-    public HashMap<Long, Long> guardarSolicitud(TransaccionTO transaccion) throws Exception {
+    public void guardarSolicitud(TransaccionTO transaccion) throws Exception {
         logger.info("   BitacoraServiceImpl:guardarSolicitud(E)");
-        HashMap<Long, Long> hmRelDetalle = new HashMap<Long, Long>();            
-        MpmTcobranzaSap orden = new MpmTcobranzaSap();        
-        try {            
+        MpmTbitacoraCargoOnline cargo = new MpmTbitacoraCargoOnline();
+        try {
             
             if (!isValidString(transaccion.getIdTransaccion())) {
-                orden.setIdsap("-");
+                cargo.setIdTransaccion("-");
             } else {
-                orden.setIdsap(transaccion.getIdTransaccion());
+                cargo.setIdTransaccion(transaccion.getIdTransaccion());
             }
             
-            orden.setComponente(Constantes.COMPONENTE_ORDEN);
-            orden.setCreadoPor(Constantes.CREADO_POR_ORDEN);
-            orden.setProducto(Constantes.PRODUCTO_ORDEN);
-            orden.setSistema(Constantes.SYSTEMA_ORDEN);
-            
-            orden.setFechaCreacion(new Date());
-            orden.setPeriodo(getCurrentPeriodo());
+            cargo.setFechaCreacion(new Date());
+            cargo.setCreadoPor(Constantes.CREADO_POR_ORDEN);
             
             //Estatus inicial de la orden
             MpmCestados mpmCestadosOrden = new MpmCestados();
-            mpmCestadosOrden.setIdEstado("NEW");            
-
-            orden.setMpmCestados(mpmCestadosOrden);
-
+            mpmCestadosOrden.setIdEstado("NEW");
+            cargo.setMpmCestados(mpmCestadosOrden);
+            
             CargoTO cargoAux = transaccion.getCargo();
             
             //Si trae cargo se guardan en bitacora
             if (cargoAux!=null) {
-                
-                Set<MpmTcobranzaSapDeta> listMpmTcobranzaSapDeta = new HashSet();
-                MpmCestados mpmCestadosDetalle = new MpmCestados();
-                MpmTcobranzaSapDeta detalle = null;
-                
-                //Definiendo el estado del detalle
-                mpmCestadosDetalle.setIdEstado("NEW");
-                
-                    detalle = new MpmTcobranzaSapDeta();
-                    
-                    //detalle.setIdUniqueDetalle(cargoAux.getUniqueIdDetail());
-                    detalle.setReferencia(cargoAux.getReferencia());
-                    detalle.setNombreCliente(cargoAux.getNombreCliente());
-                    detalle.setCuenta(cargoAux.getNumeroTarjeta());
-                    detalle.setImporte(new BigDecimal(cargoAux.getMonto()));
-                    detalle.setCreadoPor(Constantes.CREADO_POR_DETALLE);
-                    detalle.setFechaCreacion(new Date());
-                    detalle.setSistema(Constantes.SISTEMA_DETALLE);
-                    
-                    //Estatus inicial del detalle
-                    detalle.setMpmCestados(mpmCestadosDetalle);
-                    
-                    //Tipo de cuenta
-                    MpmCtiposCuentas mpmCtiposCuentas = new MpmCtiposCuentas();
-                    detalle.setMpmCtiposCuentas(mpmCtiposCuentas);
-                    
-                    //Marca tarjeta
-                    MpmCmarcasTarjetas mpmCmarcasTarjetas = new MpmCmarcasTarjetas();
-                    detalle.setMpmCmarcasTarjetas(mpmCmarcasTarjetas);
-                    
-                    //Detalle
-                    detalle.setMpmTcobranzaSap(orden);
-
-                    listMpmTcobranzaSapDeta.add(detalle);
-                
-                orden.setMpmTcobranzaSapDetas(listMpmTcobranzaSapDeta);
+                cargo.setAnioExpiracion(cargoAux.getAnioExpiracionTarjeta());
+                cargo.setCodigoSeguridad(cargoAux.getCodigoSeguridadTarjeta());
+                cargo.setMesExpiracion(cargoAux.getMesExpiracionTarjeta());
+                cargo.setMonto(new BigDecimal(cargoAux.getMonto()));
+                cargo.setNombreCliente(cargoAux.getNombreCliente());
+                cargo.setNumeroTarjeta(cargoAux.getNumeroTarjeta());
+                cargo.setReferencia(cargoAux.getReferencia());
             }
-
-            bitacora.guardarSolicitud(orden);
             
-            transaccion.setIdOrden(orden.getIdCobranza());
+            bitacora.guardarSolicitud(cargo);
             
-            for(MpmTcobranzaSapDeta detalle: orden.getMpmTcobranzaSapDetas()){
-                hmRelDetalle.put(detalle.getIdUniqueDetalle(), detalle.getIdCobranzadeta());
-            }
-
+            transaccion.setIdOrden(cargo.getIdBitacora());
+            
         } catch (Exception e) {
             logger.error("   Error en BitacoraServiceImpl:guardarSolicitud - " + e.getMessage());
             throw e;
         } finally {
             logger.info("   BitacoraServiceImpl:guardarSolicitud(S)");
         }
-        return hmRelDetalle;
-
     }
-
+    
     @Override
     public long guardarRespuesta(RespuestaTO respuesta) throws Exception {
         logger.info("   BitacoraServiceImpl:guardarRespuesta(E)");
-        MpmTcobranzaSap orden = null;
+        MpmTbitacoraCargoOnline cargo = null;
         long id = 0;
         
         try {
-            orden = bitacora.getTransaccionById(respuesta.getIdCobranzaOnline());
+            cargo = bitacora.getTransaccionById(respuesta.getIdCargoOnline());
+            
+            //si viene cero, entonces el cargo no existe.
+            if(respuesta.getIdCargoOnline()==0){
+                cargo = new MpmTbitacoraCargoOnline();
+                cargo.setIdTransaccion("SIN idTransaccion-"+new Date().getTime());
+                cargo.setFechaCreacion(new Date());
+                cargo.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+            }
             
             //Estatus inicial de la orden
             MpmCestados mpmCestadosOrden = new MpmCestados();
             mpmCestadosOrden.setIdEstado(respuesta.getIdEstatus());
-            orden.setMpmCestados(mpmCestadosOrden);
+            cargo.setMpmCestados(mpmCestadosOrden);
             
-            orden.setObservaciones(respuesta.getObservaciones());
-            orden.setFechaModificacion(new Date());
-            orden.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);
-                        
-            //Mapa de los cargos con error
-            HashMap<Long,DetalleErrorTO> hmDetalleErrorTO = new HashMap<Long,DetalleErrorTO>();
+            cargo.setBanCdError(null);
+            cargo.setBanCdRespuesta(null);
+            cargo.setBanError(null);
+            cargo.setBanFolioCpagos(respuesta.getFolioCPagos());
+            cargo.setBanNumeroAutorizacion(respuesta.getAutorizacion());
+            cargo.setBanResultado(respuesta.getRespuesta());
+            cargo.setFechaModificacion(new Date());
+            cargo.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);            
             
-            if (respuesta.getDetalleError() != null) {
-                //for (DetalleErrorTO error : respuesta.getDetalleError()) {
-                //    hmDetalleErrorTO.put(error.getIdCobranzaDetalle(), error);
-                //}
+            cargo.setRespuestaXml(respuesta.getRespuestaXml());
+            cargo.setSolicitudXml(respuesta.getSolicitudXml());
+            cargo.setObservaciones(respuesta.getObservaciones());
+            
+            if(respuesta.getDetalleError()!=null){
+                MpmCrespuestasCargos respuestaCargoEstatus = new MpmCrespuestasCargos();
+                respuestaCargoEstatus.setIdRespuestaCargo(null);
             }
             
-            MpmCrespuestasCargos mpmCrespuestasCargos = null;
-            MpmCestados mpmCestadosDetalle = null;
-            
-            long idCobranzaDetalle = 0;
-            //Actualizando detalle
-            for(MpmTcobranzaSapDeta detalle : orden.getMpmTcobranzaSapDetas()){
-                //detalle.getIdCobranzadeta()
-                detalle.setModificadoPor(Constantes.MODIFICADO_POR_DETALLE);
-                detalle.setFechaModificacion(new Date());
-                
-                idCobranzaDetalle = detalle.getIdCobranzadeta();
-                
-                //Estatus de la respuesta de los cargos con error
-                if(hmDetalleErrorTO.containsKey(idCobranzaDetalle)){                    
-                    //
-                    mpmCrespuestasCargos = new MpmCrespuestasCargos();
-                    mpmCrespuestasCargos.setIdRespuestaCargo(hmDetalleErrorTO.get(idCobranzaDetalle).getIdEstatus());
-                    detalle.setMpmCrespuestasCargos(mpmCrespuestasCargos);
-                    
-                    //Colocando estatus de rechazado
-                    mpmCestadosDetalle = new MpmCestados();
-                    mpmCestadosDetalle.setIdEstado("REJ");
-                    detalle.setMpmCestados(mpmCestadosDetalle);
-                    
-                }                
+            //Si no existe se crea, de lo contrario se actualiza
+            if(respuesta.getIdCargoOnline()==0){
+                id = bitacora.guardarSolicitud(cargo);
+            }else{
+                id = bitacora.actualizarTransaccion(cargo);
             }
-
-            id = bitacora.actualizarTransaccion(orden);
+            
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,52 +131,6 @@ public class BitacoraServiceImpl implements BitacoraService {
         }
 
         return id;
-    }
-    
-    @Override
-    public long buscarTransaccion(TransaccionTO transaccion, RespuestaTO respuesta) throws Exception {
-        MpmTcobranzaSap orden = bitacora.getTransaccionByIdSAP(transaccion.getIdTransaccion());
-        
-        if(null!=orden){
-            respuesta.setObservaciones(orden.getObservaciones());
-            respuesta.setIdCobranzaOnline(orden.getIdCobranza());
-            respuesta.setFecha(orden.getFechaCreacion());
-            respuesta.setIdTransaccion(orden.getIdsap());
-            respuesta.setIdEstatus("DUPLICATED-"+orden.getMpmCestados().getIdEstado());
-            //Pendiente el detalle de los errores
-            
-            if(orden.getMpmTcobranzaSapDetas()!=null){
-                //List<DetalleErrorTO> listdetalleError = new ArrayList<DetalleErrorTO>();
-                DetalleErrorTO detalleError= null;
-                CargoTO cargo = null;
-                for(MpmTcobranzaSapDeta detalle: orden.getMpmTcobranzaSapDetas()){
-                    
-                    if(detalle.getMpmCestados().getIdEstado().equalsIgnoreCase("NEW")){
-                        continue;
-                    }
-                    
-                    detalleError= new DetalleErrorTO();
-                    cargo = new CargoTO();
-                    
-                    detalleError.setIdCobranzaOnlineDetalle(detalle.getIdCobranzadeta());
-                    detalleError.setIdEstatus(detalle.getMpmCrespuestasCargos().getIdRespuestaCargo());
-                    detalleError.setObservaciones(detalle.getMpmCrespuestasCargos().getDescripcion());
-                    
-                    cargo.setNombreCliente(detalle.getNombreCliente());
-                    cargo.setReferencia(detalle.getReferencia());
-                    
-                    detalleError.setCargo(cargo);
-                    
-                    //listdetalleError.add(detalleError);
-                }
-                respuesta.setDetalleError(detalleError);
-            }
-            
-            return orden.getIdCobranza();
-        }
-        
-        return 0;
-        
     }
 
 }

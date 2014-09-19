@@ -1,5 +1,5 @@
 package com.maxcom.mpm.model;
-// Generated 05-sep-2014 15:58:10 by Hibernate Tools 3.6.0
+// Generated 18-sep-2014 9:04:00 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;

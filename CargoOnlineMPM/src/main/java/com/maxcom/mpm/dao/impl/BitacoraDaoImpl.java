@@ -1,15 +1,11 @@
 package com.maxcom.mpm.dao.impl;
 
 import com.maxcom.mpm.dao.BitacoraDao;
-import com.maxcom.mpm.dto.TransaccionTO;
-import com.maxcom.mpm.model.MpmTcobranzaSap;
+import com.maxcom.mpm.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.util.HibernateUtil;
-import java.util.List;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -25,7 +21,7 @@ public class BitacoraDaoImpl implements BitacoraDao{
     }
     
     @Override
-    public long guardarSolicitud(MpmTcobranzaSap orden) throws Exception {
+    public long guardarSolicitud(MpmTbitacoraCargoOnline cargo) throws Exception {
         logger.info("   BitacoraDaoImpl:guardarSolicitud(E)");
         org.hibernate.Transaction tx = null;
         Session session = null;
@@ -34,10 +30,10 @@ public class BitacoraDaoImpl implements BitacoraDao{
             session = HibernateUtil.getSessionFactoryOracle().openSession();
             
             tx = session.beginTransaction();
-            session.save(orden);
+            session.save(cargo);
             session.flush();
             tx.commit();
-            logger.info("       Orden insetada -> " + orden.getIdCobranza());
+            logger.info("       Orden insetada -> " + cargo.getIdBitacora());
         } catch (HibernateException e) {
             logger.error("      Error al guardar la solicitud(orden) en la bitacora - " + e.getMessage());
             if (null != tx) {
@@ -51,35 +47,19 @@ public class BitacoraDaoImpl implements BitacoraDao{
             
             logger.info("   BitacoraDaoImpl:guardarSolicitud(S)");
         }
-        return orden.getIdCobranza();
+        return cargo.getIdBitacora();
 
-    }
-    
-    public long buscarSolicitud(TransaccionTO transaccion) throws Exception{
-        try{
-        //List<MpmTcobranzaSap> lista = null;
-        //org.hibernate.Transaction tx = session.beginTransaction();
-        //Query q = session.createQuery ("from MpmTcobranzaSap");
-        //lista = (List<MpmTcobranzaSap>) q.list();                    
-        }catch(Exception e){
-            
-        }finally{
-            
-        }
-        return 0;
-    }
+    }    
     
     @Override
-    public MpmTcobranzaSap getTransaccionById(long idCobranza) throws Exception {
+    public MpmTbitacoraCargoOnline getTransaccionById(long idBitacora) throws Exception {
         logger.info("   BitacoraDaoImpl:getTransaccionById(E)");
-        MpmTcobranzaSap orden = null;
+        MpmTbitacoraCargoOnline orden = null;
         Session session = null;
         try{
             session = HibernateUtil.getSessionFactoryOracle().openSession();
             
-            orden = (MpmTcobranzaSap) session.get(MpmTcobranzaSap.class, idCobranza);
-            
-            
+            orden = (MpmTbitacoraCargoOnline) session.get(MpmTbitacoraCargoOnline.class, idBitacora);
             
             session.flush();
         }catch(Exception e){
@@ -95,17 +75,17 @@ public class BitacoraDaoImpl implements BitacoraDao{
     }
 
     @Override
-    public long actualizarTransaccion(MpmTcobranzaSap orden) throws Exception {
+    public long actualizarTransaccion(MpmTbitacoraCargoOnline cargo) throws Exception {
         logger.info("   BitacoraDaoImpl:actualizarTransaccion(E)");
         org.hibernate.Transaction tx = null;
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactoryOracle().openSession();
             tx = session.beginTransaction();
-            session.update(orden);
+            session.update(cargo);
             session.flush();
             tx.commit();
-            logger.info("       Orden actualizada -> " + orden.getIdCobranza());
+            logger.info("       Orden actualizada -> " + cargo.getIdBitacora());
         } catch (HibernateException e) {
             logger.error("      Error al actualizar la solicitud(orden) en la bitacora - " + e.getMessage());
             if (null != tx) {
@@ -115,47 +95,10 @@ public class BitacoraDaoImpl implements BitacoraDao{
         } finally {
             if(session!=null){
                 session.close();
-            }            
+            }
             logger.info("   BitacoraDaoImpl:actualizarTransaccion(S)");
         }
-        return orden.getIdCobranza();
-    }
-
-    @Override
-    public MpmTcobranzaSap getTransaccionByIdSAP(String idSAP) throws Exception {        
-        logger.info("   BitacoraDaoImpl:getTransaccionByIdSAP(E)");
-        MpmTcobranzaSap orden = null;
-        Session session = null;
-        try{
-            session = HibernateUtil.getSessionFactoryOracle().openSession();
-            
-            Criteria cr = session.createCriteria(MpmTcobranzaSap.class);
-            cr.add(Restrictions.eq("idsap", idSAP));
-            List<MpmTcobranzaSap> list = cr.list();
-            
-            logger.info("BitacoraDaoImpl:getTransaccionByIdSAP  idSAP lista -> "+list.size());
-            
-            if(list.size()>1){
-                logger.error("Error - Error - Hay solicitudes repetidas con el mismo idSAP");
-                throw new Exception("Error - Hay solicitudes repetidas con el mismo idSAP");
-            }else if(list.size()==1){
-                orden = (MpmTcobranzaSap) list.get(0);
-                return orden;
-            }     
-            
-            //Si la solicitud/transaccion no existe
-        }catch(Exception e){
-            logger.error("   Error en BitacoraDaoImpl:getTransaccionByIdSAP - "+e.getMessage());
-            throw e;
-        }finally{
-            if(session!=null){
-                session.flush();
-                session.close();
-            }
-            logger.info("   BitacoraDaoImpl:getTransaccionByIdSAP(S)");
-        }
-        //Si no existe se regresa nulo
-        return null;        
+        return cargo.getIdBitacora();
     }
     
 }

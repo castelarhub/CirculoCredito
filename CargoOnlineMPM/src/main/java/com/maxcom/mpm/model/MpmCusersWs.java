@@ -1,5 +1,5 @@
-package com.maxcom.mpm.model;;
-// Generated 10-sep-2014 19:15:57 by Hibernate Tools 3.6.0
+package com.maxcom.mpm.model;
+// Generated 18-sep-2014 9:04:00 by Hibernate Tools 3.6.0
 
 
 

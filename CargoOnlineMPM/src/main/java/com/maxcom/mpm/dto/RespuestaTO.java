@@ -3,7 +3,7 @@ package com.maxcom.mpm.dto;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Respuesta")
 public class RespuestaTO {
     
-    private long idCobranzaOnline;//identificador unico del MPM para los pagos en linea. Se regresa como acuse.
+    private long idCargoOnline;//identificador unico del MPM para los pagos en linea. Se regresa como acuse.
     private String idTransaccion;//identificador unico recibido.    
     
     private String idEstatus;//Estatus interno del MPM.
@@ -26,14 +26,19 @@ public class RespuestaTO {
     private String referencia;//Numero de referencia de la transaccion. Debe corresponder al enviado.
     private String autorizacion;//Numero de autorizacion del banco.
     private String monto;//Importe de la transaccion que cobro el banco.
-    private String folioCPagos;//Numero asignado de la operacion del banco.    
+    @XmlTransient
+    private String folioCPagos;//Numero asignado de la operacion del banco. 
+    @XmlTransient
+    private String solicitudXml;//Solicitud enviada al banco
+    @XmlTransient
+    private String respuestaXml;//Respuesta completa del banco
     
     public RespuestaTO(){}
 
     public RespuestaTO(long idCobranza, String idTransaccion, String idEstatus, 
                        String observaciones, Date fecha, 
                        DetalleErrorTO detalleError) {
-        this.idCobranzaOnline = idCobranza;
+        this.idCargoOnline = idCobranza;
         this.idTransaccion = idTransaccion;
         this.idEstatus = idEstatus;
         this.observaciones = observaciones;
@@ -42,17 +47,17 @@ public class RespuestaTO {
     }
 
     /**
-     * @return the idCobranzaOnline
+     * @return the idCargoOnline
      */
-    public long getIdCobranzaOnline() {
-        return idCobranzaOnline;
+    public long getIdCargoOnline() {
+        return idCargoOnline;
     }
 
     /**
-     * @param idCobranzaOnline the idCobranzaOnline to set
+     * @param idCargoOnline the idCargoOnline to set
      */
-    public void setIdCobranzaOnline(long idCobranzaOnline) {
-        this.idCobranzaOnline = idCobranzaOnline;
+    public void setIdCargoOnline(long idCargoOnline) {
+        this.idCargoOnline = idCargoOnline;
     }
 
     /**
@@ -193,6 +198,34 @@ public class RespuestaTO {
      */
     public void setFolioCPagos(String folioCPagos) {
         this.folioCPagos = folioCPagos;
+    }
+
+    /**
+     * @return the solicitudXml
+     */
+    public String getSolicitudXml() {
+        return solicitudXml;
+    }
+
+    /**
+     * @param solicitudXml the solicitudXml to set
+     */
+    public void setSolicitudXml(String solicitudXml) {
+        this.solicitudXml = solicitudXml;
+    }
+
+    /**
+     * @return the respuestaXml
+     */
+    public String getRespuestaXml() {
+        return respuestaXml;
+    }
+
+    /**
+     * @param respuestaXml the respuestaXml to set
+     */
+    public void setRespuestaXml(String respuestaXml) {
+        this.respuestaXml = respuestaXml;
     }
 
 

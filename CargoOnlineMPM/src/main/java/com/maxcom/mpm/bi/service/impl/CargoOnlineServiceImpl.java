@@ -6,7 +6,6 @@ import com.maxcom.mpm.client.bi.CargoOnlineMIT;
 import com.maxcom.mpm.client.dto.RespuestaBancoTO;
 import com.maxcom.mpm.client.dto.TransaccionBancoTO;
 import com.maxcom.mpm.dto.CargoTO;
-import com.maxcom.mpm.dto.DetalleErrorTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import java.util.Calendar;
@@ -50,19 +49,27 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
                 break;
             case "DENIED":
                 resultadoWS = "RECHAZADA";//Transacción rechazada por el banco emisor. 
-                observaciones.append("Transaccion procesada. Cargo rechazado.");
+                observaciones.append("Transaccion procesada. Cargo rechazado. ");
+                observaciones.append(respuestaBanco.getNb_error());
+                observaciones.append(" - ");
+                observaciones.append(respuestaBanco.getCd_error());
+                observaciones.append(" - ");
+                observaciones.append(respuestaBanco.getFriendly_response());
                 break;
             case "ERROR":
                 resultadoWS = "ERROR";//Error en la información proporcionada al solicitar el servicio web.
-                observaciones.append("Transaccion procesada. Error en el cargo. Ver detalle del error.");
+                observaciones.append("Transaccion procesada. Cargo con Error. Ver detalle del error. ");
+                observaciones.append(respuestaBanco.getNb_error());
+                observaciones.append(" - ");
+                observaciones.append(respuestaBanco.getCd_error());
                 break;
             default: 
                 observaciones.append("Transaccion procesada. Error, estatus del cargo desconocido, favor de reportar.");
                 resultadoWS = "DESCONOCIDA";
-        }        
+        }
         
         respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                "200", observaciones.toString(),
+                "RTRAN", observaciones.toString(),
                 Calendar.getInstance().getTime(), null);
         
         respuesta.setReferencia(respuestaBanco.getReference());
@@ -70,6 +77,9 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
         respuesta.setMonto(respuestaBanco.getAmount());
         respuesta.setRespuesta(resultadoWS);
         respuesta.setFolioCPagos(respuestaBanco.getFoliocpagos());
+                
+        respuesta.setSolicitudXml(respuestaBanco.getSolicitud_xml());
+        respuesta.setRespuestaXml(respuestaBanco.getRespuesta_xml());
         
         return respuesta;
     }

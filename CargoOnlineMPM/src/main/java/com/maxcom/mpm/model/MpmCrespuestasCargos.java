@@ -1,5 +1,5 @@
 package com.maxcom.mpm.model;
-// Generated 05-sep-2014 15:58:10 by Hibernate Tools 3.6.0
+// Generated 18-sep-2014 9:04:00 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -23,7 +23,7 @@ public class MpmCrespuestasCargos  implements java.io.Serializable {
      private String modificadoPor;
      private Date fechaModificacion;
      private boolean activo;
-     private Set<MpmTcobranzaSapDeta> mpmTcobranzaSapDetas = new HashSet<MpmTcobranzaSapDeta>(0);
+     private Set<MpmTbitacoraCargoOnline> mpmTbitacoraCargoOnlines = new HashSet<MpmTbitacoraCargoOnline>(0);
 
     public MpmCrespuestasCargos() {
     }
@@ -39,7 +39,7 @@ public class MpmCrespuestasCargos  implements java.io.Serializable {
         this.sistema = sistema;
         this.activo = activo;
     }
-    public MpmCrespuestasCargos(String idRespuestaCargo, MpmCtiposRespuestas mpmCtiposRespuestas, String descripcion, String origen, boolean accionReintento, String creadoPor, Date fechaCreacion, String sistema, String modificadoPor, Date fechaModificacion, boolean activo, Set<MpmTcobranzaSapDeta> mpmTcobranzaSapDetas) {
+    public MpmCrespuestasCargos(String idRespuestaCargo, MpmCtiposRespuestas mpmCtiposRespuestas, String descripcion, String origen, boolean accionReintento, String creadoPor, Date fechaCreacion, String sistema, String modificadoPor, Date fechaModificacion, boolean activo, Set<MpmTbitacoraCargoOnline> mpmTbitacoraCargoOnlines) {
        this.idRespuestaCargo = idRespuestaCargo;
        this.mpmCtiposRespuestas = mpmCtiposRespuestas;
        this.descripcion = descripcion;
@@ -51,7 +51,7 @@ public class MpmCrespuestasCargos  implements java.io.Serializable {
        this.modificadoPor = modificadoPor;
        this.fechaModificacion = fechaModificacion;
        this.activo = activo;
-       this.mpmTcobranzaSapDetas = mpmTcobranzaSapDetas;
+       this.mpmTbitacoraCargoOnlines = mpmTbitacoraCargoOnlines;
     }
    
     public String getIdRespuestaCargo() {
@@ -131,12 +131,12 @@ public class MpmCrespuestasCargos  implements java.io.Serializable {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-    public Set<MpmTcobranzaSapDeta> getMpmTcobranzaSapDetas() {
-        return this.mpmTcobranzaSapDetas;
+    public Set<MpmTbitacoraCargoOnline> getMpmTbitacoraCargoOnlines() {
+        return this.mpmTbitacoraCargoOnlines;
     }
     
-    public void setMpmTcobranzaSapDetas(Set<MpmTcobranzaSapDeta> mpmTcobranzaSapDetas) {
-        this.mpmTcobranzaSapDetas = mpmTcobranzaSapDetas;
+    public void setMpmTbitacoraCargoOnlines(Set<MpmTbitacoraCargoOnline> mpmTbitacoraCargoOnlines) {
+        this.mpmTbitacoraCargoOnlines = mpmTbitacoraCargoOnlines;
     }
 
 
