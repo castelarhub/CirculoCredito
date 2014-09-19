@@ -40,7 +40,7 @@ public class TransaccionCobro {
         respuestaBancoTO = new RespuestaBancoTO();
         
         respuestaBancoTO.setSolicitud_xml(xmlPago);
-        respuestaBancoTO.setRespuesta_xml(respuestaMitXml);
+        respuestaBancoTO.setRespuesta_xml(getLinearizationXML(respuestaMitXml));
         
         respuestaBancoTO.setReference(repuestaMit.getReference());
         respuestaBancoTO.setResponse(repuestaMit.getResponse());
