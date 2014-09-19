@@ -32,13 +32,19 @@ public class RespuestaTO {
     private String solicitudXml;//Solicitud enviada al banco
     @XmlTransient
     private String respuestaXml;//Respuesta completa del banco
+    @XmlTransient
+    private String banCdError;//
+    @XmlTransient
+    private String banCdResponse;//
+    @XmlTransient
+    private String banNbError;//
     
     public RespuestaTO(){}
 
-    public RespuestaTO(long idCobranza, String idTransaccion, String idEstatus, 
+    public RespuestaTO(long idCargoOnline, String idTransaccion, String idEstatus, 
                        String observaciones, Date fecha, 
                        DetalleErrorTO detalleError) {
-        this.idCargoOnline = idCobranza;
+        this.idCargoOnline = idCargoOnline;
         this.idTransaccion = idTransaccion;
         this.idEstatus = idEstatus;
         this.observaciones = observaciones;
@@ -226,6 +232,48 @@ public class RespuestaTO {
      */
     public void setRespuestaXml(String respuestaXml) {
         this.respuestaXml = respuestaXml;
+    }
+
+    /**
+     * @return the banCdError
+     */
+    public String getBanCdError() {
+        return banCdError;
+    }
+
+    /**
+     * @param banCdError the banCdError to set
+     */
+    public void setBanCdError(String banCdError) {
+        this.banCdError = banCdError;
+    }
+
+    /**
+     * @return the banCdResponse
+     */
+    public String getBanCdResponse() {
+        return banCdResponse;
+    }
+
+    /**
+     * @param banCdResponse the banCdResponse to set
+     */
+    public void setBanCdResponse(String banCdResponse) {
+        this.banCdResponse = banCdResponse;
+    }
+
+    /**
+     * @return the banNbError
+     */
+    public String getBanNbError() {
+        return banNbError;
+    }
+
+    /**
+     * @param banNbError the banNbError to set
+     */
+    public void setBanNbError(String banNbError) {
+        this.banNbError = banNbError;
     }
 
 

@@ -103,8 +103,9 @@ public class CargoOnlineFacade implements ICargoOnline {
             
             //Validando que exista al menos un cargo valido
             if (this.listCargosAceptados.isEmpty()) {
+                
                 this.respuesta = new RespuestaTO(transaccion.getIdOrden(), transaccion.getIdTransaccion(),
-                        "ETRAN", "Error, cargo invalido. Ver detalleError para mas informacion.",
+                        "ETRAN", "Error, cargo invalido. " + this.listDetalleError.get(0).getObservaciones(),
                         Calendar.getInstance().getTime(), listDetalleError.get(0));
                 this.guardarBitacoraRespuesta(this.respuesta);
                 return this.respuesta;
@@ -369,11 +370,10 @@ public class CargoOnlineFacade implements ICargoOnline {
      * @throws Exception Si algun error inesperado ocurre
      */
     private boolean isTransaccionExistente(TransaccionTO transaccion) throws Exception{
-        /*respuesta = new RespuestaTO();
+        this.respuesta = new RespuestaTO();
         long idSolicitud = bitacoraService.buscarTransaccion(transaccion,respuesta);
         
-        return idSolicitud>0;*/
-        return false;
+        return idSolicitud>0;
         
     }
     

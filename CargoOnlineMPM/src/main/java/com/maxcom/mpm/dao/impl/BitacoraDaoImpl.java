@@ -3,9 +3,12 @@ package com.maxcom.mpm.dao.impl;
 import com.maxcom.mpm.dao.BitacoraDao;
 import com.maxcom.mpm.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.util.HibernateUtil;
+import java.util.List;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -100,5 +103,42 @@ public class BitacoraDaoImpl implements BitacoraDao{
         }
         return cargo.getIdBitacora();
     }
+    
+    @Override
+    public MpmTbitacoraCargoOnline getTransaccionByIdTransaccion(String idTransaccion) throws Exception {
+        logger.info("   BitacoraDaoImpl:getTransaccionByIdTransaccion(E)");
+        MpmTbitacoraCargoOnline cargo = null;
+        Session session = null;
+        try{
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            
+            Criteria cr = session.createCriteria(MpmTbitacoraCargoOnline.class);
+            cr.add(Restrictions.eq("idTransaccion", idTransaccion));
+            List<MpmTbitacoraCargoOnline> list = cr.list();
+            
+            logger.info("BitacoraDaoImpl:getTransaccionByIdTransaccion  idTransaccion lista -> "+list.size());
+            
+            if(list.size()>1){
+                logger.error("Error - Error - Hay solicitudes repetidas con el mismo idTransaccion");
+                throw new Exception("Error - Hay solicitudes repetidas con el mismo idTransaccion");
+            }else if(list.size()==1){
+                cargo = (MpmTbitacoraCargoOnline) list.get(0);
+                return cargo;
+            }     
+            
+            //Si la solicitud/transaccion no existe
+        }catch(Exception e){
+            logger.error("   Error en BitacoraDaoImpl:getTransaccionByIdTransaccion - "+e.getMessage());
+            throw e;
+        }finally{
+            if(session!=null){
+                session.flush();
+                session.close();
+            }
+            logger.info("   BitacoraDaoImpl:getTransaccionByIdTransaccion(S)");
+        }
+        //Si no existe se regresa nulo
+        return null;        
+    }    
     
 }

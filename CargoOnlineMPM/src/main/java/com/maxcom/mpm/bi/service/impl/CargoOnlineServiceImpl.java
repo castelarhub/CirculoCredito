@@ -50,21 +50,35 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             case "DENIED":
                 resultadoWS = "RECHAZADA";//Transacción rechazada por el banco emisor. 
                 observaciones.append("Transaccion procesada. Cargo rechazado. ");
+                observaciones.append(" Nb_error: ");
                 observaciones.append(respuestaBanco.getNb_error());
                 observaciones.append(" - ");
+                observaciones.append(" cd_error: ");
                 observaciones.append(respuestaBanco.getCd_error());
                 observaciones.append(" - ");
+                observaciones.append(" cd_response: ");
+                observaciones.append(respuestaBanco.getCd_response());
+                observaciones.append(" - ");                
+                observaciones.append(" f_response: ");
                 observaciones.append(respuestaBanco.getFriendly_response());
                 break;
             case "ERROR":
                 resultadoWS = "ERROR";//Error en la información proporcionada al solicitar el servicio web.
-                observaciones.append("Transaccion procesada. Cargo con Error. Ver detalle del error. ");
-                observaciones.append(respuestaBanco.getNb_error());
+                observaciones.append("Transaccion procesada. Cargo con Error. ");
+                observaciones.append(" Nb_error: ");
+                observaciones.append(respuestaBanco.getNb_error());                
                 observaciones.append(" - ");
+                observaciones.append(" cd_error: ");
                 observaciones.append(respuestaBanco.getCd_error());
+                observaciones.append(" - ");
+                observaciones.append(" cd_response: ");
+                observaciones.append(respuestaBanco.getCd_response());                
+                observaciones.append(" - ");                
+                observaciones.append(" f_response: ");
+                observaciones.append(respuestaBanco.getFriendly_response());                
                 break;
             default: 
-                observaciones.append("Transaccion procesada. Error, estatus del cargo desconocido, favor de reportar.");
+                observaciones.append("Transaccion procesada. Error, estatus del cargo desconocido.");
                 resultadoWS = "DESCONOCIDA";
         }
         
@@ -77,6 +91,10 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
         respuesta.setMonto(respuestaBanco.getAmount());
         respuesta.setRespuesta(resultadoWS);
         respuesta.setFolioCPagos(respuestaBanco.getFoliocpagos());
+        
+        respuesta.setBanCdError(respuestaBanco.getCd_error());
+        respuesta.setBanCdResponse(respuestaBanco.getCd_response());
+        respuesta.setBanNbError(respuestaBanco.getNb_error());
                 
         respuesta.setSolicitudXml(respuestaBanco.getSolicitud_xml());
         respuesta.setRespuestaXml(respuestaBanco.getRespuesta_xml());

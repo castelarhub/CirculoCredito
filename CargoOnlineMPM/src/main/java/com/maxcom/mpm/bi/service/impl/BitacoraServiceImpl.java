@@ -4,6 +4,7 @@ import com.maxcom.mpm.bi.service.BitacoraService;
 import com.maxcom.mpm.dao.BitacoraDao;
 import com.maxcom.mpm.dao.impl.BitacoraDaoImpl;
 import com.maxcom.mpm.dto.CargoTO;
+import com.maxcom.mpm.dto.DetalleErrorTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import com.maxcom.mpm.model.MpmCestados;
@@ -12,7 +13,10 @@ import com.maxcom.mpm.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.util.Constantes;
 import static com.maxcom.mpm.util.Utilerias.isValidString;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -96,9 +100,9 @@ public class BitacoraServiceImpl implements BitacoraService {
             mpmCestadosOrden.setIdEstado(respuesta.getIdEstatus());
             cargo.setMpmCestados(mpmCestadosOrden);
             
-            cargo.setBanCdError(null);
-            cargo.setBanCdRespuesta(null);
-            cargo.setBanError(null);
+            cargo.setBanCdError(respuesta.getBanCdError());
+            cargo.setBanCdRespuesta(respuesta.getBanCdResponse());
+            cargo.setBanError(respuesta.getBanNbError());
             cargo.setBanFolioCpagos(respuesta.getFolioCPagos());
             cargo.setBanNumeroAutorizacion(respuesta.getAutorizacion());
             cargo.setBanResultado(respuesta.getRespuesta());
@@ -132,5 +136,55 @@ public class BitacoraServiceImpl implements BitacoraService {
 
         return id;
     }
+    
+    @Override
+    public long buscarTransaccion(TransaccionTO transaccion, RespuestaTO respuesta) throws Exception {
+        MpmTbitacoraCargoOnline cargoExistente = bitacora.getTransaccionByIdTransaccion(transaccion.getIdTransaccion());
+        
+        if(null!=cargoExistente){
+            
+            respuesta.setIdCargoOnline(cargoExistente.getIdBitacora());
+            respuesta.setIdTransaccion(cargoExistente.getIdTransaccion());
+            respuesta.setIdEstatus("EXISTENTE-"+cargoExistente.getMpmCestados().getIdEstado());
+            respuesta.setObservaciones(cargoExistente.getObservaciones());
+            respuesta.setFecha(cargoExistente.getFechaCreacion());
+            
+            if(!cargoExistente.getMpmCestados().getIdEstado().equalsIgnoreCase("RTRAN")){
+                DetalleErrorTO detalleError = new DetalleErrorTO();
+                
+                CargoTO cargoAux = new CargoTO(); 
+                cargoAux.setAnioExpiracionTarjeta(cargoExistente.getAnioExpiracion());
+                cargoAux.setCodigoSeguridadTarjeta(cargoExistente.getCodigoSeguridad());
+                cargoAux.setMesExpiracionTarjeta(cargoExistente.getMesExpiracion());
+                cargoAux.setMonto(cargoExistente.getMonto().doubleValue());
+                cargoAux.setNombreCliente(cargoExistente.getNombreCliente());
+                cargoAux.setNumeroTarjeta(cargoExistente.getNumeroTarjeta());
+                cargoAux.setReferencia(cargoExistente.getReferencia());
+                
+                detalleError.setCargo(cargoAux);
+                
+                detalleError.setIdEstatus(null);
+                //Este campo al parecer es inecesario.
+                detalleError.setObservaciones(null);
+                
+                respuesta.setDetalleError(detalleError);
+            }else{
+                respuesta.setReferencia(cargoExistente.getReferencia());
+                respuesta.setAutorizacion(cargoExistente.getBanNumeroAutorizacion());
+                respuesta.setMonto(String.valueOf(cargoExistente.getMonto()));
+                respuesta.setRespuesta(cargoExistente.getBanResultado());
+                respuesta.setFolioCPagos(cargoExistente.getBanFolioCpagos());
+                
+                respuesta.setBanCdError(cargoExistente.getBanCdError());
+                respuesta.setBanCdResponse(cargoExistente.getBanCdRespuesta());
+                respuesta.setBanNbError(cargoExistente.getBanError());
+            }
+                                        
+            return cargoExistente.getIdBitacora();
+        }
+        
+        return 0;
+        
+    }    
 
 }

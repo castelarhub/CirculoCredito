@@ -9,8 +9,10 @@ import com.maxcom.mpm.model.MpmTbitacoraCargoOnline;
 public interface BitacoraDao {
     public long guardarSolicitud(MpmTbitacoraCargoOnline cargo) throws Exception;
     
-    public MpmTbitacoraCargoOnline getTransaccionById(long idCobranza) throws Exception;
+    public MpmTbitacoraCargoOnline getTransaccionById(long idBitacora) throws Exception;
     
     public long actualizarTransaccion(MpmTbitacoraCargoOnline cargo) throws Exception;    
+    
+    public MpmTbitacoraCargoOnline getTransaccionByIdTransaccion(String idTransaccion) throws Exception;
     
 }

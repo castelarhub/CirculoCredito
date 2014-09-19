@@ -10,10 +10,10 @@
               <param name="sequence">MPM_TBITACORA_ONLINE_SEQ1</param>
             </generator>
         </id>
-        <many-to-one name="mpmCrespuestasCargos" class="com.maxcom.mpm.model.MpmCrespuestasCargos" fetch="select">
+        <many-to-one name="mpmCrespuestasCargos" class="com.maxcom.mpm.model.MpmCrespuestasCargos" lazy="false" fetch="select">
             <column name="ID_RESPUESTA_CARGO" length="5" />
         </many-to-one>
-        <many-to-one name="mpmCestados" class="com.maxcom.mpm.model.MpmCestados" fetch="select">
+        <many-to-one name="mpmCestados" class="com.maxcom.mpm.model.MpmCestados" lazy="false" fetch="select">
             <column name="ID_ESTADO" length="5" not-null="true" />
         </many-to-one>
         <property name="idTransaccion" type="string">
