@@ -34,6 +34,9 @@ public class RespuestaBancoTO {
     private String icc_issuer_script;
     private String authorized_amount;
     private String account_balance_1;
+    //Solicitud y respuesta general
+    private String solicitud_xml;
+    private String respuesta_xml;
 
     /**
      * @return the reference
@@ -481,6 +484,34 @@ public class RespuestaBancoTO {
      */
     public void setAccount_balance_1(String account_balance_1) {
         this.account_balance_1 = account_balance_1;
+    }
+
+    /**
+     * @return the solicitud_xml
+     */
+    public String getSolicitud_xml() {
+        return solicitud_xml;
+    }
+
+    /**
+     * @param solicitud_xml the solicitud_xml to set
+     */
+    public void setSolicitud_xml(String solicitud_xml) {
+        this.solicitud_xml = solicitud_xml;
+    }
+
+    /**
+     * @return the respuesta_xml
+     */
+    public String getRespuesta_xml() {
+        return respuesta_xml;
+    }
+
+    /**
+     * @param respuesta_xml the respuesta_xml to set
+     */
+    public void setRespuesta_xml(String respuesta_xml) {
+        this.respuesta_xml = respuesta_xml;
     }
     
 }

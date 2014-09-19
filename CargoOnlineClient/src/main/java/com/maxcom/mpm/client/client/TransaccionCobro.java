@@ -37,7 +37,11 @@ public class TransaccionCobro {
         ResponseCenterOfPayment repuestaMit = formarRespuestaPago(respuestaMitXml);
         
         //Mapeando respuesta
-        respuestaBancoTO = new RespuestaBancoTO();        
+        respuestaBancoTO = new RespuestaBancoTO();
+        
+        respuestaBancoTO.setSolicitud_xml(xmlPago);
+        respuestaBancoTO.setRespuesta_xml(respuestaMitXml);
+        
         respuestaBancoTO.setReference(repuestaMit.getReference());
         respuestaBancoTO.setResponse(repuestaMit.getResponse());
         respuestaBancoTO.setAmount(repuestaMit.getAmount());
@@ -48,7 +52,7 @@ public class TransaccionCobro {
         respuestaBancoTO.setFoliocpagos(repuestaMit.getFoliocpagos());
         
         return respuestaBancoTO;
-    }    
+    }
     
     private Payment formarPago(TransaccionBancoTO entrada){
         Payment pago = new Payment();

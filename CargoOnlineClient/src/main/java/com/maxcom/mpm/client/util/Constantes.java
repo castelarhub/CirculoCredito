@@ -3,8 +3,8 @@ package com.maxcom.mpm.client.util;
 public final class Constantes {
     
     //Urls de los servicios
-    //public final static String URL_COBRO = "https://dev3.mitec.com.mx/pgs/cobroXml";
-    public final static String URL_COBRO = "http://localhost:8070/pgs/cobroXml";
+    public final static String URL_COBRO = "https://dev3.mitec.com.mx/pgs/cobroXml";
+    //public final static String URL_COBRO = "http://localhost:8070/pgs/cobroXml";
     
     //Constantes del negocio
     public final static String ID_COMPANY="D234";
