@@ -19,7 +19,8 @@ import static com.maxcom.mpm.util.Utilerias.isValidString;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * La clase CargoOnlineFacade implementa las operaciones para trabajar 
@@ -41,7 +42,7 @@ public class CargoOnlineFacade implements ICargoOnline {
     //private long idOrden;
     
     
-    static final Logger logger = Logger.getLogger(CargoOnlineFacade.class);
+    static final Logger logger = LogManager.getLogger(CargoOnlineFacade.class);
     
     /**
      * Constructor default de la clase

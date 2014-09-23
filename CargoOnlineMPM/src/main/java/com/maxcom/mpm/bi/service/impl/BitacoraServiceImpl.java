@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -26,7 +27,7 @@ import org.apache.log4j.Logger;
 public class BitacoraServiceImpl implements BitacoraService {
 
     BitacoraDao bitacora;
-    static final Logger logger = Logger.getLogger(BitacoraServiceImpl.class);
+    static final Logger logger = LogManager.getLogger(BitacoraServiceImpl.class);
     
     public BitacoraServiceImpl(){
         //Agregar DI

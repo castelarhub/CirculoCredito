@@ -16,7 +16,10 @@ public class DetalleErrorTO {
     private long idCobranzaOnlineDetalle;
     
     private String idEstatus;
+    
+    @XmlTransient
     private String observaciones;
+    
     private CargoTO cargo;
 
     /**

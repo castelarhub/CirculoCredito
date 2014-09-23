@@ -3,7 +3,8 @@ package com.maxcom.mpm.dao.impl;
 import com.maxcom.mpm.dao.AutenticacionDao;
 import com.maxcom.mpm.model.MpmCusersWs;
 import com.maxcom.mpm.util.HibernateUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -14,7 +15,7 @@ import org.hibernate.criterion.Restrictions;
  */
 public class AutenticacionDaoImpl implements AutenticacionDao{
 
-    static final Logger logger = Logger.getLogger(AutenticacionDaoImpl.class);    
+    static final Logger logger = LogManager.getLogger(AutenticacionDaoImpl.class);
     
     @Override
     public boolean isAutenticacionValida(MpmCusersWs usuario) throws Exception {

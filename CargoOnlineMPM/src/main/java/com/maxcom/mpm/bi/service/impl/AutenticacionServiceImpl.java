@@ -5,15 +5,16 @@ import com.maxcom.mpm.dao.AutenticacionDao;
 import com.maxcom.mpm.dao.impl.AutenticacionDaoImpl;
 import com.maxcom.mpm.dto.AutenticacionTO;
 import com.maxcom.mpm.model.MpmCusersWs;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author operador
  */
 public class AutenticacionServiceImpl implements AutenticacionService{
-            
-    static final Logger logger = Logger.getLogger(AutenticacionServiceImpl.class);
+    
+    static final Logger logger = LogManager.getLogger(AutenticacionServiceImpl.class);
     AutenticacionDao autenticacionDao;
     
     public AutenticacionServiceImpl(){
