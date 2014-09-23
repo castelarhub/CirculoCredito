@@ -5,18 +5,20 @@ import com.maxcom.mpm.client.dto.RespuestaBancoTO;
 import com.maxcom.mpm.client.dto.TransaccionBancoTO;
 
 public class CargoOnlineMIT implements CargoOnlineBanco{
-    
-    TransaccionCobro clienteCobro = null;
-    
-    public CargoOnlineMIT(){        
-        clienteCobro = new TransaccionCobro();
+        
+    public CargoOnlineMIT(){                
     }
 
     @Override
     public RespuestaBancoTO realizarCargo(TransaccionBancoTO transaccion) throws Exception{        
         RespuestaBancoTO respuestaBanco=null;
         try {
+            
+            TransaccionCobro clienteCobro = new TransaccionCobro();
+            
             respuestaBanco = clienteCobro.realizarPago(transaccion);
+            
+            clienteCobro = null;
             
         } catch (Exception ex) {
             ex.printStackTrace();
