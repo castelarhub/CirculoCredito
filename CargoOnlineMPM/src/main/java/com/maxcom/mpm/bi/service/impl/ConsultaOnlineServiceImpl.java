@@ -32,7 +32,7 @@ public class ConsultaOnlineServiceImpl implements ConsultaOnlineService{
         transaccionBanco.setReferencia(cargo.getReferencia());
 
         //Realizando pago
-        RespuestaBancoTO respuestaBanco = consultaOnline.consultarCargo(transaccionBanco);
+        RespuestaBancoTO respuestaBanco = consultaOnline.consultarCargo(transaccionBanco);        
 
         //Si es nulo, entonces no se encontro el cargo solicitado
         if (respuestaBanco != null) {
@@ -88,6 +88,11 @@ public class ConsultaOnlineServiceImpl implements ConsultaOnlineService{
                     respuestaBanco.getNb_referencia(), 
                     respuestaBanco.getNu_auth(), 
                     respuestaBanco.getNu_importe());
+            
+            respuesta.setBanCdRespuesta(respuestaBanco.getCd_resp());
+            respuesta.setBanNbRespuesta(respuestaBanco.getNb_response());
+            respuesta.setBanNumeroOperacion(respuestaBanco.getNu_operaion());
+            //respuesta.setRespuestaXml(respuestaBanco.getRespuesta_xml());
 
         } else {
             

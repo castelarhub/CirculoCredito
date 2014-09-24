@@ -49,12 +49,12 @@ public class ConsultaOnlineFacade implements IConsultaOnline {
             
             //Validando datos minimos requeridos
             if (!this.isTransaccionCompleta(transaccion)) {
-                //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+                this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
             }            
             
             //Persistir la solicitud de entrada
-            //PENDIENTE this.guardarBitacoraSolicitud(transaccion);
+            this.guardarBitacoraSolicitud(transaccion);
             
             //Validando credenciales de la solicitud
             if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {
@@ -65,7 +65,7 @@ public class ConsultaOnlineFacade implements IConsultaOnline {
                                                         Calendar.getInstance().getTime(), 
                                                         null, null, null, null, null);                                
                 
-                //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+                this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
             }
             
@@ -80,14 +80,14 @@ public class ConsultaOnlineFacade implements IConsultaOnline {
                                                     Calendar.getInstance().getTime(), 
                                                     detalleError, null, null, null, null);                
                 
-                //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+                this.guardarBitacoraRespuesta(this.respuesta);
                 return this.respuesta;
             }
             
             
             this.respuesta = this.consultaOnlineService.consultarCargo(transaccion);
             
-            //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+            this.guardarBitacoraRespuesta(this.respuesta);
             
             return this.respuesta;
             
@@ -107,7 +107,7 @@ public class ConsultaOnlineFacade implements IConsultaOnline {
                                                 null, null, null, null, null);
             
             try{
-                //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+                this.guardarBitacoraRespuesta(this.respuesta);
             }catch(Exception err){
                 logger.error("Error al intentar guardar el error- " + err.getMessage());
             }
@@ -246,5 +246,24 @@ public class ConsultaOnlineFacade implements IConsultaOnline {
             return sb;
             
     }    
+    
+    /**
+     * Guarda la transaccion en bitacora antes de ser procesada.
+     * @param transaccion Transaccion a guardar.
+     * @throws Exception Si algun error inesperado ocurre
+     */
+    private void guardarBitacoraSolicitud(ConsultaTransaccionTO transaccion) throws Exception{        
+        bitacoraService.guardarSolicitud(transaccion);
+        
+    }
+    
+    /**
+     * Guarda en bitacora el resultado de la transaccion tras haber sido procesada.
+     * @param respuesta Respuesta de la transaccion
+     * @throws Exception Si algun error inesperado ocurre
+     */
+    private void guardarBitacoraRespuesta(ConsultaRespuestaTO respuesta) throws Exception{
+        bitacoraService.guardarRespuesta(respuesta);
+    }
     
 }

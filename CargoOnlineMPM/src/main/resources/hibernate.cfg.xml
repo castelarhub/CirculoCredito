@@ -19,6 +19,7 @@
     <property name="hibernate.connection.zeroDateTimeBehavior">convertToNull</property>
     
     <mapping resource="com/maxcom/mpm/model/MpmTbitacoraCargoOnline.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/model/MpmTbitacoraConsultaOnline.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/model/MpmCusersWs.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/model/MpmCnotificaciones.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/model/MpmCestados.hbm.xml"/>

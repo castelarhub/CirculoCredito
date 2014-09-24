@@ -2,6 +2,7 @@ package com.maxcom.mpm.dao.impl;
 
 import com.maxcom.mpm.dao.BitacoraDao;
 import com.maxcom.mpm.model.MpmTbitacoraCargoOnline;
+import com.maxcom.mpm.model.MpmTbitacoraConsultaOnline;
 import com.maxcom.mpm.util.HibernateUtil;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -141,5 +142,83 @@ public class BitacoraDaoImpl implements BitacoraDao{
         //Si no existe se regresa nulo
         return null;        
     }    
+
+    @Override
+    public long guardarSolicitud(MpmTbitacoraConsultaOnline consulta) throws Exception {
+        logger.info("   BitacoraDaoImpl:guardarSolicitud(E)");
+        org.hibernate.Transaction tx = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            tx = session.beginTransaction();
+            session.save(consulta);
+            session.flush();
+            tx.commit();
+            logger.info("       Consulta realizada -> " + consulta.getIdBitacoraConsulta());
+        } catch (HibernateException e) {
+            logger.error("      Error al guardar la consulta(orden) en la bitacora - " + e.getMessage());
+            if (null != tx) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            if(session!=null){
+                session.close();
+            }
+            
+            logger.info("   BitacoraDaoImpl:guardarSolicitud(S)");
+        }
+        return consulta.getIdBitacoraConsulta();
+    }
+
+    @Override
+    public MpmTbitacoraConsultaOnline getConsultaById(long idBitacoraConsulta) throws Exception {
+        logger.info("   BitacoraDaoImpl:getTransaccionById(E)");
+        MpmTbitacoraConsultaOnline consulta = null;
+        Session session = null;
+        try{
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            
+            consulta = (MpmTbitacoraConsultaOnline) session.get(MpmTbitacoraConsultaOnline.class, idBitacoraConsulta);
+            
+            session.flush();
+        }catch(Exception e){
+            logger.error("   Error en BitacoraDaoImpl:getTransaccionById - "+e.getMessage());
+            throw e;
+        }finally{
+            if(session!=null){
+                session.close();
+            }
+            logger.info("   BitacoraDaoImpl:getTransaccionById(E)");            
+        }
+        return consulta;
+    }
+
+    @Override
+    public long actualizarTransaccionConsulta(MpmTbitacoraConsultaOnline consulta) throws Exception {
+        logger.info("   BitacoraDaoImpl:actualizarTransaccionConsulta(E)");
+        org.hibernate.Transaction tx = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            tx = session.beginTransaction();
+            session.update(consulta);
+            session.flush();
+            tx.commit();
+            logger.info("       consulta actualizada -> " + consulta.getIdBitacoraConsulta());
+        } catch (HibernateException e) {
+            logger.error("      Error en BitacoraDaoImpl:actualizarTransaccionConsulta - " + e.getMessage());
+            if (null != tx) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            if(session!=null){
+                session.close();
+            }
+            logger.info("   BitacoraDaoImpl:actualizarTransaccionConsulta(S)");
+        }
+        return consulta.getIdBitacoraConsulta();
+    }
     
 }

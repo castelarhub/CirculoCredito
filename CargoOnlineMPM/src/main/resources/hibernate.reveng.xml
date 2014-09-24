@@ -9,5 +9,6 @@
   <table-filter match-name="MPM_TBITACORA_CARGO_ONLINE"/>
   <table-filter match-name="MPM_CUSERS_WS"/>
   <table-filter match-name="MPM_CRESPUESTAS_CARGOS"/>
+  <table-filter match-name="MPM_TBITACORA_CONSULTA_ONLINE"/>
   
 </hibernate-reverse-engineering>

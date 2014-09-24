@@ -4,19 +4,20 @@ import com.maxcom.mpm.bi.service.BitacoraService;
 import com.maxcom.mpm.dao.BitacoraDao;
 import com.maxcom.mpm.dao.impl.BitacoraDaoImpl;
 import com.maxcom.mpm.dto.CargoTO;
+import com.maxcom.mpm.dto.ConsultaCargoTO;
+import com.maxcom.mpm.dto.ConsultaRespuestaTO;
+import com.maxcom.mpm.dto.ConsultaTransaccionTO;
 import com.maxcom.mpm.dto.DetalleErrorTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import com.maxcom.mpm.model.MpmCestados;
 import com.maxcom.mpm.model.MpmCrespuestasCargos;
 import com.maxcom.mpm.model.MpmTbitacoraCargoOnline;
+import com.maxcom.mpm.model.MpmTbitacoraConsultaOnline;
 import com.maxcom.mpm.util.Constantes;
 import static com.maxcom.mpm.util.Utilerias.isValidString;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -187,5 +188,85 @@ public class BitacoraServiceImpl implements BitacoraService {
         return 0;
         
     }    
+
+    @Override
+    public void guardarSolicitud(ConsultaTransaccionTO transaccion) throws Exception {
+        logger.info("   BitacoraServiceImpl:guardarSolicitud(E)");
+        
+        try {
+            MpmTbitacoraConsultaOnline consulta = new MpmTbitacoraConsultaOnline();
+            consulta.setFechaCreacion(new Date());
+            consulta.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+            
+            consulta.setIdEstado("NEW");
+            ConsultaCargoTO cargo = transaccion.getCargo();
+            //Si trae cargo se guardan en bitacora
+            if (cargo!=null) {
+                consulta.setReferencia(cargo.getReferencia());
+                consulta.setFechaCargo(cargo.getFechaCargo());
+            }
+            
+            bitacora.guardarSolicitud(consulta);
+            
+            transaccion.setIdOrden(consulta.getIdBitacoraConsulta());
+            
+        } catch (Exception e) {
+            logger.error("   Error en BitacoraServiceImpl:guardarSolicitud - " + e.getMessage());
+            throw e;
+        } finally {
+            logger.info("   BitacoraServiceImpl:guardarSolicitud(S)");
+        }
+    }
+
+    @Override
+    public long guardarRespuesta(ConsultaRespuestaTO respuesta) throws Exception {
+        logger.info("   BitacoraServiceImpl:guardarRespuesta(E)");
+        MpmTbitacoraConsultaOnline consulta = null;
+        long id = 0;
+        
+        try {
+            consulta = bitacora.getConsultaById(respuesta.getIdConsultaOnline());
+            
+            //si viene cero, entonces la consulta no existe
+            if(respuesta.getIdConsultaOnline()==0){
+                consulta = new MpmTbitacoraConsultaOnline();
+                consulta.setFechaCreacion(new Date());
+                consulta.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+            }
+                        
+            consulta.setIdEstado(respuesta.getIdEstatus());
+            
+            consulta.setBanCdRespuesta(respuesta.getBanCdRespuesta());
+            consulta.setBanMonto(respuesta.getMonto());
+            consulta.setBanNbRespuesta(respuesta.getBanNbRespuesta());
+            consulta.setBanNumeroAutorizacion(respuesta.getAutorizacion());
+            consulta.setBanNumeroOperacion(respuesta.getBanNumeroOperacion());
+            consulta.setBanResultado(respuesta.getRespuesta());
+            consulta.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);
+            consulta.setFechaModificacion(new Date());
+            consulta.setObservaciones(respuesta.getObservaciones());
+            consulta.setRespuestaXml(respuesta.getRespuestaXml());
+            
+            if(respuesta.getDetalleError()!=null){
+                consulta.setIdRespuestaCargo(respuesta.getDetalleError().getIdEstatus());
+            }
+            
+            //Si no existe se crea, de lo contrario se actualiza
+            if(respuesta.getIdConsultaOnline()==0){
+                id = bitacora.guardarSolicitud(consulta);
+            }else{
+                id = bitacora.actualizarTransaccionConsulta(consulta);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("   Error en BitacoraServiceImpl:guardarRespuesta - " + e.toString());
+            throw e;
+        } finally {
+            logger.info("   BitacoraServiceImpl:guardarRespuesta(S)");
+        }
+
+        return id;
+    }
 
 }

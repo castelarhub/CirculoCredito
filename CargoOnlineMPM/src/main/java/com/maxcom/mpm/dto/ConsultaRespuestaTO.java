@@ -3,6 +3,7 @@ package com.maxcom.mpm.dto;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -18,6 +19,16 @@ public class ConsultaRespuestaTO {
     private String referencia;//Numero de referencia de la transaccion. Debe corresponder al enviado.
     private String autorizacion;//Numero de autorizacion del banco.
     private String monto;//Importe de la transaccion que cobro el banco.    
+    
+    @XmlTransient
+    private String banNumeroOperacion;
+    @XmlTransient
+    private String banCdRespuesta;
+    @XmlTransient
+    private String banNbRespuesta;
+    
+    @XmlTransient
+    private String respuestaXml;//Respuesta completa del banco
 
     public ConsultaRespuestaTO(long idConsultaOnline, String idEstatus, String observaciones, Date fecha, ConsultaDetalleErrorTO detalleError, String respuesta, String referencia, String autorizacion, String monto) {
         this.idConsultaOnline = idConsultaOnline;
@@ -157,6 +168,62 @@ public class ConsultaRespuestaTO {
      */
     public void setMonto(String monto) {
         this.monto = monto;
+    }
+
+    /**
+     * @return the respuestaXml
+     */
+    public String getRespuestaXml() {
+        return respuestaXml;
+    }
+
+    /**
+     * @param respuestaXml the respuestaXml to set
+     */
+    public void setRespuestaXml(String respuestaXml) {
+        this.respuestaXml = respuestaXml;
+    }
+
+    /**
+     * @return the banNumeroOperacion
+     */
+    public String getBanNumeroOperacion() {
+        return banNumeroOperacion;
+    }
+
+    /**
+     * @param banNumeroOperacion the banNumeroOperacion to set
+     */
+    public void setBanNumeroOperacion(String banNumeroOperacion) {
+        this.banNumeroOperacion = banNumeroOperacion;
+    }
+
+    /**
+     * @return the banCdRespuesta
+     */
+    public String getBanCdRespuesta() {
+        return banCdRespuesta;
+    }
+
+    /**
+     * @param banCdRespuesta the banCdRespuesta to set
+     */
+    public void setBanCdRespuesta(String banCdRespuesta) {
+        this.banCdRespuesta = banCdRespuesta;
+    }
+
+    /**
+     * @return the banNbRespuesta
+     */
+    public String getBanNbRespuesta() {
+        return banNbRespuesta;
+    }
+
+    /**
+     * @param banNbRespuesta the banNbRespuesta to set
+     */
+    public void setBanNbRespuesta(String banNbRespuesta) {
+        this.banNbRespuesta = banNbRespuesta;
     }
     
 }
