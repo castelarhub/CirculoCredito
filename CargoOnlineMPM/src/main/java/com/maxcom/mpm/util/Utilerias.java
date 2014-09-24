@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
  * @author Nelson C.
  */
 public class Utilerias {
+        
+    public static final Pattern VALID_DATE = 
+        Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$", Pattern.CASE_INSENSITIVE);
     
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
         Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);    
@@ -65,6 +68,11 @@ public class Utilerias {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(email);
         return matcher.find();
     }    
+    
+    public static boolean isValidDate(String date){
+        Matcher matcher = VALID_DATE .matcher(date);
+        return matcher.find();
+    }        
     
     /**
      * Valida si la cadena de entrada corresponde a un nombre de cliente valido

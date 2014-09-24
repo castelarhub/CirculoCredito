@@ -1,7 +1,11 @@
 package com.maxcom.mpm.ws;
 
 import com.maxcom.mpm.bi.CargoOnlineFacade;
+import com.maxcom.mpm.bi.ConsultaOnlineFacade;
 import com.maxcom.mpm.bi.ICargoOnline;
+import com.maxcom.mpm.bi.IConsultaOnline;
+import com.maxcom.mpm.dto.ConsultaRespuestaTO;
+import com.maxcom.mpm.dto.ConsultaTransaccionTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
 import javax.jws.WebMethod;
@@ -11,7 +15,7 @@ import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * Clase que provee el servicio de cargos recurrentes en el MPM.
+ * Clase que provee el servicio de cargo y consulta online en el MPM.
  * @author Nelson Castelar
  * @version 1.0
  */
@@ -38,5 +42,17 @@ public class CargoOnline {
         
         return respuesta;
     }
+    
+    @WebMethod(operationName = "consultarCargo")
+    @WebResult(name = "consultaRespuesta")
+    public ConsultaRespuestaTO consultarCargo(@WebParam(name = "consultaTransaccion") @XmlElement(required=true) ConsultaTransaccionTO transaccion ){
+        //Agregar DI
+        IConsultaOnline iconsultaOnline = new ConsultaOnlineFacade();
+        
+        ConsultaRespuestaTO  respuesta = iconsultaOnline.consultar(transaccion);
+        iconsultaOnline = null;
+        
+        return respuesta;
+    }    
     
 }

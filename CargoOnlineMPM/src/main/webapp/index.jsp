@@ -9,5 +9,6 @@
     </head>
     <body>
         <h1>Servicio de cargo online del MPM disponible!</h1>
+        <h1>Servicio de consulta de cargo online del MPM disponible!</h1>
     </body>
 </html>
