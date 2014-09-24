@@ -23,7 +23,10 @@ public class RespuestaBancoTO {
     private String tp_operacion;
     private String nb_currency;
     private String cd_resp;
-    private String nb_resp;    
+    private String nb_resp;
+    
+    //Respuesta general
+    private String respuesta_xml;
 
     /**
      * @return the nu_operaion
@@ -331,6 +334,20 @@ public class RespuestaBancoTO {
      */
     public void setNb_resp(String nb_resp) {
         this.nb_resp = nb_resp;
+    }
+
+    /**
+     * @return the respuesta_xml
+     */
+    public String getRespuesta_xml() {
+        return respuesta_xml;
+    }
+
+    /**
+     * @param respuesta_xml the respuesta_xml to set
+     */
+    public void setRespuesta_xml(String respuesta_xml) {
+        this.respuesta_xml = respuesta_xml;
     }
     
 }

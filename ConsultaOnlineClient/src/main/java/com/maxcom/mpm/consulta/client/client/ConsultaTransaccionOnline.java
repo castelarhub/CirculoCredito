@@ -25,7 +25,7 @@ public class ConsultaTransaccionOnline {
                                                                Constantes.ID_COMPANY, 
                                                                transaccion.getFechaCargo(), 
                                                                Constantes.ID_BRANCH, 
-                                                               transaccion.getReferencia());
+                                                               transaccion.getReferencia());        
         
         response = "<respuestaMIT>"+response+"</respuestaMIT>";
         
@@ -34,12 +34,12 @@ public class ConsultaTransaccionOnline {
         Unmarshaller u = context2.createUnmarshaller ();
         RespuestaMIT reponseMIT =(RespuestaMIT) u.unmarshal(sr);
         
-        listRespuestaBancoTO = mapearRespuesta(reponseMIT);
+        listRespuestaBancoTO = mapearRespuesta(reponseMIT,response);
         
         return listRespuestaBancoTO;
     }
     
-    private List<RespuestaBancoTO> mapearRespuesta(RespuestaMIT respuestaMIT) {
+    private List<RespuestaBancoTO> mapearRespuesta(RespuestaMIT respuestaMIT, String respuestaGeneral) {
         
         List<RespuestaBancoTO> listRespuestaBancoTO = new ArrayList<RespuestaBancoTO>();
         RespuestaBancoTO respuestaBancoTO;
