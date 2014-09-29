@@ -2,7 +2,7 @@ package com.maxcom.mpm.paypal.client.dto;
 
 import java.util.List;
 
-public class TransaccionSolicitudPagoExpressTO {
+public class TransaccionPagoExpressTO {
     private String referencia;
     private String descripcion;
     private List<ArticuloTO> listaArticulos;

@@ -3,7 +3,7 @@ package com.maxcom.mpm.paypal.client.client;
 import com.maxcom.mpm.paypal.client.dto.ArticuloTO;
 import com.maxcom.mpm.paypal.client.dto.RespuestaSolPagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.TipoErrorTO;
-import com.maxcom.mpm.paypal.client.dto.TransaccionSolicitudPagoExpressTO;
+import com.maxcom.mpm.paypal.client.dto.TransaccionPagoExpressTO;
 import com.maxcom.mpm.paypal.client.paypal.BasicAmountType;
 import com.maxcom.mpm.paypal.client.paypal.CurrencyCodeType;
 import com.maxcom.mpm.paypal.client.paypal.CustomSecurityHeaderType;
@@ -33,19 +33,19 @@ public class SolicitudPagoExpress {
     private SetExpressCheckoutRequestDetailsType detalleSolicitud = null;
     private SetExpressCheckoutReq solicitudExpres = null;
     private SetExpressCheckoutRequestType tipoSolicitudExpres = null;
-    private PayPalAPIInterfaceService payPalAPIInterfaceService= null;
+    private PayPalAPIInterfaceService payPalAPIInterfaceService= null;    
     
     public SolicitudPagoExpress(){
         currencyCodeType = CurrencyCodeType.MXN;
         paymentDetails = new PaymentDetailsType();
-        paymentAction = PaymentActionCodeType.SALE;
+        paymentAction = PaymentActionCodeType.AUTHORIZATION;
         detalleSolicitud = new SetExpressCheckoutRequestDetailsType();
         solicitudExpres = new SetExpressCheckoutReq();
         tipoSolicitudExpres = new SetExpressCheckoutRequestType();
         payPalAPIInterfaceService= new PayPalAPIInterfaceService();
     }
     
-    public RespuestaSolPagoExpressTO solicitar(TransaccionSolicitudPagoExpressTO transaccion) throws Exception{
+    public RespuestaSolPagoExpressTO solicitar(TransaccionPagoExpressTO transaccion) throws Exception{
         
         PayPalAPIAAInterface port = payPalAPIInterfaceService.getPayPalAPIAA();
         SetExpressCheckoutResponseType respuestaSolPaypal=null;
@@ -105,12 +105,19 @@ public class SolicitudPagoExpress {
     }
     
     private void setExtraDetalleSolicitudAdicional(){
-        this.detalleSolicitud.setCppHeaderImage("http://www.tudecide.com/images/detalle_empresas/maxcom.png");
+        this.detalleSolicitud.setCppHeaderImage(Constantes.LOGO_MAXCOM);
+        this.detalleSolicitud.setCppPayflowColor(Constantes.COLOR_FONDO);
+        this.detalleSolicitud.setCppHeaderBorderColor("000000");
+        this.detalleSolicitud.setNoteToBuyer("Para una notra extra al comprador...");
+        //this.detalleSolicitud.setCppLogoImage(Constantes.LOGO_MAXCOM);
     }    
     
-    private void setDetallePago(TransaccionSolicitudPagoExpressTO transaccion)throws Exception{
+    private void setDetallePago(TransaccionPagoExpressTO transaccion)throws Exception{
         Double orderTotal = 0d;
         Double itemTotal = 0d;
+        
+        //Transaccion recurrente
+        this.paymentDetails.setRecurring("Y");        
         
         this.paymentDetails.setOrderDescription(transaccion.getDescripcion());
         this.paymentDetails.setPaymentAction(this.paymentAction);
