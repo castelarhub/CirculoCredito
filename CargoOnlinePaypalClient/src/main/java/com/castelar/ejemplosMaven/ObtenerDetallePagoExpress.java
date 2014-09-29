@@ -31,7 +31,7 @@ public class ObtenerDetallePagoExpress {
         PayPalAPIAAInterface port = payPalAPIInterfaceService.getPayPalAPIAA();
         
         GetExpressCheckoutDetailsRequestType value = new GetExpressCheckoutDetailsRequestType();
-        value.setToken("EC-9KC77066CF427724D");
+        value.setToken("EC-9Y876716RX761704K");
         value.setVersion("117");
         
         GetExpressCheckoutDetailsReq detailsRequest = new GetExpressCheckoutDetailsReq();

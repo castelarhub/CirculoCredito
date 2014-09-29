@@ -62,30 +62,43 @@ public class SolicitarPagoExpress {
         SetExpressCheckoutRequestDetailsType details = new SetExpressCheckoutRequestDetailsType();
 
         PaymentDetailsType paymentDetails = new PaymentDetailsType();
-        paymentDetails.setOrderDescription("Simple test");
+        paymentDetails.setOrderDescription("Mi descripcion de la ordenXXX");
         //paymentDetails.setInvoiceID("invoice-#xxx");
         paymentDetails.setPaymentAction(paymentAction);        
         
         details.getPaymentDetails().add(paymentDetails);
 
+                
+        Double orderTotal = 0d;
         Double itemTotal = 0d;
-
+        
+        /**************/
+        Double itemTotal01 = 1.5d;
         PaymentDetailsItemType item = new PaymentDetailsItemType();
-
-        BasicAmountType amount = buildAmount(1.5d, currencyCodeType);
+        BasicAmountType amount = buildAmount(itemTotal01, currencyCodeType);
         item.setAmount(amount);
-
         item.setQuantity(new BigInteger("1"));
         item.setName("Paquete convenga Maxcom");
         
-        itemTotal += 1 * 1.5;
-
+        itemTotal += item.getQuantity().intValue() * itemTotal01;
+        
         paymentDetails.getPaymentDetailsItem().add(item);
+        orderTotal = itemTotal;
+        /**************/
 
-        Double orderTotal = itemTotal;
-
+        /**************/
+        Double itemTotal02 = 1.0d;
+        item = new PaymentDetailsItemType();
+        amount = buildAmount(itemTotal02, currencyCodeType);
+        item.setAmount(amount);
+        item.setQuantity(new BigInteger("1"));
+        item.setName("Paquete animes Maxcom");
+        itemTotal += item.getQuantity().intValue() * itemTotal02;
+        paymentDetails.getPaymentDetailsItem().add(item);
+        orderTotal = itemTotal;
+        /**************/
+        
         paymentDetails.setOrderTotal(buildAmount(orderTotal, currencyCodeType));
-
         paymentDetails.setItemTotal(buildAmount(itemTotal, currencyCodeType));
 
         details.setReturnURL("http://returnPage.com");
