@@ -5,9 +5,12 @@ import com.maxcom.mpm.paypal.client.dto.RespuestaSolPagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.TipoErrorTO;
 import com.maxcom.mpm.paypal.client.dto.TransaccionPagoExpressTO;
 import com.maxcom.mpm.paypal.client.paypal.BasicAmountType;
+import com.maxcom.mpm.paypal.client.paypal.BillingAgreementDetailsType;
+import com.maxcom.mpm.paypal.client.paypal.BillingCodeType;
 import com.maxcom.mpm.paypal.client.paypal.CurrencyCodeType;
 import com.maxcom.mpm.paypal.client.paypal.CustomSecurityHeaderType;
 import com.maxcom.mpm.paypal.client.paypal.ErrorType;
+import com.maxcom.mpm.paypal.client.paypal.MerchantPullPaymentCodeType;
 import com.maxcom.mpm.paypal.client.paypal.PayPalAPIAAInterface;
 import com.maxcom.mpm.paypal.client.paypal.PayPalAPIInterfaceService;
 import com.maxcom.mpm.paypal.client.paypal.PaymentActionCodeType;
@@ -65,7 +68,7 @@ public class SolicitudPagoExpress {
         //Url en caso de que se cancele el pago
         this.detalleSolicitud.setCancelURL(transaccion.getUrlCancel());
         //Referencia
-        this.detalleSolicitud.setCustom(transaccion.getReferencia());
+        this.detalleSolicitud.setCustom(transaccion.getReferencia());        
         
         //Para personalizar la pagina en paypal
         this.setExtraDetalleSolicitudAdicional();
@@ -89,7 +92,8 @@ public class SolicitudPagoExpress {
         respuesta.setToken(respuestaPaypal.getToken());
 
         //Su hay errores
-        if (respuestaPaypal.getErrors() != null) {
+        if (respuestaPaypal.getErrors() != null &&
+            respuestaPaypal.getErrors().size()>0) {
             TipoErrorTO tipoErrorTO = null;
             respuesta.setListaErrores(new ArrayList<TipoErrorTO>());
             for (ErrorType error : respuestaPaypal.getErrors()) {
@@ -108,8 +112,17 @@ public class SolicitudPagoExpress {
         this.detalleSolicitud.setCppHeaderImage(Constantes.LOGO_MAXCOM);
         this.detalleSolicitud.setCppPayflowColor(Constantes.COLOR_FONDO);
         this.detalleSolicitud.setCppHeaderBorderColor("000000");
-        this.detalleSolicitud.setNoteToBuyer("Para una notra extra al comprador...");
-        //this.detalleSolicitud.setCppLogoImage(Constantes.LOGO_MAXCOM);
+        this.detalleSolicitud.setNoteToBuyer("Para una notra extra al comprador...");        
+        
+        /**************Para los pagos recurrentes***********/
+        BillingAgreementDetailsType acuerdo = new BillingAgreementDetailsType();
+        acuerdo.setBillingAgreementDescription("Se cobrara recurrentemente");
+        acuerdo.setBillingType(BillingCodeType.MERCHANT_INITIATED_BILLING);
+        acuerdo.setPaymentType(MerchantPullPaymentCodeType.ANY);
+        this.detalleSolicitud.getBillingAgreementDetails().add(acuerdo);
+        /***************************************************/
+        
+        //this.detalleSolicitud.setCppLogoImage(Constantes.LOGO_MAXCOM);        
     }    
     
     private void setDetallePago(TransaccionPagoExpressTO transaccion)throws Exception{
@@ -117,7 +130,7 @@ public class SolicitudPagoExpress {
         Double itemTotal = 0d;
         
         //Transaccion recurrente
-        this.paymentDetails.setRecurring("Y");        
+        //this.paymentDetails.setRecurring("Y");        
         
         this.paymentDetails.setOrderDescription(transaccion.getDescripcion());
         this.paymentDetails.setPaymentAction(this.paymentAction);
@@ -140,7 +153,7 @@ public class SolicitudPagoExpress {
         }
         
         this.paymentDetails.setOrderTotal(buildAmount(orderTotal, this.currencyCodeType));
-        this.paymentDetails.setItemTotal(buildAmount(itemTotal, this.currencyCodeType));
+        this.paymentDetails.setItemTotal(buildAmount(itemTotal, this.currencyCodeType));        
         
     }        
     

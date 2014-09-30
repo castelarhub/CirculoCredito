@@ -62,7 +62,8 @@ public class DetallePagoExpress {
         RespuestaDetallePagoExpressTO respuesta = new RespuestaDetallePagoExpressTO();
         GetExpressCheckoutDetailsResponseDetailsType detalle = null;
         List<ArticuloTO> listArticulos = null;
-
+        
+        //Respuesta general
         respuesta.setAck(respuestaPaypal.getAck().toString());
         respuesta.setCorrelationID(respuestaPaypal.getCorrelationID());
         respuesta.setFechaHora(respuestaPaypal.getTimestamp().toString());
@@ -82,7 +83,8 @@ public class DetallePagoExpress {
             
             return respuesta;
         }
-                
+        
+        //Recuperando detalle del pago
         detalle = respuestaPaypal.getGetExpressCheckoutDetailsResponseDetails();
         
         if(detalle!=null){
@@ -90,16 +92,18 @@ public class DetallePagoExpress {
             respuesta.setToken(detalle.getToken());
             StringBuilder nombre = new StringBuilder();            
             
-            PayerInfoType payerInfoPaypal = detalle.getPayerInfo();
+            //Informacion de la cuenta que acepto el pago
+            PayerInfoType payerInfoPaypal = detalle.getPayerInfo();            
             
-            nombre.append(payerInfoPaypal.getPayerName().getFirstName());
-            nombre.append(" ");
-            nombre.append(payerInfoPaypal.getPayerName().getLastName());
-                        
             payerInfoTO.setPayer(payerInfoPaypal.getPayer());
             payerInfoTO.setPayerID(payerInfoPaypal.getPayerID());
+            nombre.append(payerInfoPaypal.getPayerName().getFirstName());
+            nombre.append(" ");
+            nombre.append(payerInfoPaypal.getPayerName().getLastName());            
             payerInfoTO.setPayerName(nombre.toString());
             payerInfoTO.setPayerStatus(payerInfoPaypal.getPayerStatus().toString());
+            
+            //Direccion de la cuenta que acepto el pago
             if(payerInfoPaypal.getAddress()!=null){
                 payerInfoTO.setCalle(payerInfoPaypal.getAddress().getStreet1());
                 payerInfoTO.setCiudad(payerInfoPaypal.getAddress().getCityName());
@@ -109,6 +113,7 @@ public class DetallePagoExpress {
                 payerInfoTO.setTelefono(payerInfoPaypal.getAddress().getPhone());
             }
            
+           //Informacion de los articulos que componen el pago aceptado
            listArticulos = new ArrayList<ArticuloTO>();
            for(PaymentDetailsType deta:detalle.getPaymentDetails()){
                //deta.getRecurring();
@@ -121,6 +126,7 @@ public class DetallePagoExpress {
                    listArticulos.add(articuloTO);
                }
                
+               //Totales
                respuesta.setItemTotal(Double.parseDouble(deta.getItemTotal().getValue()));
                respuesta.setOrderTotal(Double.parseDouble(deta.getOrderTotal().getValue()));
                

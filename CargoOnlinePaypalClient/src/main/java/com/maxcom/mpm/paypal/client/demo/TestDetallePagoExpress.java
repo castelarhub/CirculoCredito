@@ -5,8 +5,6 @@ import com.maxcom.mpm.paypal.client.bi.CargoOnlinePaypalImpl;
 import com.maxcom.mpm.paypal.client.dto.ArticuloTO;
 import com.maxcom.mpm.paypal.client.dto.RespuestaDetallePagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.TransaccionDetallePagoExpressTO;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -20,7 +18,7 @@ public class TestDetallePagoExpress {
         
         try {
             trasaccion.setReferencia("XX-XXXXX");
-            trasaccion.setToken("EC-8G397647D0271223C");
+            trasaccion.setToken("EC-7PM28564M7114473P");
             
             respuesta = cargo.recuperaDetallePagoExpress(trasaccion);
             

@@ -17,24 +17,24 @@ public class TestSolicitudPagoExpress {
 
         try {
             
-            trasaccion.setDescripcion("Descripcion orden xyz");
-            trasaccion.setReferencia("REF-123");
-            trasaccion.setUrlCancel("http://cancelo.com");
-            trasaccion.setUrlReturn("http://acepto.com");            
+            trasaccion.setDescripcion("Descripcion orden xyz fsdsfds");
+            trasaccion.setReferencia("REF-1234356");
+            trasaccion.setUrlCancel("http://canceloBaruch.com");
+            trasaccion.setUrlReturn("http://aceptoBaruch.com");
             
             List <ArticuloTO> lista = new ArrayList<ArticuloTO>();
             ArticuloTO articulo = null;
             
             articulo = new ArticuloTO();
             articulo.setCantidad(2);
-            articulo.setDescripcion("Patito de hule");
-            articulo.setPrecio(1.20d);
+            articulo.setDescripcion("Patito de hule con goma");
+            articulo.setPrecio(4.20d);
             lista.add(articulo);
             
             articulo = new ArticuloTO();
             articulo.setCantidad(1);
-            articulo.setDescripcion("Oso moloso");
-            articulo.setPrecio(1.15d);
+            articulo.setDescripcion("Paquete convenga");
+            articulo.setPrecio(1.05d);
             lista.add(articulo);
             
             trasaccion.setListaArticulos(lista);
