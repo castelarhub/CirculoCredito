@@ -116,7 +116,7 @@ public class SolicitudPagoExpress {
         
         /**************Para los pagos recurrentes***********/
         BillingAgreementDetailsType acuerdo = new BillingAgreementDetailsType();
-        acuerdo.setBillingAgreementDescription("Se cobrara recurrentemente");
+        acuerdo.setBillingAgreementDescription("Se aplicara un cargo mensual de xx pesos por el servicio");
         acuerdo.setBillingType(BillingCodeType.MERCHANT_INITIATED_BILLING);
         acuerdo.setPaymentType(MerchantPullPaymentCodeType.ANY);
         this.detalleSolicitud.getBillingAgreementDetails().add(acuerdo);

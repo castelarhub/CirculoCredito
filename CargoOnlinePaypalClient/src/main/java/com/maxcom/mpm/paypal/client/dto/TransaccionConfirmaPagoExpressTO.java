@@ -5,6 +5,10 @@ public class TransaccionConfirmaPagoExpressTO {
     private String token;
     private String payerId;
     private String referencia;
+    private double orderTotal;
+    private double itemTotal;
+    
+    
 
     /**
      * @return the token
@@ -46,6 +50,34 @@ public class TransaccionConfirmaPagoExpressTO {
      */
     public void setReferencia(String referencia) {
         this.referencia = referencia;
+    }
+
+    /**
+     * @return the orderTotal
+     */
+    public double getOrderTotal() {
+        return orderTotal;
+    }
+
+    /**
+     * @param orderTotal the orderTotal to set
+     */
+    public void setOrderTotal(double orderTotal) {
+        this.orderTotal = orderTotal;
+    }
+
+    /**
+     * @return the itemTotal
+     */
+    public double getItemTotal() {
+        return itemTotal;
+    }
+
+    /**
+     * @param itemTotal the itemTotal to set
+     */
+    public void setItemTotal(double itemTotal) {
+        this.itemTotal = itemTotal;
     }
     
 }

@@ -18,7 +18,7 @@ public class TestDetallePagoExpress {
         
         try {
             trasaccion.setReferencia("XX-XXXXX");
-            trasaccion.setToken("EC-7PM28564M7114473P");
+            trasaccion.setToken("EC-399331809R441821P");
             
             respuesta = cargo.recuperaDetallePagoExpress(trasaccion);
             
@@ -26,7 +26,7 @@ public class TestDetallePagoExpress {
             System.out.println("getToken:" + respuesta.getToken());
             System.out.println("getFechaHora:" + respuesta.getFechaHora());
             System.out.println("getCorrelationID:" + respuesta.getCorrelationID());
-            System.out.println("getListaErrores:" + respuesta.getListaErrores());
+            System.out.println("getListaErrores:" + respuesta.getListaErrores());            
             
             System.out.println("***************************");
             if(respuesta.getPayerInfo()!=null){

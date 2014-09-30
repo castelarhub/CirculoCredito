@@ -4,6 +4,7 @@ import com.maxcom.mpm.paypal.client.dto.PaymentInfoTO;
 import com.maxcom.mpm.paypal.client.dto.RespuestaConfirmalPagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.TipoErrorTO;
 import com.maxcom.mpm.paypal.client.dto.TransaccionConfirmaPagoExpressTO;
+import com.maxcom.mpm.paypal.client.paypal.CurrencyCodeType;
 import com.maxcom.mpm.paypal.client.paypal.CustomSecurityHeaderType;
 import com.maxcom.mpm.paypal.client.paypal.DoExpressCheckoutPaymentReq;
 import com.maxcom.mpm.paypal.client.paypal.DoExpressCheckoutPaymentRequestDetailsType;
@@ -14,9 +15,11 @@ import com.maxcom.mpm.paypal.client.paypal.ErrorType;
 import com.maxcom.mpm.paypal.client.paypal.PayPalAPIAAInterface;
 import com.maxcom.mpm.paypal.client.paypal.PayPalAPIInterfaceService;
 import com.maxcom.mpm.paypal.client.paypal.PaymentActionCodeType;
+import com.maxcom.mpm.paypal.client.paypal.PaymentDetailsType;
 import com.maxcom.mpm.paypal.client.paypal.PaymentInfoType;
 import com.maxcom.mpm.paypal.client.paypal.UserIdPasswordType;
 import com.maxcom.mpm.paypal.client.util.Constantes;
+import static com.maxcom.mpm.paypal.client.util.Utilerias.buildAmount;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.ws.Holder;
@@ -25,14 +28,18 @@ public class ConfirmacionPagoExpress {
     
     private PaymentActionCodeType paymentAction = null;
     private Holder<CustomSecurityHeaderType> securityHeader;
-    private PayPalAPIInterfaceService payPalAPIInterfaceService= null;    
+    private PayPalAPIInterfaceService payPalAPIInterfaceService= null;   
+    private PaymentDetailsType paymentDetails = null;
+    private CurrencyCodeType currencyCodeType = null;
     
     public ConfirmacionPagoExpress(){
+        currencyCodeType = CurrencyCodeType.MXN;
         paymentAction = PaymentActionCodeType.SALE;
         payPalAPIInterfaceService= new PayPalAPIInterfaceService();
+        paymentDetails = new PaymentDetailsType();
     }
     
-    public RespuestaConfirmalPagoExpressTO confirmarPagoExpress(TransaccionConfirmaPagoExpressTO transaccion){
+    public RespuestaConfirmalPagoExpressTO confirmarPagoExpress(TransaccionConfirmaPagoExpressTO transaccion)throws Exception{
         
         PayPalAPIAAInterface port = payPalAPIInterfaceService.getPayPalAPIAA();
         
@@ -47,10 +54,15 @@ public class ConfirmacionPagoExpress {
         valueDetails.setToken(transaccion.getToken());
         valueDetails.setPayerID(transaccion.getPayerId());
         valueDetails.setPaymentAction(paymentAction.SALE);
-        //valueDetails.setOrderURL(null);
+        //valueDetails.setOrderURL(null        
+        
+        this.setDetallePago(transaccion);
+        
+        //Detalle del pago
+        valueDetails.getPaymentDetails().add(this.paymentDetails);        
         
         value.setVersion(Constantes.VERSION_PAYPAL);
-        value.setDoExpressCheckoutPaymentRequestDetails(valueDetails);
+        value.setDoExpressCheckoutPaymentRequestDetails(valueDetails);        
         
         doExpressCheckoutPaymentRequest.setDoExpressCheckoutPaymentRequest(value);
         
@@ -63,6 +75,20 @@ public class ConfirmacionPagoExpress {
         return respuesta;
         
     }
+    
+    private void setDetallePago(TransaccionConfirmaPagoExpressTO transaccion)throws Exception{
+        
+        //this.paymentDetails.setOrderDescription(transaccion.getDescripcion());
+        this.paymentDetails.setPaymentAction(this.paymentAction);
+        //paymentDetails.setInvoiceID("invoice-#xxx");
+        
+        Double orderTotal = transaccion.getOrderTotal();
+        Double itemTotal = transaccion.getItemTotal();
+        
+        this.paymentDetails.setOrderTotal(buildAmount(orderTotal, this.currencyCodeType));
+        this.paymentDetails.setItemTotal(buildAmount(itemTotal, this.currencyCodeType));
+        
+    }            
     
     private RespuestaConfirmalPagoExpressTO mapearRespuesta(DoExpressCheckoutPaymentResponseType respuestaPaypal) {
 
