@@ -7,8 +7,6 @@ public class TransaccionConfirmaPagoExpressTO {
     private String referencia;
     private double orderTotal;
     private double itemTotal;
-    
-    
 
     /**
      * @return the token

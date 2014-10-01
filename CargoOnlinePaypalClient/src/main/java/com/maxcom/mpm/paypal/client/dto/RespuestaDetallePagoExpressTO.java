@@ -20,6 +20,8 @@ public class RespuestaDetallePagoExpressTO {
     
     private double orderTotal;
     
+    private boolean tieneAcuerdoReferenciado;
+    
 
     /**
      * @return the fechaHora
@@ -145,6 +147,20 @@ public class RespuestaDetallePagoExpressTO {
      */
     public void setOrderTotal(double orderTotal) {
         this.orderTotal = orderTotal;
+    }
+
+    /**
+     * @return the tieneAcuerdoReferenciado
+     */
+    public boolean isTieneAcuerdoReferenciado() {
+        return tieneAcuerdoReferenciado;
+    }
+
+    /**
+     * @param tieneAcuerdoReferenciado the tieneAcuerdoReferenciado to set
+     */
+    public void setTieneAcuerdoReferenciado(boolean tieneAcuerdoReferenciado) {
+        this.tieneAcuerdoReferenciado = tieneAcuerdoReferenciado;
     }
     
     

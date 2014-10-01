@@ -58,7 +58,7 @@ public class DetallePagoExpress {
     }
     
     private RespuestaDetallePagoExpressTO mapearRespuesta(GetExpressCheckoutDetailsResponseType respuestaPaypal) {
-
+        
         RespuestaDetallePagoExpressTO respuesta = new RespuestaDetallePagoExpressTO();
         GetExpressCheckoutDetailsResponseDetailsType detalle = null;
         List<ArticuloTO> listArticulos = null;
@@ -131,6 +131,8 @@ public class DetallePagoExpress {
                respuesta.setOrderTotal(Double.parseDouble(deta.getOrderTotal().getValue()));
                
            }
+           
+           respuesta.setTieneAcuerdoReferenciado(detalle.isBillingAgreementAcceptedStatus());
            
            respuesta.setListItem(listArticulos);
            
