@@ -1,7 +1,8 @@
 package com.maxcom.mpm.paypal.bi;
 
+import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
-import com.maxcom.mpm.paypal.dto.RespuestaTO;
+import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
 
 /**
@@ -13,12 +14,8 @@ import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
  */
 public interface ICargoOnline {
     
-    /**
-     * Solicita el pago de la transaccion especificada
-     * @param transaccion Transaccion a procesar
-     * @return Regresa la respuesta que resulto del procesamiento. Un objeto de tipo RespuestaTO.
-     * @since 1.0
-     */
     public RespuestaSolicitudTO solicitarPago(TransaccionSolicitudTO transaccion);
+    
+    public RespuestaDetallePagoTO recuperarDetallePago(TransaccionDetallePagoTO transaccion);
     
 }

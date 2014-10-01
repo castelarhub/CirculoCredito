@@ -1,7 +1,9 @@
 package com.maxcom.mpm.paypal.ws;
 
 import com.maxcom.mpm.paypal.bi.CargoOnlineFacade;
+import com.maxcom.mpm.paypal.bi.DetalleCargoOnlineFacade;
 import com.maxcom.mpm.paypal.bi.ICargoOnline;
+import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
 import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
@@ -47,15 +49,15 @@ public class CargoOnlinePaypal {
      */
     @WebMethod(operationName = "recuperarDetallePago")
     @WebResult(name = "respuestaDetallePago")
-    public RespuestaSolicitudTO recuperarDetallePago(@WebParam(name = "transaccionDetallePago") @XmlElement(required=true) TransaccionDetallePagoTO transaccion ){
+    public RespuestaDetallePagoTO recuperarDetallePago(@WebParam(name = "transaccionDetallePago") @XmlElement(required=true) TransaccionDetallePagoTO transaccion ){
         //Agregar DI
-        ICargoOnline icargoOnline = new CargoOnlineFacade();
+        ICargoOnline icargoOnline = new DetalleCargoOnlineFacade();
         
-        //RespuestaSolicitudTO  respuesta = icargoOnline.solicitarPago(transaccion);
+        RespuestaDetallePagoTO  respuesta = icargoOnline.recuperarDetallePago(transaccion);
         
         icargoOnline = null;
         
-        return null;
+        return respuesta;
     }    
     
 }
