@@ -2,13 +2,13 @@ package com.maxcom.mpm.paypal.client.dto;
 
 import java.util.List;
 
-public class RespuestaSolPagoExpressTO {    
+public class RespuestaSolPagoExpressTO {
     private String token;
     private String ack;
     private String correlationID;
     private String fechaHora;
     private List<TipoErrorTO> listaErrores;
-
+    
     /**
      * @return the token
      */

@@ -68,7 +68,10 @@ public class SolicitudPagoExpress {
         //Url en caso de que se cancele el pago
         this.detalleSolicitud.setCancelURL(transaccion.getUrlCancel());
         //Referencia
-        this.detalleSolicitud.setCustom(transaccion.getReferencia());        
+        this.detalleSolicitud.setCustom(transaccion.getReferencia());
+        
+        //Preparando para refenciar cargos en caso de que sea solicitado
+        this.referenciarPago(transaccion);
         
         //Para personalizar la pagina en paypal
         this.setExtraDetalleSolicitudAdicional();
@@ -108,22 +111,26 @@ public class SolicitudPagoExpress {
         return respuesta;
     }
     
+    private void referenciarPago(TransaccionPagoExpressTO transaccion){
+        /**************Para los pagos referenciados***********/
+        if(transaccion.isReferenciarPago()){
+            BillingAgreementDetailsType acuerdo = new BillingAgreementDetailsType();
+            acuerdo.setBillingAgreementDescription("Nota para el acuerdo de pago mensual");
+            acuerdo.setBillingType(BillingCodeType.MERCHANT_INITIATED_BILLING);
+            acuerdo.setPaymentType(MerchantPullPaymentCodeType.ANY);
+            this.detalleSolicitud.getBillingAgreementDetails().add(acuerdo);
+        }
+        /*****************************************************/
+        
+    }        
+    
     private void setExtraDetalleSolicitudAdicional(){
         this.detalleSolicitud.setCppHeaderImage(Constantes.LOGO_MAXCOM);
         this.detalleSolicitud.setCppPayflowColor(Constantes.COLOR_FONDO);
         this.detalleSolicitud.setCppHeaderBorderColor("000000");
-        this.detalleSolicitud.setNoteToBuyer("Para una notra extra al comprador...");        
-        
-        /**************Para los pagos recurrentes***********/
-        BillingAgreementDetailsType acuerdo = new BillingAgreementDetailsType();
-        acuerdo.setBillingAgreementDescription("Se aplicara un cargo mensual de xx pesos por el servicio");
-        acuerdo.setBillingType(BillingCodeType.MERCHANT_INITIATED_BILLING);
-        acuerdo.setPaymentType(MerchantPullPaymentCodeType.ANY);
-        this.detalleSolicitud.getBillingAgreementDetails().add(acuerdo);
-        /***************************************************/
-        
-        //this.detalleSolicitud.setCppLogoImage(Constantes.LOGO_MAXCOM);        
-    }    
+        this.detalleSolicitud.setNoteToBuyer("Nota adicional a mostrar al cliente");
+        //this.detalleSolicitud.setCppLogoImage(Constantes.LOGO_MAXCOM);
+    }
     
     private void setDetallePago(TransaccionPagoExpressTO transaccion)throws Exception{
         Double orderTotal = 0d;

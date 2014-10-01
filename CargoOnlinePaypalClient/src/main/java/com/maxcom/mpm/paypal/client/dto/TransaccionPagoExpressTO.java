@@ -8,6 +8,7 @@ public class TransaccionPagoExpressTO {
     private List<ArticuloTO> listaArticulos;
     private String urlReturn;
     private String urlCancel;
+    private boolean referenciarPago;
 
     /**
      * @return the referencia
@@ -77,6 +78,20 @@ public class TransaccionPagoExpressTO {
      */
     public void setUrlCancel(String urlCancel) {
         this.urlCancel = urlCancel;
+    }
+
+    /**
+     * @return the referenciarPago
+     */
+    public boolean isReferenciarPago() {
+        return referenciarPago;
+    }
+
+    /**
+     * @param referenciarPago the referenciarPago to set
+     */
+    public void setReferenciarPago(boolean referenciarPago) {
+        this.referenciarPago = referenciarPago;
     }
     
 }
