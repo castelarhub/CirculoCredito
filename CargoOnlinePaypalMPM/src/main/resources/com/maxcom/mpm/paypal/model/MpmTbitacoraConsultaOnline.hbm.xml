@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 23-sep-2014 23:46:56 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class name="com.maxcom.mpm.paypal.model.MpmTbitacoraConsultaOnline" schema="ADMIN_MPM" table="MPM_TBITACORA_CONSULTA_ONLINE">
+    <id name="idBitacoraConsulta" type="long">
+      <column name="ID_BITACORA_CONSULTA" precision="16" scale="0"/>
+      <generator class="sequence">
+        <param name="sequence">MPM_TBITACORA_CONSULTA_SEQ1</param>
+      </generator>
+    </id>
+    <property name="fechaCargo" type="string">
+      <column length="100" name="FECHA_CARGO"/>
+    </property>
+    <property name="referencia" type="string">
+      <column length="100" name="REFERENCIA"/>
+    </property>
+    <property name="idEstado" type="string">
+      <column length="5" name="ID_ESTADO" not-null="true"/>
+    </property>
+    <property name="idRespuestaCargo" type="string">
+      <column length="5" name="ID_RESPUESTA_CARGO"/>
+    </property>
+    <property name="observaciones" type="string">
+      <column length="250" name="OBSERVACIONES"/>
+    </property>
+    <property name="banResultado" type="string">
+      <column length="50" name="BAN_RESULTADO"/>
+    </property>
+    <property name="banNumeroAutorizacion" type="string">
+      <column length="50" name="BAN_NUMERO_AUTORIZACION"/>
+    </property>
+    <property name="banNumeroOperacion" type="string">
+      <column length="50" name="BAN_NUMERO_OPERACION"/>
+    </property>
+    <property name="banMonto" type="string">
+      <column length="50" name="BAN_MONTO"/>
+    </property>
+    <property name="banCdRespuesta" type="string">
+      <column length="50" name="BAN_CD_RESPUESTA"/>
+    </property>
+    <property name="banNbRespuesta" type="string">
+      <column length="50" name="BAN_NB_RESPUESTA"/>
+    </property>
+    <property name="creadoPor" type="string">
+      <column length="30" name="CREADO_POR" not-null="true"/>
+    </property>
+    <property name="fechaCreacion" type="date">
+      <column length="7" name="FECHA_CREACION" not-null="true"/>
+    </property>
+    <property name="modificadoPor" type="string">
+      <column length="30" name="MODIFICADO_POR"/>
+    </property>
+    <property name="fechaModificacion" type="date">
+      <column length="7" name="FECHA_MODIFICACION"/>
+    </property>
+    <property name="solicitudXml" type="string">
+      <column name="SOLICITUD_XML"/>
+    </property>
+    <property name="respuestaXml" type="string">
+      <column name="RESPUESTA_XML"/>
+    </property>
+  </class>
+</hibernate-mapping>

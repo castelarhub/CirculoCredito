@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-sep-2014 9:04:02 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class name="com.maxcom.mpm.paypal.model.MpmCestados" schema="ADMIN_MPM" table="MPM_CESTADOS">
+    <comment>Entidad de los estatus de los diferentes objetos</comment>
+    <id name="idEstado" type="string">
+      <column length="5" name="ID_ESTADO"/>
+      <generator class="assigned"/>
+    </id>
+    <many-to-one class="com.maxcom.mpm.paypal.model.MpmCnotificaciones" fetch="select" name="mpmCnotificaciones">
+      <column name="ID_NOTIFICACION" precision="10" scale="0"/>
+    </many-to-one>
+    <property name="descripcion" type="string">
+      <column length="120" name="DESCRIPCION" not-null="true">
+        <comment>Describe el estado especificado por las siglas (clave primaria)</comment>
+      </column>
+    </property>
+    <property name="nombre" type="string">
+      <column length="40" name="NOMBRE">
+        <comment>Representa el nombre largo del estatus</comment>
+      </column>
+    </property>
+    <property name="estadoFinal" type="java.lang.Boolean">
+      <column name="ESTADO_FINAL" precision="1" scale="0">
+        <comment>Por omision tiene 0 que indica que no es un estado final, si tiene un 1, indica que tiene un estado final.</comment>
+      </column>
+    </property>
+    <property name="creadoPor" type="string">
+      <column length="30" name="CREADO_POR" not-null="true">
+        <comment>Atributo de auditoria, usuario que realizó acción de inserción del registro.</comment>
+      </column>
+    </property>
+    <property name="fechaCreacion" type="date">
+      <column length="7" name="FECHA_CREACION" not-null="true">
+        <comment>Atributo de auditoria, fecha, hora de creación del registro</comment>
+      </column>
+    </property>
+    <property name="sistema" type="string">
+      <column length="30" name="SISTEMA" not-null="true">
+        <comment>Atributo de auditoria, sistema que realizó la inserción del registro en la tabla.</comment>
+      </column>
+    </property>
+    <property name="modificadoPor" type="string">
+      <column length="30" name="MODIFICADO_POR">
+        <comment>Atributo de auditoria, nombre del usuario que realizó la ultima modificación al registro.</comment>
+      </column>
+    </property>
+    <property name="fechaModificacion" type="date">
+      <column length="7" name="FECHA_MODIFICACION">
+        <comment>Atributo de auditoria, fecha y hora de ultima modificación realizada en el registro.</comment>
+      </column>
+    </property>
+    <property name="activo" type="boolean">
+      <column name="ACTIVO" not-null="true" precision="1" scale="0">
+        <comment>Bandera (campo booleano), que indica si el registro esta activo 1, o desactivado 0.</comment>
+      </column>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="mpmTbitacoraCargoOnlines" table="MPM_TBITACORA_CARGO_ONLINE">
+      <key>
+        <column length="5" name="ID_ESTADO" not-null="true"/>
+      </key>
+      <one-to-many class="com.maxcom.mpm.paypal.model.MpmTbitacoraCargoOnline"/>
+    </set>
+  </class>
+</hibernate-mapping>
