@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TransaccionConfirmacionPago")
+
 public class TransaccionConfirmacionPagoTO extends TransaccionTO{
     @XmlElement(required=true)
     private String referencia;

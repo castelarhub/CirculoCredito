@@ -7,7 +7,6 @@ import com.maxcom.mpm.paypal.bi.service.impl.AutenticacionServiceImpl;
 import com.maxcom.mpm.paypal.bi.service.impl.BitacoraServiceImpl;
 import com.maxcom.mpm.paypal.bi.service.impl.CargoOnlineServiceImpl;
 import com.maxcom.mpm.paypal.dto.AutenticacionTO;
-import com.maxcom.mpm.paypal.dto.CargoTO;
 import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
 import com.maxcom.mpm.paypal.dto.RespuestaConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
@@ -17,7 +16,6 @@ import com.maxcom.mpm.paypal.dto.TransaccionConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
 import com.maxcom.mpm.paypal.dto.TransaccionTO;
-import static com.maxcom.mpm.paypal.util.Utilerias.isValidList;
 import static com.maxcom.mpm.paypal.util.Utilerias.isValidString;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,53 +23,51 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * La clase CargoOnlineFacade implementa las operaciones para trabajar 
- * con los cargos online de Paypal en el MPM.
- * 
- * @author Nelson Castelar
- * @version 1.0
- */
-public class CargoOnlineFacade implements ICargoOnline {
+
+public class ConfirmacionCargoOnlineFacade implements ICargoOnline {
     
     private BitacoraService bitacoraService;
     private CargoOnlineService cargoOnlineService;
     private AutenticacionService autenticacionService;
     
     private List<DetalleErrorTO> listDetalleError;
-    private RespuestaSolicitudTO respuesta;
+    private RespuestaConfirmacionPagoTO respuesta;
         
-    static final Logger logger = LogManager.getLogger(CargoOnlineFacade.class);
+    static final Logger logger = LogManager.getLogger(DetalleCargoOnlineFacade.class);
     
     /**
      * Constructor default de la clase
      */
-    public CargoOnlineFacade(){
+    public ConfirmacionCargoOnlineFacade(){
         //Agregar DI
         this.bitacoraService = new BitacoraServiceImpl();
         this.cargoOnlineService = new CargoOnlineServiceImpl();
         this.autenticacionService = new AutenticacionServiceImpl();
         this.listDetalleError = new ArrayList<>();
     }
-    
-    
+        
     /**
      * Solicita el pago de la transaccion especificada
      * @param transaccion Transaccion a procesar
-     * @return Regresa la respuesta que resulto del procesamiento. Un objeto de tipo RespuestaTO.
+     * @return Regresa la respuesta que resulto del procesamiento.
      * @since 1.0
      */
     @Override
-    public RespuestaSolicitudTO solicitarPago(TransaccionSolicitudTO transaccion) {
+    public RespuestaConfirmacionPagoTO confirmarPago(TransaccionConfirmacionPagoTO transaccion) {
         //StringBuilder observaciones =;
         try {
-            logger.info("CargoOnlineFacade:solicitarPago(E)");
+            logger.info("CargoOnlineFacade:confirmarPago(E)");
             
-            if (!this.isTransaccionValida(transaccion)) {                
-                this.respuesta = new RespuestaSolicitudTO("-", "-", null, "-", 
-                                                          "-", null, 0, "-", 
-                                                          "ETRAN", "Error - Transaccion nula", 
-                                                          Calendar.getInstance().getTime());
+            if (!this.isTransaccionValida(transaccion)) {
+                /*
+                public RespuestaConfirmacionPagoTO(
+                String token, String billingAgreementId, PaymentInfoTO informacionPago, String idEstatus, 
+                String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, 
+                String respuesta, String observaciones, Date fecha) {
+                */
+                this.respuesta = new RespuestaConfirmacionPagoTO("-", "-", null, "-", 
+                                                            "-", "-", 0, "-", 
+                                                            "ETRAN","Error - Transaccion nula",Calendar.getInstance().getTime());
                 return respuesta;
             }
             
@@ -92,11 +88,16 @@ public class CargoOnlineFacade implements ICargoOnline {
             //PENDIENTE this.guardarBitacoraSolicitud(transaccion);
             
             //Validando credenciales de la solicitud
-            if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {                
-                this.respuesta = new RespuestaSolicitudTO("-", "-", null, "-", 
-                                                          "-", null, transaccion.getIdOrden(), transaccion.getIdTransaccion(), 
-                                                          "ETRAN", "Error - Credenciales invalidas", 
-                                                          Calendar.getInstance().getTime());
+            if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {
+                /*
+                public RespuestaConfirmacionPagoTO(
+                String token, String billingAgreementId, PaymentInfoTO informacionPago, String idEstatus, 
+                String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, 
+                String respuesta, String observaciones, Date fecha) {
+                */
+                this.respuesta = new RespuestaConfirmacionPagoTO("-", "-", null, "-", 
+                                                            "-", "-", transaccion.getIdOrden(), transaccion.getIdTransaccion(), 
+                                                            "ETRAN","Error - Credenciales invalidas",Calendar.getInstance().getTime());
                 
                 //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
@@ -105,20 +106,27 @@ public class CargoOnlineFacade implements ICargoOnline {
             //Revisando los datos cargo por cargo
             //this.revisarDetalleCargo(transaccion.getCargo());
             
-            this.respuesta = this.cargoOnlineService.solicitarPago(transaccion);            
+            this.respuesta = this.cargoOnlineService.confirmarPago(transaccion);
+            
             //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
             
             return this.respuesta;            
         } catch (Exception e) {
-            logger.error("Error en CargoOnlineFacade:solicitarPago - " + e.toString());            
+            logger.error("Error en CargoOnlineFacade:confirmarPago - " + e.toString());            
             e.printStackTrace();            
             StringBuilder detalleErrorApp = new StringBuilder("");            
-            detalleErrorApp.append("Error en el aplicativo - Servicio de CargoOnline Paypal - solicitarPago.");
+            detalleErrorApp.append("Error en el aplicativo - Servicio de CargoOnline Paypal - confirmarPago.");
             //Agregar notificaciones de mail en caso de error
-            this.respuesta = new RespuestaSolicitudTO("-", "-", null, "-", 
-                                                      "-", null, transaccion.getIdOrden(), transaccion.getIdTransaccion(), 
-                                                      "EAPP", detalleErrorApp.toString(), 
-                                                      Calendar.getInstance().getTime());
+            
+            /*
+            public RespuestaConfirmacionPagoTO(
+            String token, String billingAgreementId, PaymentInfoTO informacionPago, String idEstatus, 
+            String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, 
+            String respuesta, String observaciones, Date fecha) {
+            */
+            this.respuesta = new RespuestaConfirmacionPagoTO("-", "-", null, "-", 
+                                                        "-", "-", transaccion.getIdOrden(), transaccion.getIdTransaccion(), 
+                                                        "EAPP",detalleErrorApp.toString(),Calendar.getInstance().getTime());
             
             try{
                 //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
@@ -128,7 +136,7 @@ public class CargoOnlineFacade implements ICargoOnline {
             
             return this.respuesta;
         } finally {
-            logger.info("CargoOnlineFacade:solicitarPago(S)");
+            logger.info("CargoOnlineFacade:confirmarPago(S)");
         }
     }
     
@@ -169,7 +177,7 @@ public class CargoOnlineFacade implements ICargoOnline {
      * @param transaccion Transaccion a procesar.
      * @return True - Si la transaccion cuenta con la informacion minima para su procesamiento.
      */
-    private boolean isTransaccionCompleta(TransaccionSolicitudTO transaccion) {
+    private boolean isTransaccionCompleta(TransaccionConfirmacionPagoTO transaccion) {
         StringBuilder error = new StringBuilder();
         
         if (!isValidString(transaccion.getIdTransaccion())) {
@@ -178,7 +186,7 @@ public class CargoOnlineFacade implements ICargoOnline {
         
         if (!isValidString(transaccion.getReferencia())) {
             error.append("El campo referencia es obligatorio.");
-        }        
+        }
         
         if (transaccion.getAutenticacion() == null) {
             error.append("El campo autenticacion es obligatorio - ");
@@ -192,50 +200,35 @@ public class CargoOnlineFacade implements ICargoOnline {
             if (!isValidString(transaccion.getAutenticacion().getContrasenia())) {
                 error.append("El campo contrasenia es obligatorio - ");
             }
-        }               
-        
-        if (!isValidList(transaccion.getCargos())) {
-            error.append("El campo cargos es obligatorio (enviar al menos un cargo) -");
-        }else{
-            boolean bErrorCargo=false;
-            for(CargoTO cargoAux: transaccion.getCargos()){
+        }
                 
-                if(cargoAux.getCantidad() < 1){
-                    bErrorCargo=true;
-                    error.append("El campo cantidad debe ser mayor a 0 (Revisar Cargos) - ");
-                }
-                
-                if(!isValidString(cargoAux.getDescripcion())){
-                    bErrorCargo=true;
-                    error.append("El campo descripcion es obligatorio (Revisar Cargos) - ");
-                }
-                
-                if(cargoAux.getPrecio() <= 0.0){
-                    bErrorCargo=true;
-                    error.append("El campo precio debe ser mayor a 0.0 (Revisar Cargos) - ");
-                }
-                
-                //Reportando solo el primer error encontrado en un cargo
-                if(bErrorCargo){
-                    break;
-                }
-                
-            }
+        if (!isValidString(transaccion.getReferencia())) {
+            error.append("El campo referencia es obligatorio - ");
         }
         
-        if (!isValidString(transaccion.getReturnUrl())) {
-            error.append("El campo returnUrl es obligatorio - ");
+        if (!isValidString(transaccion.getToken())) {
+            error.append("El campo token es obligatorio - ");
         }
         
-        if (!isValidString(transaccion.getCancelUrl())) {
-            error.append("El campo cancelUrl es obligatorio - ");
-        }                
-                
+        if (!isValidString(transaccion.getPayerId())) {
+            error.append("El campo payerId es obligatorio - ");
+        }
+        
+        if (transaccion.getOrderTotal()<=0.0) {
+            error.append("El campo orderTotal deber ser mayor a 0.0 - ");
+        }
+        
         if (error.length() > 0) {
-            this.respuesta = new RespuestaSolicitudTO("-", "-", null, "-", 
-                                                      "-", null, transaccion.getIdOrden(), transaccion.getIdTransaccion(), 
-                                                      "ETRAN", "Error - Transaccion incompleta ->"+error.toString(), 
-                                                      Calendar.getInstance().getTime());
+            
+                /*
+                public RespuestaConfirmacionPagoTO(
+                String token, String billingAgreementId, PaymentInfoTO informacionPago, String idEstatus, 
+                String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, 
+                String respuesta, String observaciones, Date fecha) {
+                */
+                this.respuesta = new RespuestaConfirmacionPagoTO("-", "-", null, "-", 
+                                                            "-", "-", transaccion.getIdOrden(), transaccion.getIdTransaccion(), 
+                                                            "ETRAN","Error - Transaccion incompleta ->"+error.toString(),Calendar.getInstance().getTime());
             return false;
         }
         
@@ -260,12 +253,12 @@ public class CargoOnlineFacade implements ICargoOnline {
     }
 
     @Override
-    public RespuestaDetallePagoTO recuperarDetallePago(TransaccionDetallePagoTO transaccion) {
+    public RespuestaSolicitudTO solicitarPago(TransaccionSolicitudTO transaccion) {    
         throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
-    public RespuestaConfirmacionPagoTO confirmarPago(TransaccionConfirmacionPagoTO transaccion) {
+    public RespuestaDetallePagoTO recuperarDetallePago(TransaccionDetallePagoTO transaccion) {
         throw new UnsupportedOperationException("Not supported."); //To change body of generated methods, choose Tools | Templates.
     }
     

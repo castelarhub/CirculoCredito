@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.XmlType;
 public class RespuestaConfirmacionPagoTO extends RespuestaTO{
     
     private String token;
-    private String billingAgreementId;    
-    private PaymentInfoTO informacionPago;
+    private String billingAgreementId;
+    private InformacionPagoTO informacionPago;
     
     private String idEstatus;//Es el ack Estatus SUCCESS
     @XmlTransient
@@ -23,7 +23,7 @@ public class RespuestaConfirmacionPagoTO extends RespuestaTO{
     public RespuestaConfirmacionPagoTO(){        
     }
     
-    public RespuestaConfirmacionPagoTO(String token, String billingAgreementId, PaymentInfoTO informacionPago, String idEstatus, String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, String respuesta, String observaciones, Date fecha) {
+    public RespuestaConfirmacionPagoTO(String token, String billingAgreementId, InformacionPagoTO informacionPago, String idEstatus, String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, String respuesta, String observaciones, Date fecha) {
         super(idCargoOnline, idTransaccion, respuesta, observaciones, fecha);
         this.token = token;
         this.billingAgreementId = billingAgreementId;
@@ -64,14 +64,14 @@ public class RespuestaConfirmacionPagoTO extends RespuestaTO{
     /**
      * @return the informacionPago
      */
-    public PaymentInfoTO getInformacionPago() {
+    public InformacionPagoTO getInformacionPago() {
         return informacionPago;
     }
 
     /**
      * @param informacionPago the informacionPago to set
      */
-    public void setInformacionPago(PaymentInfoTO informacionPago) {
+    public void setInformacionPago(InformacionPagoTO informacionPago) {
         this.informacionPago = informacionPago;
     }
 

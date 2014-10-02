@@ -1,7 +1,9 @@
 package com.maxcom.mpm.paypal.bi;
 
+import com.maxcom.mpm.paypal.dto.RespuestaConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
+import com.maxcom.mpm.paypal.dto.TransaccionConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
 
@@ -17,5 +19,7 @@ public interface ICargoOnline {
     public RespuestaSolicitudTO solicitarPago(TransaccionSolicitudTO transaccion);
     
     public RespuestaDetallePagoTO recuperarDetallePago(TransaccionDetallePagoTO transaccion);
+    
+    public RespuestaConfirmacionPagoTO confirmarPago(TransaccionConfirmacionPagoTO transaccion);
     
 }

@@ -4,14 +4,20 @@ import com.maxcom.mpm.paypal.bi.service.CargoOnlineService;
 import com.maxcom.mpm.paypal.client.bi.CargoOnlinePaypal;
 import com.maxcom.mpm.paypal.client.bi.CargoOnlinePaypalImpl;
 import com.maxcom.mpm.paypal.client.dto.ArticuloTO;
+import com.maxcom.mpm.paypal.client.dto.PaymentInfoTO;
+import com.maxcom.mpm.paypal.client.dto.RespuestaConfirmalPagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.RespuestaDetallePagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.RespuestaSolPagoExpressTO;
+import com.maxcom.mpm.paypal.client.dto.TransaccionConfirmaPagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.TransaccionDetallePagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.TransaccionPagoExpressTO;
 import com.maxcom.mpm.paypal.dto.CargoTO;
+import com.maxcom.mpm.paypal.dto.InformacionPagoTO;
 import com.maxcom.mpm.paypal.dto.PayerInfoTO;
+import com.maxcom.mpm.paypal.dto.RespuestaConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
+import com.maxcom.mpm.paypal.dto.TransaccionConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
 import java.util.ArrayList;
@@ -57,10 +63,6 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             
             respuestaSol = cargo.solicitarPagoExpress(transaccionPago);
             
-            /*(String token, String montoTotal, List<DetalleErrorTO> detalleError, String idEstatus, 
-               String idOperacion, Date fechaHora, long idCargoOnline, String idTransaccion, 
-               String respuesta, String observaciones, Date fecha)*/
-            
             respuesta.setDetalleError(null);
             respuesta.setFecha(Calendar.getInstance().getTime());
             respuesta.setFechaHora(respuestaSol.getFechaHora());
@@ -73,8 +75,7 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             respuesta.setRespuesta("RTRAN");
             respuesta.setToken(respuestaSol.getToken());
             
-            
-            //Pendiente si respuestaSol.getListaErrores() trae errores
+            //Pendiente si respuestaConfirmacion.getListaErrores() trae errores
 
         } catch (Exception e) {
             //e.printStackTrace();
@@ -139,7 +140,60 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             //Para pagos referenciados
             respuesta.setTieneAcuerdoPagoReferenciado(respuestaSol.isTieneAcuerdoReferenciado());
             
-            //Pendiente si respuestaSol.getListaErrores() trae errores
+            //Pendiente si respuestaConfirmacion.getListaErrores() trae errores
+
+        } catch (Exception e) {
+            //e.printStackTrace();
+            throw e;
+        }
+        
+        return respuesta;
+    }
+
+    @Override
+    public RespuestaConfirmacionPagoTO confirmarPago(TransaccionConfirmacionPagoTO transaccion) throws Exception {
+        CargoOnlinePaypal cargo = new CargoOnlinePaypalImpl();
+        RespuestaConfirmalPagoExpressTO respuestaConfirmacion;
+        TransaccionConfirmaPagoExpressTO trasaccionConfirma = new TransaccionConfirmaPagoExpressTO();
+        RespuestaConfirmacionPagoTO respuesta = new RespuestaConfirmacionPagoTO();
+        
+        try {
+            
+            trasaccionConfirma.setReferencia(transaccion.getReferencia());
+            trasaccionConfirma.setToken(transaccion.getToken());
+            trasaccionConfirma.setPayerId(transaccion.getPayerId());
+            trasaccionConfirma.setOrderTotal(transaccion.getOrderTotal());
+            trasaccionConfirma.setItemTotal(transaccion.getOrderTotal());//Revisar si se puede omitir el itemTotal
+            
+            respuestaConfirmacion = cargo.confirmarPagoExpress(trasaccionConfirma);
+            
+            PaymentInfoTO infoPagoRespuesta = respuestaConfirmacion.getInformacionPago();
+            InformacionPagoTO informacionPago = new InformacionPagoTO();
+            if(infoPagoRespuesta!=null){
+                informacionPago.setFeeAmount(infoPagoRespuesta.getFeeAmount());
+                informacionPago.setGrossAmount(infoPagoRespuesta.getGrossAmount());
+                informacionPago.setPaymentDate(infoPagoRespuesta.getPaymentDate());
+                informacionPago.setPaymentStatus(infoPagoRespuesta.getPaymentStatus());
+                informacionPago.setPaymentType(infoPagoRespuesta.getPaymentType());
+                informacionPago.setTransactionID(infoPagoRespuesta.getTransactionID());
+                informacionPago.setTransactionType(infoPagoRespuesta.getTransactionType());
+            }
+            
+            respuesta.setInformacionPago(informacionPago);
+            respuesta.setFecha(Calendar.getInstance().getTime());
+            respuesta.setFechaHora(respuestaConfirmacion.getFechaHora());
+            respuesta.setIdCargoOnline(transaccion.getIdOrden());
+            respuesta.setIdEstatus(respuestaConfirmacion.getAck());
+            respuesta.setIdOperacion(respuestaConfirmacion.getCorrelationID());
+            respuesta.setIdTransaccion(transaccion.getIdTransaccion());
+            respuesta.setObservaciones("Transaccion procesada.");
+            respuesta.setRespuesta("RTRAN");
+            respuesta.setToken(respuestaConfirmacion.getToken());
+            
+            //Para los pagos referenciados
+            respuesta.setBillingAgreementId(respuestaConfirmacion.getBillingAgreementId());
+            
+            //Pendiente si respuestaConfirmacion.getListaErrores() trae errores
 
         } catch (Exception e) {
             //e.printStackTrace();

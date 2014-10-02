@@ -1,6 +1,6 @@
 package com.maxcom.mpm.paypal.dto;
 
-public class PaymentInfoTO {
+public class InformacionPagoTO {
     private String transactionID;
     private String transactionType;
     private String paymentType;

@@ -8,9 +8,11 @@ import com.maxcom.mpm.paypal.bi.service.impl.BitacoraServiceImpl;
 import com.maxcom.mpm.paypal.bi.service.impl.CargoOnlineServiceImpl;
 import com.maxcom.mpm.paypal.dto.AutenticacionTO;
 import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
+import com.maxcom.mpm.paypal.dto.RespuestaConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
 import com.maxcom.mpm.paypal.dto.RespuestaTO;
+import com.maxcom.mpm.paypal.dto.TransaccionConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
 import com.maxcom.mpm.paypal.dto.TransaccionTO;
@@ -246,6 +248,11 @@ public class DetalleCargoOnlineFacade implements ICargoOnline {
     @Override
     public RespuestaSolicitudTO solicitarPago(TransaccionSolicitudTO transaccion) {    
         throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public RespuestaConfirmacionPagoTO confirmarPago(TransaccionConfirmacionPagoTO transaccion) {
+        throw new UnsupportedOperationException("Not supported."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
