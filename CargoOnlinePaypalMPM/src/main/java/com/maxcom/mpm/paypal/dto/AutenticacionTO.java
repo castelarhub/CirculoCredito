@@ -3,6 +3,7 @@ package com.maxcom.mpm.paypal.dto;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -18,6 +19,7 @@ public class AutenticacionTO {
     @XmlElement(required=true)
     private String contrasenia;
     @XmlElement(required=true)
+    @XmlTransient
     private String claveServicio;    
 
     /**

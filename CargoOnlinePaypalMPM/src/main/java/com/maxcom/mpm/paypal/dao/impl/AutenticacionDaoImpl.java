@@ -27,7 +27,8 @@ public class AutenticacionDaoImpl implements AutenticacionDao{
             Criteria cr = session.createCriteria(MpmCusersWs.class);
             cr.add(Restrictions.eq("userLogin", usuario.getUserLogin()));
             cr.add(Restrictions.eq("userPass", usuario.getUserPass()));
-            cr.add(Restrictions.eq("servicio", usuario.getServicio()));
+            //cr.add(Restrictions.eq("servicio", usuario.getServicio()));
+            cr.add(Restrictions.eq("servicio", "PAYPAL"));
             MpmCusersWs mpmCusersWs = (MpmCusersWs) cr.uniqueResult();            
             
             if(mpmCusersWs != null){

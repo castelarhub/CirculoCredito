@@ -11,7 +11,6 @@ import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
 import com.maxcom.mpm.paypal.dto.RespuestaTO;
 import com.maxcom.mpm.paypal.dto.TransaccionTO;
 import com.maxcom.mpm.paypal.model.MpmCestados;
-import com.maxcom.mpm.paypal.model.MpmCrespuestasCargos;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraConsultaOnline;
 import com.maxcom.mpm.paypal.util.Constantes;
@@ -87,10 +86,10 @@ public class BitacoraServiceImpl implements BitacoraService {
         long id = 0;
         
         try {
-            cargo = bitacora.getTransaccionById(respuesta.getIdCargoOnline());
+            cargo = bitacora.getTransaccionById(respuesta.getIdOperacionMPM());
             
             //si viene cero, entonces el cargo no existe.
-            if(respuesta.getIdCargoOnline()==0){
+            if(respuesta.getIdOperacionMPM()==0){
                 cargo = new MpmTbitacoraCargoOnline();
                 cargo.setIdTransaccion("SIN idTransaccion-"+new Date().getTime());
                 cargo.setFechaCreacion(new Date());
@@ -123,7 +122,7 @@ public class BitacoraServiceImpl implements BitacoraService {
             */
             
             //Si no existe se crea, de lo contrario se actualiza
-            if(respuesta.getIdCargoOnline()==0){
+            if(respuesta.getIdOperacionMPM()==0){
                 id = bitacora.guardarSolicitud(cargo);
             }else{
                 id = bitacora.actualizarTransaccion(cargo);
@@ -147,7 +146,7 @@ public class BitacoraServiceImpl implements BitacoraService {
         
         if(null!=cargoExistente){
             
-            respuesta.setIdCargoOnline(cargoExistente.getIdBitacora());
+            //respuessetIdOperacionMPMine(cargoExistente.getIdBitacora());
             respuesta.setIdTransaccion(cargoExistente.getIdTransaccion());
             //respuesta.setIdEstatus("EXISTENTE-"+cargoExistente.getMpmCestados().getIdEstado());
             respuesta.setObservaciones(cargoExistente.getObservaciones());

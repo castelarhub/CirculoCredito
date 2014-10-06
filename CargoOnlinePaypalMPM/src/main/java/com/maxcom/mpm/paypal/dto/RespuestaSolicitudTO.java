@@ -12,26 +12,25 @@ import javax.xml.bind.annotation.XmlType;
 public class RespuestaSolicitudTO extends RespuestaTO{
     
     private String token;//Referencia del pago de Paypal.
-    private String montoTotal;//Importe de la transaccion que se cobrara.
-    
     private List<DetalleErrorTO> detalleError;//En caso de error en los campos de entrada
     
-    private String idEstatus;//Estatus interno del MPM.
+    //private String estatus;//Estatus que se regresa al cliente
     @XmlTransient
     private String idOperacion;//Numero de operacion de Paypal.
     @XmlTransient
     private String fechaHora;//Fecha y hora de operacion Paypal.
+    @XmlTransient
+    private String montoTotal;//Importe de la transaccion que se cobrara.
     
-    public RespuestaSolicitudTO(){        
+    public RespuestaSolicitudTO(){
     }
 
     public RespuestaSolicitudTO(String token, String montoTotal, List<DetalleErrorTO> detalleError, String idEstatus, String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, String respuesta, String observaciones, Date fecha) {
         
-        super(idCargoOnline, idTransaccion, respuesta, observaciones, fecha);
+        super(idCargoOnline, idTransaccion, respuesta, idEstatus, observaciones, fecha);
         this.token = token;
         this.montoTotal = montoTotal;
         this.detalleError = detalleError;
-        this.idEstatus = idEstatus;
         this.idOperacion = idOperacion;
         this.fechaHora = fechaHora;
     }
@@ -78,20 +77,6 @@ public class RespuestaSolicitudTO extends RespuestaTO{
      */
     public void setDetalleError(List<DetalleErrorTO> detalleError) {
         this.detalleError = detalleError;
-    }
-
-    /**
-     * @return the idEstatus
-     */
-    public String getIdEstatus() {
-        return idEstatus;
-    }
-
-    /**
-     * @param idEstatus the idEstatus to set
-     */
-    public void setIdEstatus(String idEstatus) {
-        this.idEstatus = idEstatus;
     }
 
     /**

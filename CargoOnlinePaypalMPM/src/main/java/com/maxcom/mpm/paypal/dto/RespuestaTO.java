@@ -12,35 +12,37 @@ import javax.xml.bind.annotation.XmlAccessorType;
 //@XmlType(name = "Respuesta")
 public class RespuestaTO {
     
-    private long idCargoOnline;//identificador unico del MPM para los pagos en linea. Se regresa como acuse.
+    private long idOperacionMPM;//identificador unico del MPM para los pagos en linea paypal. Se regresa como acuse.
     private String idTransaccion;//identificador unico.
     private String respuesta;//Resultado de la transaccion. Esta puede ser: SUCCESS,...
+    private String estatus;//Estatus que se regresa al cliente
     private String observaciones;//Descripcion general de la respuesta.        
     private Date fecha;//Fecha y hora en que se realizo la operacion.    
     
     public RespuestaTO(){}
 
-    public RespuestaTO(long idCargoOnline, String idTransaccion, String respuesta, String observaciones, Date fecha) {
-        this.idCargoOnline = idCargoOnline;
+    public RespuestaTO(long idCargoOnline, String idTransaccion, String respuesta, String estatus, String observaciones, Date fecha) {
+        this.idOperacionMPM = idCargoOnline;
         this.idTransaccion = idTransaccion;
         this.respuesta = respuesta;
+        this.estatus = estatus;
         this.observaciones = observaciones;
         this.fecha = fecha;
     }
     
 
     /**
-     * @return the idCargoOnline
+     * @return the idOperacionMPM
      */
-    public long getIdCargoOnline() {
-        return idCargoOnline;
+    public long getIdOperacionMPM() {
+        return idOperacionMPM;
     }
 
     /**
-     * @param idCargoOnline the idCargoOnline to set
+     * @param idOperacionMPM the idOperacionMPM to set
      */
-    public void setIdCargoOnline(long idCargoOnline) {
-        this.idCargoOnline = idCargoOnline;
+    public void setIdOperacionMPM(long idOperacionMPM) {
+        this.idOperacionMPM = idOperacionMPM;
     }
 
     /**
@@ -97,6 +99,20 @@ public class RespuestaTO {
      */
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    /**
+     * @return the estatus
+     */
+    public String getEstatus() {
+        return estatus;
+    }
+
+    /**
+     * @param estatus the estatus to set
+     */
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
     }
 
 

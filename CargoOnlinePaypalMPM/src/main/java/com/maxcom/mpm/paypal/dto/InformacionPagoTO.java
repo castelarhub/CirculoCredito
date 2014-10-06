@@ -1,12 +1,22 @@
 package com.maxcom.mpm.paypal.dto;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 public class InformacionPagoTO {
     private String transactionID;
+    
+    @XmlTransient
     private String transactionType;
+    @XmlTransient
     private String paymentType;
+    @XmlTransient
     private String paymentDate;
+    
     private String paymentStatus;
+    
+    @XmlTransient
     private double grossAmount;
+    @XmlTransient
     private double feeAmount;
 
     /**

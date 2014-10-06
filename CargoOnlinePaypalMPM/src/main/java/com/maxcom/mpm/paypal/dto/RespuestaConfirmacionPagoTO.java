@@ -13,8 +13,7 @@ public class RespuestaConfirmacionPagoTO extends RespuestaTO{
     private String token;
     private String billingAgreementId;
     private InformacionPagoTO informacionPago;
-    
-    private String idEstatus;//Es el ack Estatus SUCCESS
+    //private String estatus;
     @XmlTransient
     private String idOperacion;//Numero de operacion de Paypal.
     @XmlTransient
@@ -24,11 +23,10 @@ public class RespuestaConfirmacionPagoTO extends RespuestaTO{
     }
     
     public RespuestaConfirmacionPagoTO(String token, String billingAgreementId, InformacionPagoTO informacionPago, String idEstatus, String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, String respuesta, String observaciones, Date fecha) {
-        super(idCargoOnline, idTransaccion, respuesta, observaciones, fecha);
+        super(idCargoOnline, idTransaccion, respuesta,idEstatus, observaciones, fecha);
         this.token = token;
         this.billingAgreementId = billingAgreementId;
         this.informacionPago = informacionPago;
-        this.idEstatus = idEstatus;
         this.idOperacion = idOperacion;
         this.fechaHora = fechaHora;
     }
@@ -73,20 +71,6 @@ public class RespuestaConfirmacionPagoTO extends RespuestaTO{
      */
     public void setInformacionPago(InformacionPagoTO informacionPago) {
         this.informacionPago = informacionPago;
-    }
-
-    /**
-     * @return the idEstatus
-     */
-    public String getIdEstatus() {
-        return idEstatus;
-    }
-
-    /**
-     * @param idEstatus the idEstatus to set
-     */
-    public void setIdEstatus(String idEstatus) {
-        this.idEstatus = idEstatus;
     }
 
     /**

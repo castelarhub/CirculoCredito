@@ -14,9 +14,10 @@ public class RespuestaDetallePagoTO extends RespuestaTO{
     private PayerInfoTO infoCliente;
     private List<CargoTO> cargos;
     private double orderTotal;
-    private boolean tieneAcuerdoPagoReferenciado;//
+    private boolean tieneAcuerdoPagoReferenciado;
     
-    private String idEstatus;//Estatus SUCCESS
+    //private String estatus;//Estatus SUCCESS
+    
     @XmlTransient
     private String idOperacion;//Numero de operacion de Paypal.
     @XmlTransient
@@ -26,12 +27,11 @@ public class RespuestaDetallePagoTO extends RespuestaTO{
     }
 
     public RespuestaDetallePagoTO(String token, PayerInfoTO infoCliente, List<CargoTO> cargos, double orderTotal, String idEstatus, String idOperacion, String fechaHora, long idCargoOnline, String idTransaccion, String respuesta, String observaciones, Date fecha) {
-        super(idCargoOnline, idTransaccion, respuesta, observaciones, fecha);
+        super(idCargoOnline, idTransaccion, respuesta, idEstatus, observaciones, fecha);
         this.token = token;
         this.infoCliente = infoCliente;
         this.cargos = cargos;
         this.orderTotal = orderTotal;
-        this.idEstatus = idEstatus;
         this.idOperacion = idOperacion;
         this.fechaHora = fechaHora;
     }
@@ -90,20 +90,6 @@ public class RespuestaDetallePagoTO extends RespuestaTO{
      */
     public void setOrderTotal(double orderTotal) {
         this.orderTotal = orderTotal;
-    }
-
-    /**
-     * @return the idEstatus
-     */
-    public String getIdEstatus() {
-        return idEstatus;
-    }
-
-    /**
-     * @param idEstatus the idEstatus to set
-     */
-    public void setIdEstatus(String idEstatus) {
-        this.idEstatus = idEstatus;
     }
 
     /**

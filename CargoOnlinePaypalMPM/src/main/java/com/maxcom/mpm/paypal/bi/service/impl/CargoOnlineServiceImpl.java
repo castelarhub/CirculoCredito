@@ -66,8 +66,8 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             respuesta.setDetalleError(null);
             respuesta.setFecha(Calendar.getInstance().getTime());
             respuesta.setFechaHora(respuestaSol.getFechaHora());
-            respuesta.setIdCargoOnline(transaccion.getIdOrden());
-            respuesta.setIdEstatus(respuestaSol.getAck());
+            respuesta.setIdOperacionMPM(transaccion.getIdOrden());
+            respuesta.setEstatus(respuestaSol.getAck());
             respuesta.setIdOperacion(respuestaSol.getCorrelationID());
             respuesta.setIdTransaccion(transaccion.getIdTransaccion());
             respuesta.setMontoTotal("0.0");
@@ -128,8 +128,8 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             respuesta.setCargos(cargos);
             respuesta.setFecha(Calendar.getInstance().getTime());
             respuesta.setFechaHora(respuestaSol.getFechaHora());
-            respuesta.setIdCargoOnline(transaccion.getIdOrden());
-            respuesta.setIdEstatus(respuestaSol.getAck());
+            respuesta.setIdOperacionMPM(transaccion.getIdOrden());
+            respuesta.setEstatus(respuestaSol.getAck());
             respuesta.setIdOperacion(respuestaSol.getCorrelationID());
             respuesta.setIdTransaccion(transaccion.getIdTransaccion());
             respuesta.setInfoCliente(infoCliente);
@@ -182,8 +182,8 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             respuesta.setInformacionPago(informacionPago);
             respuesta.setFecha(Calendar.getInstance().getTime());
             respuesta.setFechaHora(respuestaConfirmacion.getFechaHora());
-            respuesta.setIdCargoOnline(transaccion.getIdOrden());
-            respuesta.setIdEstatus(respuestaConfirmacion.getAck());
+            respuesta.setIdOperacionMPM(transaccion.getIdOrden());
+            respuesta.setEstatus(respuestaConfirmacion.getAck());
             respuesta.setIdOperacion(respuestaConfirmacion.getCorrelationID());
             respuesta.setIdTransaccion(transaccion.getIdTransaccion());
             respuesta.setObservaciones("Transaccion procesada.");
