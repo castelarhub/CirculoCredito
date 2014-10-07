@@ -24,7 +24,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{urn:ebay:apis:eBLBaseComponents}TransactionID"/>
+ *         &lt;element ref="{urn:ebay:apis:eBLBaseComponents}TransactionID" minOccurs="0"/>
  *         &lt;element ref="{urn:ebay:apis:eBLBaseComponents}EbayTransactionID" minOccurs="0"/>
  *         &lt;element name="ParentTransactionID" type="{urn:ebay:apis:eBLBaseComponents}TransactionId" minOccurs="0"/>
  *         &lt;element ref="{urn:ebay:apis:eBLBaseComponents}ReceiptID" minOccurs="0"/>
@@ -32,8 +32,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="PaymentType" type="{urn:ebay:apis:eBLBaseComponents}PaymentCodeType" minOccurs="0"/>
  *         &lt;element name="RefundSourceCodeType" type="{urn:ebay:apis:eBLBaseComponents}RefundSourceCodeType" minOccurs="0"/>
  *         &lt;element name="ExpectedeCheckClearDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="PaymentDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="GrossAmount" type="{urn:ebay:apis:CoreComponentTypes}BasicAmountType"/>
+ *         &lt;element name="PaymentDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="GrossAmount" type="{urn:ebay:apis:CoreComponentTypes}BasicAmountType" minOccurs="0"/>
  *         &lt;element name="FeeAmount" type="{urn:ebay:apis:CoreComponentTypes}BasicAmountType" minOccurs="0"/>
  *         &lt;element name="FinancingFeeAmount" type="{urn:ebay:apis:CoreComponentTypes}BasicAmountType" minOccurs="0"/>
  *         &lt;element name="FinancingTotalCost" type="{urn:ebay:apis:CoreComponentTypes}BasicAmountType" minOccurs="0"/>
@@ -127,7 +127,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 })
 public class PaymentInfoType {
 
-    @XmlElement(name = "TransactionID", required = true)
+    @XmlElement(name = "TransactionID")
     protected String transactionID;
     @XmlElement(name = "EbayTransactionID")
     protected String ebayTransactionID;
@@ -144,10 +144,10 @@ public class PaymentInfoType {
     @XmlElement(name = "ExpectedeCheckClearDate")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar expectedeCheckClearDate;
-    @XmlElement(name = "PaymentDate", required = true)
+    @XmlElement(name = "PaymentDate")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar paymentDate;
-    @XmlElement(name = "GrossAmount", required = true)
+    @XmlElement(name = "GrossAmount")
     protected BasicAmountType grossAmount;
     @XmlElement(name = "FeeAmount")
     protected BasicAmountType feeAmount;
@@ -223,13 +223,11 @@ public class PaymentInfoType {
     /**
      * A transaction identification number. 
      * 
-     *             
      * <pre>
      * &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;br xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cc="urn:ebay:apis:CoreComponentTypes" xmlns:ed="urn:ebay:apis:EnhancedDataTypes" xmlns:ns="urn:ebay:apis:eBLBaseComponents" xmlns:xs="http://www.w3.org/2001/XMLSchema"/&gt;
      * </pre>
      * Character length and limits: 19 single-byte characters maximum
      * 
-     *           
      * 
      * @return
      *     possible object is
@@ -255,7 +253,6 @@ public class PaymentInfoType {
     /**
      * Its Ebay transaction id.
      * 					
-     *             
      * <pre>
      * &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;br xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cc="urn:ebay:apis:CoreComponentTypes" xmlns:ed="urn:ebay:apis:EnhancedDataTypes" xmlns:ns="urn:ebay:apis:eBLBaseComponents" xmlns:xs="http://www.w3.org/2001/XMLSchema"/&gt;
      * </pre>
@@ -311,7 +308,6 @@ public class PaymentInfoType {
      * 
      * 			Receipt ID 
      * 
-     *             
      * <pre>
      * &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;br xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cc="urn:ebay:apis:CoreComponentTypes" xmlns:ed="urn:ebay:apis:EnhancedDataTypes" xmlns:ns="urn:ebay:apis:eBLBaseComponents" xmlns:xs="http://www.w3.org/2001/XMLSchema"/&gt;
      * </pre>
@@ -321,7 +317,6 @@ public class PaymentInfoType {
      * </pre>
      * 
      * Character length and limitations: 16 digits in xxxx-xxxx-xxxx-xxxx format
-     *           
      * 
      * @return
      *     possible object is

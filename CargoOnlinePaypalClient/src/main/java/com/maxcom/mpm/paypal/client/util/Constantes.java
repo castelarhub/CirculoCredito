@@ -14,4 +14,7 @@ public class Constantes {
     public static final String LOGO_MAXCOM="http://www.tudecide.com/images/detalle_empresas/maxcom.png";
     public static final String COLOR_FONDO="8B0000";
     
+    //Ambiente de desarrollo
+    public static final String URL_ENDPOINT = "https://api-aa-3t.sandbox.paypal.com/2.0/";
+    
 }

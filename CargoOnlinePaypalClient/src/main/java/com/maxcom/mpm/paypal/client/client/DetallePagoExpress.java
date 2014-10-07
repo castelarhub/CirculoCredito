@@ -20,6 +20,7 @@ import com.maxcom.mpm.paypal.client.paypal.UserIdPasswordType;
 import com.maxcom.mpm.paypal.client.util.Constantes;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
 
 public class DetallePagoExpress {
@@ -40,6 +41,9 @@ public class DetallePagoExpress {
                 
         PayPalAPIAAInterface port = payPalAPIInterfaceService.getPayPalAPIAA();
         RespuestaDetallePagoExpressTO respuesta= null;
+        
+        ((BindingProvider) port).getRequestContext().put(
+        BindingProvider.ENDPOINT_ADDRESS_PROPERTY,Constantes.URL_ENDPOINT);        
         
         this.setEncabezado();
         

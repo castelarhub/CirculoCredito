@@ -22,6 +22,7 @@ import com.maxcom.mpm.paypal.client.util.Constantes;
 import static com.maxcom.mpm.paypal.client.util.Utilerias.buildAmount;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
 
 public class ConfirmacionPagoExpress {
@@ -42,6 +43,9 @@ public class ConfirmacionPagoExpress {
     public RespuestaConfirmalPagoExpressTO confirmarPagoExpress(TransaccionConfirmaPagoExpressTO transaccion)throws Exception{
         
         PayPalAPIAAInterface port = payPalAPIInterfaceService.getPayPalAPIAA();
+        
+        ((BindingProvider) port).getRequestContext().put(
+        BindingProvider.ENDPOINT_ADDRESS_PROPERTY,Constantes.URL_ENDPOINT);        
         
         RespuestaConfirmalPagoExpressTO respuesta = null;
         

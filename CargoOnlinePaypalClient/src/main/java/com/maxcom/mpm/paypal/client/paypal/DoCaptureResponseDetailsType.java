@@ -50,13 +50,11 @@ public class DoCaptureResponseDetailsType {
     /**
      * The authorization identification number you specified in the request. 
      * 
-     *             
      * <pre>
      * &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;br xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cc="urn:ebay:apis:CoreComponentTypes" xmlns:ed="urn:ebay:apis:EnhancedDataTypes" xmlns:ns="urn:ebay:apis:eBLBaseComponents" xmlns:xs="http://www.w3.org/2001/XMLSchema"/&gt;
      * </pre>
      * Character length and limits: 19 single-byte characters maximum
      * 
-     *           
      * 
      * @return
      *     possible object is

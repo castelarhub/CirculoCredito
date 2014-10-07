@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="MERCHANT_COUPON"/>
  *     &lt;enumeration value="LOYALTY_CARD"/>
  *     &lt;enumeration value="MANUFACTURER_COUPON"/>
+ *     &lt;enumeration value="MERCHANT_CLOSED_LOOP_OFFER"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -27,7 +28,8 @@ public enum WalletItemType {
 
     MERCHANT_COUPON,
     LOYALTY_CARD,
-    MANUFACTURER_COUPON;
+    MANUFACTURER_COUPON,
+    MERCHANT_CLOSED_LOOP_OFFER;
 
     public String value() {
         return name();

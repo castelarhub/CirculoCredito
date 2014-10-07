@@ -42,10 +42,10 @@ public class DoUATPAuthorizationResponseType
 {
 
     @XmlElementRefs({
+        @XmlElementRef(name = "UATPDetails", namespace = "urn:ebay:apis:eBLBaseComponents", type = JAXBElement.class),
         @XmlElementRef(name = "AuthorizationCode", namespace = "urn:ebay:api:PayPalAPI", type = JAXBElement.class),
         @XmlElementRef(name = "MsgSubID", namespace = "urn:ebay:api:PayPalAPI", type = JAXBElement.class),
-        @XmlElementRef(name = "InvoiceID", namespace = "urn:ebay:api:PayPalAPI", type = JAXBElement.class),
-        @XmlElementRef(name = "UATPDetails", namespace = "urn:ebay:apis:eBLBaseComponents", type = JAXBElement.class)
+        @XmlElementRef(name = "InvoiceID", namespace = "urn:ebay:api:PayPalAPI", type = JAXBElement.class)
     })
     protected List<JAXBElement<?>> rest;
 
@@ -55,8 +55,8 @@ public class DoUATPAuthorizationResponseType
      * <p>
      * You are getting this "catch-all" property because of the following reason: 
      * The field name "MsgSubID" is used by two different parts of a schema. See: 
-     * line 3636 of file:/C:/Documents%20and%20Settings/operador/Escritorio/wsimport/PayPalAPIInterfaceService.wsdl
-     * line 3464 of file:/C:/Documents%20and%20Settings/operador/Escritorio/wsimport/PayPalAPIInterfaceService.wsdl
+     * line 3061 of https://www.sandbox.paypal.com/wsdl/PayPalSvc.wsdl
+     * line 2903 of https://www.sandbox.paypal.com/wsdl/PayPalSvc.wsdl
      * <p>
      * To get rid of this property, apply a property customization to one 
      * of both of the following declarations to change their names: 
@@ -77,10 +77,10 @@ public class DoUATPAuthorizationResponseType
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * {@link JAXBElement }{@code <}{@link UATPDetailsType }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * 
      * 
      */

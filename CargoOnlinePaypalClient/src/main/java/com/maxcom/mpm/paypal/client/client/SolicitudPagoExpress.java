@@ -25,6 +25,7 @@ import com.maxcom.mpm.paypal.client.util.Constantes;
 import static com.maxcom.mpm.paypal.client.util.Utilerias.buildAmount;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
 
 public class SolicitudPagoExpress {
@@ -53,6 +54,9 @@ public class SolicitudPagoExpress {
         PayPalAPIAAInterface port = payPalAPIInterfaceService.getPayPalAPIAA();
         SetExpressCheckoutResponseType respuestaSolPaypal=null;
         RespuestaSolPagoExpressTO respuesta = null;
+        
+        ((BindingProvider) port).getRequestContext().put(
+        BindingProvider.ENDPOINT_ADDRESS_PROPERTY,Constantes.URL_ENDPOINT);
         
         this.solicitudExpres.setSetExpressCheckoutRequest(tipoSolicitudExpres);
         this.tipoSolicitudExpres.setVersion(Constantes.VERSION_PAYPAL);
@@ -173,7 +177,8 @@ public class SolicitudPagoExpress {
         CustomSecurityHeaderType header = new CustomSecurityHeaderType();
         header.setCredentials(user);
         
-	this.securityHeader = new Holder<CustomSecurityHeaderType>(header);
+	this.securityHeader = new Holder<CustomSecurityHeaderType>(header);        
+        
     }
     
 }

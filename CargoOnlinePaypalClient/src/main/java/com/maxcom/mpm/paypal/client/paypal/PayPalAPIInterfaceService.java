@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "PayPalAPIInterfaceService", targetNamespace = "urn:ebay:api:PayPalAPI", wsdlLocation = "file:/C:/Documents%20and%20Settings/operador/Escritorio/wsimport/PayPalAPIInterfaceService.wsdl")
+@WebServiceClient(name = "PayPalAPIInterfaceService", targetNamespace = "urn:ebay:api:PayPalAPI", wsdlLocation = "https://www.sandbox.paypal.com/wsdl/PayPalSvc.wsdl")
 public class PayPalAPIInterfaceService
     extends Service
 {
@@ -30,9 +30,9 @@ public class PayPalAPIInterfaceService
         try {
             URL baseUrl;
             baseUrl = com.maxcom.mpm.paypal.client.paypal.PayPalAPIInterfaceService.class.getResource(".");
-            url = new URL(baseUrl, "file:/C:/Documents%20and%20Settings/operador/Escritorio/wsimport/PayPalAPIInterfaceService.wsdl");
+            url = new URL(baseUrl, "https://www.sandbox.paypal.com/wsdl/PayPalSvc.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/C:/Documents%20and%20Settings/operador/Escritorio/wsimport/PayPalAPIInterfaceService.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'https://www.sandbox.paypal.com/wsdl/PayPalSvc.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         PAYPALAPIINTERFACESERVICE_WSDL_LOCATION = url;

@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlValue;
 /**
  * On requests, you must set the currencyID attribute to one of the three-character currency codes for any of the supported PayPal currencies. 
  * 
- *         
  * <pre>
  * &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;br xmlns:ebl="urn:ebay:apis:eBLBaseComponents" xmlns:ns="urn:ebay:apis:CoreComponentTypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"/&gt;
  * </pre>
@@ -22,7 +21,6 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  * Limitations: Must not exceed $10,000 USD in any currency. No currency symbol. Decimal separator must be a period (.), and the thousands separator must be a comma (,).
  * 
- *       
  * 
  * <p>Java class for BasicAmountType complex type.
  * 
