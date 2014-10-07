@@ -80,7 +80,7 @@ public class SolicitudPagoExpress {
         //Para personalizar la pagina en paypal
         this.setExtraDetalleSolicitudAdicional();
         
-        this.tipoSolicitudExpres.setSetExpressCheckoutRequestDetails(this.detalleSolicitud);
+        this.tipoSolicitudExpres.setSetExpressCheckoutRequestDetails(this.detalleSolicitud);        
 
         respuestaSolPaypal = port.setExpressCheckout(this.solicitudExpres, this.securityHeader);
         

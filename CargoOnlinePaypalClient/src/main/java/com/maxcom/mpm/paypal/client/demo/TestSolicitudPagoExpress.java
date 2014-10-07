@@ -28,13 +28,13 @@ public class TestSolicitudPagoExpress {
             articulo = new ArticuloTO();
             articulo.setCantidad(2);
             articulo.setDescripcion("Patito de hule con goma");
-            articulo.setPrecio(4.20d);
+            articulo.setPrecio(-4.20d);
             lista.add(articulo);
             
             articulo = new ArticuloTO();
             articulo.setCantidad(1);
             articulo.setDescripcion("Paquete convenga");
-            articulo.setPrecio(1.05d);
+            articulo.setPrecio(-1.05d);
             lista.add(articulo);
             
             trasaccion.setListaArticulos(lista);
