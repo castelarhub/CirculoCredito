@@ -3,6 +3,7 @@ package com.maxcom.mpm.paypal.dto;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -17,6 +18,10 @@ public class RespuestaTO {
     private String idTransaccion;//identificador unico.
     private String respuesta;//Resultado de la transaccion. Esta puede ser: SUCCESS,...
     private String estatus;//Estatus que se regresa al cliente
+    
+    @XmlTransient
+    private String estatusPaypal;//Estatus de la operacion en paypal
+    
     private String observaciones;//Descripcion general de la respuesta.        
     private Date fecha;//Fecha y hora en que se realizo la operacion.    
     
@@ -114,6 +119,20 @@ public class RespuestaTO {
      */
     public void setEstatus(String estatus) {
         this.estatus = estatus;
+    }
+
+    /**
+     * @return the estatusPaypal
+     */
+    public String getEstatusPaypal() {
+        return estatusPaypal;
+    }
+
+    /**
+     * @param estatusPaypal the estatusPaypal to set
+     */
+    public void setEstatusPaypal(String estatusPaypal) {
+        this.estatusPaypal = estatusPaypal;
     }
 
 

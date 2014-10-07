@@ -77,7 +77,7 @@ public class CargoOnlineFacade implements ICargoOnline {
             
             //Validando datos minimos requeridos
             if (!this.isTransaccionCompleta(transaccion)) {
-                //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+                this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
             }
             
@@ -89,7 +89,7 @@ public class CargoOnlineFacade implements ICargoOnline {
             */
             
             //Persistir la solicitud de entrada
-            //PENDIENTE this.guardarBitacoraSolicitud(transaccion);
+            this.guardarBitacoraSolicitud(transaccion);
             
             //Validando credenciales de la solicitud
             if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {                
@@ -98,15 +98,12 @@ public class CargoOnlineFacade implements ICargoOnline {
                                                           "ETRAN", "Error - Credenciales invalidas", 
                                                           Calendar.getInstance().getTime());
                 
-                //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+                this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
-            }            
-            
-            //Revisando los datos cargo por cargo
-            //this.revisarDetalleCargo(transaccion.getCargo());
+            }
             
             this.respuesta = this.cargoOnlineService.solicitarPago(transaccion);            
-            //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+            this.guardarBitacoraRespuesta(this.respuesta);
             
             return this.respuesta;            
         } catch (Exception e) {
@@ -121,7 +118,7 @@ public class CargoOnlineFacade implements ICargoOnline {
                                                       Calendar.getInstance().getTime());
             
             try{
-                //PENDIENTE this.guardarBitacoraRespuesta(this.respuesta);
+                this.guardarBitacoraRespuesta(this.respuesta);
             }catch(Exception err){
                 logger.error("Error al intentar guardar el error- " + err.getMessage());
             }
@@ -243,12 +240,12 @@ public class CargoOnlineFacade implements ICargoOnline {
     } 
     
     
-    private void guardarBitacoraSolicitud(TransaccionTO transaccion) throws Exception{        
+    private void guardarBitacoraSolicitud(TransaccionSolicitudTO transaccion) throws Exception{        
         bitacoraService.guardarSolicitud(transaccion);
         
     }
     
-    private void guardarBitacoraRespuesta(RespuestaTO respuesta) throws Exception{
+    private void guardarBitacoraRespuesta(RespuestaSolicitudTO respuesta) throws Exception{
         bitacoraService.guardarRespuesta(respuesta);
     }
     

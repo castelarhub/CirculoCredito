@@ -238,12 +238,12 @@ public class ConfirmacionCargoOnlineFacade implements ICargoOnline {
     
     
     private void guardarBitacoraSolicitud(TransaccionTO transaccion) throws Exception{        
-        bitacoraService.guardarSolicitud(transaccion);
+        //bitacoraService.guardarSolicitud(transaccion);
         
     }
     
     private void guardarBitacoraRespuesta(RespuestaTO respuesta) throws Exception{
-        bitacoraService.guardarRespuesta(respuesta);
+        //bitacoraService.guardarRespuesta(respuesta);
     }
     
     private boolean isTransaccionExistente(TransaccionTO transaccion) throws Exception{

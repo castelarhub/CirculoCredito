@@ -3,6 +3,7 @@ package com.maxcom.mpm.paypal.dao.impl;
 import com.maxcom.mpm.paypal.dao.BitacoraDao;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraConsultaOnline;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraSolPaypal;
 import com.maxcom.mpm.paypal.util.HibernateUtil;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +27,7 @@ public class BitacoraDaoImpl implements BitacoraDao{
     }
     
     @Override
-    public long guardarSolicitud(MpmTbitacoraCargoOnline cargo) throws Exception {
+    public long guardarSolicitud(MpmTbitacoraSolPaypal solicitud) throws Exception {
         logger.info("   BitacoraDaoImpl:guardarSolicitud(E)");
         org.hibernate.Transaction tx = null;
         Session session = null;
@@ -35,12 +36,12 @@ public class BitacoraDaoImpl implements BitacoraDao{
             session = HibernateUtil.getSessionFactoryOracle().openSession();
             
             tx = session.beginTransaction();
-            session.save(cargo);
+            session.save(solicitud);
             session.flush();
             tx.commit();
-            logger.info("       Orden insetada -> " + cargo.getIdBitacora());
+            logger.info("       Orden insetada -> " + solicitud.getIdBitacoraSolPaypal());
         } catch (HibernateException e) {
-            logger.error("      Error al guardar la solicitud(orden) en la bitacora - " + e.getMessage());
+            logger.error("      Error al guardar la solicitud Paypal en la bitacora - " + e.getMessage());
             if (null != tx) {
                 tx.rollback();
             }
@@ -52,19 +53,19 @@ public class BitacoraDaoImpl implements BitacoraDao{
             
             logger.info("   BitacoraDaoImpl:guardarSolicitud(S)");
         }
-        return cargo.getIdBitacora();
+        return solicitud.getIdBitacoraSolPaypal();
 
     }    
     
     @Override
-    public MpmTbitacoraCargoOnline getTransaccionById(long idBitacora) throws Exception {
+    public MpmTbitacoraSolPaypal getTransaccionById(long idBitacora) throws Exception {
         logger.info("   BitacoraDaoImpl:getTransaccionById(E)");
-        MpmTbitacoraCargoOnline orden = null;
+        MpmTbitacoraSolPaypal solicitud = null;
         Session session = null;
         try{
             session = HibernateUtil.getSessionFactoryOracle().openSession();
             
-            orden = (MpmTbitacoraCargoOnline) session.get(MpmTbitacoraCargoOnline.class, idBitacora);
+            solicitud = (MpmTbitacoraSolPaypal) session.get(MpmTbitacoraSolPaypal.class, idBitacora);
             
             session.flush();
         }catch(Exception e){
@@ -76,21 +77,21 @@ public class BitacoraDaoImpl implements BitacoraDao{
             }
             logger.info("   BitacoraDaoImpl:getTransaccionById(E)");            
         }
-        return orden;
+        return solicitud;
     }
 
     @Override
-    public long actualizarTransaccion(MpmTbitacoraCargoOnline cargo) throws Exception {
+    public long actualizarTransaccion(MpmTbitacoraSolPaypal solicitud) throws Exception {
         logger.info("   BitacoraDaoImpl:actualizarTransaccion(E)");
         org.hibernate.Transaction tx = null;
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactoryOracle().openSession();
             tx = session.beginTransaction();
-            session.update(cargo);
+            session.update(solicitud);
             session.flush();
             tx.commit();
-            logger.info("       Orden actualizada -> " + cargo.getIdBitacora());
+            logger.info("       Se actualiza -> " + solicitud.getIdBitacoraSolPaypal());
         } catch (HibernateException e) {
             logger.error("      Error al actualizar la solicitud(orden) en la bitacora - " + e.getMessage());
             if (null != tx) {
@@ -103,7 +104,7 @@ public class BitacoraDaoImpl implements BitacoraDao{
             }
             logger.info("   BitacoraDaoImpl:actualizarTransaccion(S)");
         }
-        return cargo.getIdBitacora();
+        return solicitud.getIdBitacoraSolPaypal();
     }
     
     @Override

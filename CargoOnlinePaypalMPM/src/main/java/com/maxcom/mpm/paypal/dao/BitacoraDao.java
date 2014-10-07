@@ -2,17 +2,18 @@ package com.maxcom.mpm.paypal.dao;
 
 import com.maxcom.mpm.paypal.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraConsultaOnline;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraSolPaypal;
 
 /**
  *
  * @author Nelson C.
  */
 public interface BitacoraDao {
-    public long guardarSolicitud(MpmTbitacoraCargoOnline cargo) throws Exception;
+    public long guardarSolicitud(MpmTbitacoraSolPaypal solicitud) throws Exception;
     
-    public MpmTbitacoraCargoOnline getTransaccionById(long idBitacora) throws Exception;
+    public MpmTbitacoraSolPaypal getTransaccionById(long idBitacora) throws Exception;
     
-    public long actualizarTransaccion(MpmTbitacoraCargoOnline cargo) throws Exception;    
+    public long actualizarTransaccion(MpmTbitacoraSolPaypal solicitud) throws Exception;    
     
     public MpmTbitacoraCargoOnline getTransaccionByIdTransaccion(String idTransaccion) throws Exception;
     

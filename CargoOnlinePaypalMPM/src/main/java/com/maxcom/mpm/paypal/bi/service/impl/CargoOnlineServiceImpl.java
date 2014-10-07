@@ -8,6 +8,7 @@ import com.maxcom.mpm.paypal.client.dto.PaymentInfoTO;
 import com.maxcom.mpm.paypal.client.dto.RespuestaConfirmalPagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.RespuestaDetallePagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.RespuestaSolPagoExpressTO;
+import com.maxcom.mpm.paypal.client.dto.TipoErrorTO;
 import com.maxcom.mpm.paypal.client.dto.TransaccionConfirmaPagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.TransaccionDetallePagoExpressTO;
 import com.maxcom.mpm.paypal.client.dto.TransaccionPagoExpressTO;
@@ -63,22 +64,45 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             
             respuestaSol = cargo.solicitarPagoExpress(transaccionPago);
             
-            respuesta.setDetalleError(null);
+            String estatusPaypal = respuestaSol.getAck();
+            estatusPaypal = estatusPaypal.toUpperCase();
+            
+            String estatusCliente;
+            StringBuilder observaciones = new StringBuilder();
+            
+            //Analizando respuesta
+            switch(estatusPaypal){
+                case "SUCCESS":
+                    estatusCliente = "SUCCESS";//
+                    observaciones.append("Transaccion procesada correctamente.");
+                    break;                
+                default:
+                    estatusCliente = "ERROR";//
+                    observaciones.append("Transaccion procesada. Se encontraron los siguientes errores: ");
+            }
+            
+            //Si hay errores se agregan a la respuesta
+            if(respuestaSol.getListaErrores()!=null){
+                for(TipoErrorTO error:respuestaSol.getListaErrores()){
+                    observaciones.append(error.getCodigoError());
+                    observaciones.append(" -> ");
+                    observaciones.append(error.getMensajeLargo());
+                    observaciones.append(" ; ");
+                }
+            }
+            
             respuesta.setFecha(Calendar.getInstance().getTime());
-            respuesta.setFechaHora(respuestaSol.getFechaHora());
+            respuesta.setFechaHoraOperacionPaypal(respuestaSol.getFechaHora());
             respuesta.setIdOperacionMPM(transaccion.getIdOrden());
-            respuesta.setEstatus(respuestaSol.getAck());
-            respuesta.setIdOperacion(respuestaSol.getCorrelationID());
+            respuesta.setEstatus(estatusCliente);
+            respuesta.setEstatusPaypal(estatusPaypal);
+            respuesta.setIdOperacionPaypal(respuestaSol.getCorrelationID());
             respuesta.setIdTransaccion(transaccion.getIdTransaccion());
-            respuesta.setMontoTotal("0.0");
-            respuesta.setObservaciones("Transaccion procesada.");
+            respuesta.setObservaciones(observaciones.toString());
             respuesta.setRespuesta("RTRAN");
             respuesta.setToken(respuestaSol.getToken());
-            
-            //Pendiente si respuestaConfirmacion.getListaErrores() trae errores
 
         } catch (Exception e) {
-            //e.printStackTrace();
             throw e;
         }
         

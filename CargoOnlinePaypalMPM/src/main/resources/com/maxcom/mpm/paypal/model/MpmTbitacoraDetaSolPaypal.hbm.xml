@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 06-oct-2014 23:27:32 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="com.maxcom.mpm.paypal.model.MpmTbitacoraDetaSolPaypal" table="MPM_TBITACORA_DETA_SOL_PAYPAL" schema="ADMIN_MPM">
+        <id name="idBitacoraDetaSolPaypal" type="long">
+            <column name="ID_BITACORA_DETA_SOL_PAYPAL" precision="16" scale="0" />
+            <generator class="sequence" >
+              <param name="sequence">MPM_TBITA_DETA_SOL_PAYPAL_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="mpmTbitacoraSolPaypal" class="com.maxcom.mpm.paypal.model.MpmTbitacoraSolPaypal" fetch="select">
+            <column name="ID_BITACORA_SOL_PAYPAL" precision="16" scale="0">
+                <comment>Identificador de referencia a MPM_TBITACORA_SOL_PAYPAL</comment>
+            </column>
+        </many-to-one>
+        <property name="cantidad" type="java.lang.Integer">
+            <column name="CANTIDAD" precision="5" scale="0">
+                <comment>Numero de articulos</comment>
+            </column>
+        </property>
+        <property name="descripcion" type="string">
+            <column name="DESCRIPCION" length="250">
+                <comment>Descripci&#243;n del articulo al que se hace el cargo</comment>
+            </column>
+        </property>
+        <property name="precio" type="big_decimal">
+            <column name="PRECIO" precision="10">
+                <comment>Costo del articulo</comment>
+            </column>
+        </property>
+        <property name="creadoPor" type="string">
+            <column name="CREADO_POR" length="30" not-null="true">
+                <comment>Usuario que realizo el registro</comment>
+            </column>
+        </property>
+        <property name="modificadoPor" type="string">
+            <column name="MODIFICADO_POR" length="30">
+                <comment>Usuario que modifico el registro por ultima vez</comment>
+            </column>
+        </property>
+        <property name="fechaCreacion" type="date">
+            <column name="FECHA_CREACION" not-null="true">
+                <comment>Fecha en que se creo el registro</comment>
+            </column>
+        </property>
+        <property name="fechaModificacion" type="date">
+            <column name="FECHA_MODIFICACION">
+                <comment>Fecha en que se modifico el registro por ultima vez</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

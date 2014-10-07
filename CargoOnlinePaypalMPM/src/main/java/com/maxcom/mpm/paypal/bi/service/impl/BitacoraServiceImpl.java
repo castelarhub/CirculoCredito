@@ -8,14 +8,21 @@ import com.maxcom.mpm.paypal.dto.ConsultaCargoTO;
 import com.maxcom.mpm.paypal.dto.ConsultaRespuestaTO;
 import com.maxcom.mpm.paypal.dto.ConsultaTransaccionTO;
 import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
+import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
 import com.maxcom.mpm.paypal.dto.RespuestaTO;
+import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
 import com.maxcom.mpm.paypal.dto.TransaccionTO;
-import com.maxcom.mpm.paypal.model.MpmCestados;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraConsultaOnline;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraDetaSolPaypal;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraSolPaypal;
 import com.maxcom.mpm.paypal.util.Constantes;
 import static com.maxcom.mpm.paypal.util.Utilerias.isValidString;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,42 +41,52 @@ public class BitacoraServiceImpl implements BitacoraService {
     }
 
     @Override
-    public void guardarSolicitud(TransaccionTO transaccion) throws Exception {
+    public void guardarSolicitud(TransaccionSolicitudTO transaccion) throws Exception {
         logger.info("   BitacoraServiceImpl:guardarSolicitud(E)");
-        MpmTbitacoraCargoOnline cargo = new MpmTbitacoraCargoOnline();
+        MpmTbitacoraSolPaypal solicitud = new MpmTbitacoraSolPaypal();
         try {
             
             if (!isValidString(transaccion.getIdTransaccion())) {
-                cargo.setIdTransaccion("-");
+                solicitud.setIdTransaccion("-");
             } else {
-                cargo.setIdTransaccion(transaccion.getIdTransaccion());
+                solicitud.setIdTransaccion(transaccion.getIdTransaccion());
             }
             
-            cargo.setFechaCreacion(new Date());
-            cargo.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+            solicitud.setFechaCreacion(new Date());
+            solicitud.setCreadoPor(Constantes.CREADO_POR_ORDEN);
             
-            //Estatus inicial de la orden
-            MpmCestados mpmCestadosOrden = new MpmCestados();
-            mpmCestadosOrden.setIdEstado("NEW");
-            cargo.setMpmCestados(mpmCestadosOrden);
-            /*
-            CargoTO cargoAux = transaccion.getCargo();
+            solicitud.setReferencia(transaccion.getReferencia());
+            solicitud.setUrlReturn(transaccion.getReturnUrl());
+            solicitud.setUrlCancel(transaccion.getCancelUrl());
             
-            //Si trae cargo se guardan en bitacora
-            if (cargoAux!=null) {
-                cargo.setAnioExpiracion(cargoAux.getAnioExpiracionTarjeta());
-                cargo.setCodigoSeguridad(cargoAux.getCodigoSeguridadTarjeta());
-                cargo.setMesExpiracion(cargoAux.getMesExpiracionTarjeta());
-                cargo.setMonto(new BigDecimal(cargoAux.getMonto()));
-                cargo.setNombreCliente(cargoAux.getNombreCliente());
-                cargo.setNumeroTarjeta(cargoAux.getNumeroTarjeta());
-                cargo.setReferencia(cargoAux.getReferencia());
+            //Estatus unicial
+            solicitud.setEstatus("NEW");
+            
+            solicitud.setReferenciarPago(transaccion.isReferenciarPago());
+            
+            //Si trae cargos se guardan en bitacora
+            List<CargoTO> cargos = transaccion.getCargos();            
+            if (cargos!=null) {
+                Set<MpmTbitacoraDetaSolPaypal> hsDetalle = new HashSet<>();
+                MpmTbitacoraDetaSolPaypal detalle = null;
+                for(CargoTO cargoAux: cargos){
+                    detalle = new MpmTbitacoraDetaSolPaypal();
+                    detalle.setCantidad(cargoAux.getCantidad());
+                    detalle.setDescripcion(cargoAux.getDescripcion());
+                    detalle.setPrecio(new BigDecimal(cargoAux.getPrecio()));
+                    detalle.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+                    detalle.setFechaCreacion(new Date());
+                    
+                    detalle.setMpmTbitacoraSolPaypal(solicitud);
+                    
+                    hsDetalle.add(detalle);
+                }
+                solicitud.setMpmTbitacoraDetaSolPaypals(hsDetalle);
             }
-            */
             
-            bitacora.guardarSolicitud(cargo);
+            bitacora.guardarSolicitud(solicitud);
             
-            transaccion.setIdOrden(cargo.getIdBitacora());
+            transaccion.setIdOrden(solicitud.getIdBitacoraSolPaypal());
             
         } catch (Exception e) {
             logger.error("   Error en BitacoraServiceImpl:guardarSolicitud - " + e.getMessage());
@@ -80,57 +97,48 @@ public class BitacoraServiceImpl implements BitacoraService {
     }
     
     @Override
-    public long guardarRespuesta(RespuestaTO respuesta) throws Exception {
-        logger.info("   BitacoraServiceImpl:guardarRespuesta(E)");
-        MpmTbitacoraCargoOnline cargo = null;
+    public long guardarRespuesta(RespuestaSolicitudTO respuesta) throws Exception {
+        logger.info("   BitacoraServiceImpl:guardarRespuesta(E)");       
+        MpmTbitacoraSolPaypal solicitud = null;
+        
         long id = 0;
         
         try {
-            cargo = bitacora.getTransaccionById(respuesta.getIdOperacionMPM());
+            solicitud = bitacora.getTransaccionById(respuesta.getIdOperacionMPM());
             
             //si viene cero, entonces el cargo no existe.
             if(respuesta.getIdOperacionMPM()==0){
-                cargo = new MpmTbitacoraCargoOnline();
-                cargo.setIdTransaccion("SIN idTransaccion-"+new Date().getTime());
-                cargo.setFechaCreacion(new Date());
-                cargo.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+                solicitud = new MpmTbitacoraSolPaypal();
+                if(respuesta.getIdTransaccion()==null){
+                    solicitud.setIdTransaccion("SIN idTransaccion-"+new Date().getTime());
+                }else{
+                    solicitud.setIdTransaccion(respuesta.getIdTransaccion());
+                }
+                solicitud.setFechaCreacion(new Date());
+                solicitud.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+                solicitud.setReferenciarPago(false);
+                
+                
             }
             
-            /*
-            //Estatus inicial de la orden
-            MpmCestados mpmCestadosOrden = new MpmCestados();
-            mpmCestadosOrden.setIdEstado(respuesta.getIdEstatus());
-            cargo.setMpmCestados(mpmCestadosOrden);
-            
-            cargo.setBanCdError(respuesta.getBanCdError());
-            cargo.setBanCdRespuesta(respuesta.getBanCdResponse());
-            cargo.setBanError(respuesta.getBanNbError());
-            cargo.setBanFolioCpagos(respuesta.getFolioCPagos());
-            cargo.setBanNumeroAutorizacion(respuesta.getAutorizacion());
-            cargo.setBanResultado(respuesta.getRespuesta());
-            cargo.setFechaModificacion(new Date());
-            cargo.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);            
-            
-            cargo.setRespuestaXml(respuesta.getRespuestaXml());
-            cargo.setSolicitudXml(respuesta.getSolicitudXml());
-            cargo.setObservaciones(respuesta.getObservaciones());
-            
-            if(respuesta.getDetalleError()!=null){
-                MpmCrespuestasCargos respuestaCargoEstatus = new MpmCrespuestasCargos();
-                respuestaCargoEstatus.setIdRespuestaCargo(null);
-            }
-            */
+            solicitud.setEstatus(respuesta.getEstatus());
+            solicitud.setEstatusPaypal(respuesta.getEstatusPaypal());
+            solicitud.setFechaModificacion(new Date());
+            solicitud.setFechaOperacionPaypal(respuesta.getFechaHoraOperacionPaypal());
+            solicitud.setIdOperacionPaypal(respuesta.getIdOperacionPaypal());
+            solicitud.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);
+            solicitud.setObservaciones(respuesta.getObservaciones());
+            solicitud.setRespuesta(respuesta.getRespuesta());
             
             //Si no existe se crea, de lo contrario se actualiza
             if(respuesta.getIdOperacionMPM()==0){
-                id = bitacora.guardarSolicitud(cargo);
+                id = bitacora.guardarSolicitud(solicitud);
             }else{
-                id = bitacora.actualizarTransaccion(cargo);
+                id = bitacora.actualizarTransaccion(solicitud);
             }
             
             
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("   Error en BitacoraServiceImpl:guardarRespuesta - " + e.toString());
             throw e;
         } finally {
