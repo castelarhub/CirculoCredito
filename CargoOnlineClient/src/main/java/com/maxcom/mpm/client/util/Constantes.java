@@ -15,10 +15,12 @@ public final class Constantes {
     
     //Constantes de la tarjeta
     public final static String CRYPTO="3";
-    public final static String TYPE="V/MC";
+    public final static String TYPE_V_MC="V/MC";//Visa y Mastercard
+    public final static String TYPE_AMEX="AMEX";//American Express
     
     //Constantes de la transaccion
-    public final static String MERCHANT="10023221";
+    public final static String MERCHANT_V_MC="10023221";//Visa y Mastercard
+    public final static String MERCHANT_AMEX="10023329";//American Express
     public final static String TP_OPERACION="2";
     public final static String CURRENCY="MXN";
     

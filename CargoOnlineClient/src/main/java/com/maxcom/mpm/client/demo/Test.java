@@ -14,12 +14,12 @@ public class Test {
         try {
 
             pagoSolicitado.setAnioExpiracionTarjeta("15");
-            pagoSolicitado.setCodigoSeguridadTarjeta("9920");
+            pagoSolicitado.setCodigoSeguridadTarjeta("123");
             pagoSolicitado.setMesExpiracionTarjeta("08");
-            pagoSolicitado.setMonto(1.20);
-            pagoSolicitado.setNombreCliente("Nelson Ca Mo");
-            pagoSolicitado.setNumeroTarjeta("5275010903634968");
-            pagoSolicitado.setReferencia("99020");
+            pagoSolicitado.setMonto(2.09);
+            pagoSolicitado.setNombreCliente("Nelson Amex PruebaXYZ");
+            pagoSolicitado.setNumeroTarjeta("370314551252452");
+            pagoSolicitado.setReferencia("99052");
 
             //
             RespuestaBancoTO respuestaBanco = cargoOnline.realizarCargo(pagoSolicitado);

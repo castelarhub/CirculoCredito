@@ -56,7 +56,7 @@ public class TransaccionCobro {
     
     private Payment formarPago(TransaccionBancoTO entrada){
         Payment pago = new Payment();
-                        
+        
         Business negocio = new Business();
         negocio.setId_company(Constantes.ID_COMPANY);
         negocio.setId_branch(Constantes.ID_BRANCH);
@@ -67,7 +67,7 @@ public class TransaccionCobro {
         
         CreditCard tarjeta = new CreditCard();
         tarjeta.setCrypto(Constantes.CRYPTO);
-        tarjeta.setType(Constantes.TYPE);
+        tarjeta.setType(Constantes.TYPE_AMEX);
         //Datos encriptados
         tarjeta.setName(getEncryptedString(entrada.getNombreCliente()));
         tarjeta.setNumber(getEncryptedString(entrada.getNumeroTarjeta()));
@@ -76,7 +76,7 @@ public class TransaccionCobro {
         tarjeta.setCvv_csc(getEncryptedString(entrada.getCodigoSeguridadTarjeta()));
                 
         Transacction transaccion = new Transacction();
-        transaccion.setMerchant(Constantes.MERCHANT);
+        transaccion.setMerchant(Constantes.MERCHANT_AMEX);
         transaccion.setReference(entrada.getReferencia());
         transaccion.setTp_operation(Constantes.TP_OPERACION);
         transaccion.setTarjeta(tarjeta);
