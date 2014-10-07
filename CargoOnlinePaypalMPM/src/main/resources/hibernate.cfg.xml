@@ -5,13 +5,14 @@
     <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
     <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
     <property name="hibernate.connection.username">ADMIN_MPM</property>
-    <!--Desarrollo
+    <!--Desarrollo-->
     <property name="hibernate.connection.url">jdbc:oracle:thin:@172.16.4.50:1521:maxdb01</property>
-    <property name="hibernate.connection.password">ad1npag0s</property>
-    -->
-    <!--Local-->
+    <property name="hibernate.connection.password">ad1npag0s</property>    
+    
+    <!--Local
     <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>
     <property name="hibernate.connection.password">am1np4g05</property>
+    -->
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>

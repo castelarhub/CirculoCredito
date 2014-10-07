@@ -183,9 +183,9 @@ public class CargoOnlineFacade implements ICargoOnline {
         if (transaccion.getAutenticacion() == null) {
             error.append("El campo autenticacion es obligatorio - ");
         }else{
-            if (!isValidString(transaccion.getAutenticacion().getClaveServicio())) {
+            /*if (!isValidString(transaccion.getAutenticacion().getClaveServicio())) {
                 error.append("El campo claveServicio es obligatorio - ");
-            }
+            }*/
             if (!isValidString(transaccion.getAutenticacion().getUsuario())) {
                 error.append("El campo usuario es obligatorio - ");
             }

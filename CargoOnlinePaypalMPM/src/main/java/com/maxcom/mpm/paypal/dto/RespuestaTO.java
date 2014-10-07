@@ -3,13 +3,14 @@ package com.maxcom.mpm.paypal.dto;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Nelson Castelar
  * @author 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-//@XmlType(name = "Respuesta")
+@XmlType(name = "Respuesta")
 public class RespuestaTO {
     
     private long idOperacionMPM;//identificador unico del MPM para los pagos en linea paypal. Se regresa como acuse.

@@ -11,8 +11,9 @@ import javax.xml.bind.annotation.XmlType;
 public class RespuestaConfirmacionPagoTO extends RespuestaTO{
     
     private String token;
-    private String billingAgreementId;
     private InformacionPagoTO informacionPago;
+    @XmlTransient
+    private String billingAgreementId;    
     //private String estatus;
     @XmlTransient
     private String idOperacion;//Numero de operacion de Paypal.

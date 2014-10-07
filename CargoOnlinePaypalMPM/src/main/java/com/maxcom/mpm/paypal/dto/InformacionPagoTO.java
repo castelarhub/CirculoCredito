@@ -1,9 +1,15 @@
 package com.maxcom.mpm.paypal.dto;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "InformacionPago")
 public class InformacionPagoTO {
     private String transactionID;
+    private String paymentStatus;
     
     @XmlTransient
     private String transactionType;
@@ -11,14 +17,11 @@ public class InformacionPagoTO {
     private String paymentType;
     @XmlTransient
     private String paymentDate;
-    
-    private String paymentStatus;
-    
     @XmlTransient
     private double grossAmount;
     @XmlTransient
     private double feeAmount;
-
+    
     /**
      * @return the transactionID
      */

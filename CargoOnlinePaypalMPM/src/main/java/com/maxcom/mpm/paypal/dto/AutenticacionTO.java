@@ -18,7 +18,6 @@ public class AutenticacionTO {
     private String usuario;
     @XmlElement(required=true)
     private String contrasenia;
-    @XmlElement(required=true)
     @XmlTransient
     private String claveServicio;    
 
