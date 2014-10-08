@@ -9,16 +9,14 @@ import com.maxcom.mpm.paypal.dto.ConsultaRespuestaTO;
 import com.maxcom.mpm.paypal.dto.ConsultaTransaccionTO;
 import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
-import com.maxcom.mpm.paypal.dto.RespuestaTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
-import com.maxcom.mpm.paypal.dto.TransaccionTO;
-import com.maxcom.mpm.paypal.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraConsultaOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraDetaSolPaypal;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraSolPaypal;
 import com.maxcom.mpm.paypal.util.Constantes;
 import static com.maxcom.mpm.paypal.util.Utilerias.isValidString;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -117,12 +115,11 @@ public class BitacoraServiceImpl implements BitacoraService {
                 solicitud.setFechaCreacion(new Date());
                 solicitud.setCreadoPor(Constantes.CREADO_POR_ORDEN);
                 solicitud.setReferenciarPago(false);
-                
-                
             }
             
             solicitud.setEstatus(respuesta.getEstatus());
             solicitud.setEstatusPaypal(respuesta.getEstatusPaypal());
+            solicitud.setTokenPaypal(respuesta.getToken());
             solicitud.setFechaModificacion(new Date());
             solicitud.setFechaOperacionPaypal(respuesta.getFechaHoraOperacionPaypal());
             solicitud.setIdOperacionPaypal(respuesta.getIdOperacionPaypal());
@@ -149,53 +146,50 @@ public class BitacoraServiceImpl implements BitacoraService {
     }
     
     @Override
-    public long buscarTransaccion(TransaccionTO transaccion, RespuestaTO respuesta) throws Exception {
-        MpmTbitacoraCargoOnline cargoExistente = bitacora.getTransaccionByIdTransaccion(transaccion.getIdTransaccion());
+    public long buscarTransaccion(TransaccionSolicitudTO transaccion, RespuestaSolicitudTO respuesta) throws Exception {
+        MpmTbitacoraSolPaypal soliExistente = bitacora.getTransaccionByIdTransaccion(transaccion.getIdTransaccion());
         
-        if(null!=cargoExistente){
+        if(respuesta==null){
+            respuesta = new RespuestaSolicitudTO();
+        }
+        
+        if(null!=soliExistente){
             
-            //respuessetIdOperacionMPMine(cargoExistente.getIdBitacora());
-            respuesta.setIdTransaccion(cargoExistente.getIdTransaccion());
-            //respuesta.setIdEstatus("EXISTENTE-"+cargoExistente.getMpmCestados().getIdEstado());
-            respuesta.setObservaciones(cargoExistente.getObservaciones());
-            respuesta.setFecha(cargoExistente.getFechaCreacion());
+            respuesta.setEstatus(soliExistente.getEstatus());
+            respuesta.setEstatusPaypal(soliExistente.getEstatusPaypal());
+            respuesta.setFecha(soliExistente.getFechaCreacion());
+            respuesta.setFechaHoraOperacionPaypal(soliExistente.getFechaOperacionPaypal());
+            respuesta.setIdTransaccion(soliExistente.getIdTransaccion());
+            respuesta.setObservaciones(soliExistente.getObservaciones());
+            respuesta.setRespuesta(soliExistente.getRespuesta());
             
-            if(!cargoExistente.getMpmCestados().getIdEstado().equalsIgnoreCase("RTRAN")){
-                DetalleErrorTO detalleError = new DetalleErrorTO();
+            respuesta.setEstatus("EXISTENTE-"+soliExistente.getRespuesta());
+            
+            if(!soliExistente.getRespuesta().equalsIgnoreCase("RTRAN")){
+                List<DetalleErrorTO> listDetalleError = new ArrayList<>();
+                DetalleErrorTO detalleError = null;
+                CargoTO cargoAux = null;
                 
-                CargoTO cargoAux = new CargoTO(); 
-                /*
-                cargoAux.setAnioExpiracionTarjeta(cargoExistente.getAnioExpiracion());
-                cargoAux.setCodigoSeguridadTarjeta(cargoExistente.getCodigoSeguridad());
-                cargoAux.setMesExpiracionTarjeta(cargoExistente.getMesExpiracion());
-                cargoAux.setMonto(cargoExistente.getMonto().doubleValue());
-                cargoAux.setNombreCliente(cargoExistente.getNombreCliente());
-                cargoAux.setNumeroTarjeta(cargoExistente.getNumeroTarjeta());
-                cargoAux.setReferencia(cargoExistente.getReferencia());
-                */
+                for(MpmTbitacoraDetaSolPaypal solAux : soliExistente.getMpmTbitacoraDetaSolPaypals()){
+                    cargoAux = new CargoTO();
+                    cargoAux.setCantidad(solAux.getCantidad());
+                    cargoAux.setDescripcion(solAux.getDescripcion());
+                    cargoAux.setPrecio( solAux.getPrecio().doubleValue());
+                    
+                    detalleError.setCargo(cargoAux);
+                    
+                    listDetalleError.add(detalleError);
+                }
                 
-                detalleError.setCargo(cargoAux);
+                respuesta.setDetalleError(listDetalleError);
                 
-                detalleError.setIdEstatus(null);
-                //Este campo al parecer es inecesario.
-                detalleError.setObservaciones(null);
-                
-                //respuesta.setDetalleError(detalleError);
             }else{
-                /*
-                respuesta.setReferencia(cargoExistente.getReferencia());
-                respuesta.setAutorizacion(cargoExistente.getBanNumeroAutorizacion());
-                respuesta.setMonto(String.valueOf(cargoExistente.getMonto()));
-                respuesta.setRespuesta(cargoExistente.getBanResultado());
-                respuesta.setFolioCPagos(cargoExistente.getBanFolioCpagos());
-                
-                respuesta.setBanCdError(cargoExistente.getBanCdError());
-                respuesta.setBanCdResponse(cargoExistente.getBanCdRespuesta());
-                respuesta.setBanNbError(cargoExistente.getBanError());
-                */
+                respuesta.setIdOperacionMPM(soliExistente.getIdBitacoraSolPaypal());
+                respuesta.setIdOperacionPaypal(soliExistente.getIdOperacionPaypal());
+                respuesta.setToken(soliExistente.getTokenPaypal());
             }
                                         
-            return cargoExistente.getIdBitacora();
+            return soliExistente.getIdBitacoraSolPaypal();
         }
         
         return 0;

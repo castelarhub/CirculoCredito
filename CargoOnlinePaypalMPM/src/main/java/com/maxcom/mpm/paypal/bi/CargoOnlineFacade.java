@@ -12,7 +12,6 @@ import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
 import com.maxcom.mpm.paypal.dto.RespuestaConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
-import com.maxcom.mpm.paypal.dto.RespuestaTO;
 import com.maxcom.mpm.paypal.dto.TransaccionConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
@@ -77,18 +76,15 @@ public class CargoOnlineFacade implements ICargoOnline {
             
             //Validando datos minimos requeridos
             if (!this.isTransaccionCompleta(transaccion)) {
+                this.guardarBitacoraSolicitud(transaccion);
                 this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
             }
             
-            /*
-            //PENDIENTE 
             if(isTransaccionExistente(transaccion)){
                 return this.respuesta;
             }
-            */
             
-            //Persistir la solicitud de entrada
             this.guardarBitacoraSolicitud(transaccion);
             
             //Validando credenciales de la solicitud
@@ -249,9 +245,9 @@ public class CargoOnlineFacade implements ICargoOnline {
         bitacoraService.guardarRespuesta(respuesta);
     }
     
-    private boolean isTransaccionExistente(TransaccionTO transaccion) throws Exception{
-        //this.respuesta = new RespuestaTO();
-        long idSolicitud = bitacoraService.buscarTransaccion(transaccion,respuesta);
+    private boolean isTransaccionExistente(TransaccionSolicitudTO transaccion) throws Exception{
+        
+        long idSolicitud = bitacoraService.buscarTransaccion(transaccion,this.respuesta);
         
         return idSolicitud>0;        
     }

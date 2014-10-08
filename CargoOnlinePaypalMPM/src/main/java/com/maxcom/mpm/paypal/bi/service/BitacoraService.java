@@ -16,7 +16,7 @@ public interface BitacoraService {
     
     public long guardarRespuesta(RespuestaSolicitudTO respuesta) throws Exception;    
     
-    public long buscarTransaccion(TransaccionTO transaccion, RespuestaTO respueta) throws Exception;
+    public long buscarTransaccion(TransaccionSolicitudTO transaccion, RespuestaSolicitudTO respueta) throws Exception;
     
     public void guardarSolicitud(ConsultaTransaccionTO transaccion) throws Exception;
     

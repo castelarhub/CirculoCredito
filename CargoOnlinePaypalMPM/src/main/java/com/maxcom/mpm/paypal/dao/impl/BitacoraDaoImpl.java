@@ -1,7 +1,6 @@
 package com.maxcom.mpm.paypal.dao.impl;
 
 import com.maxcom.mpm.paypal.dao.BitacoraDao;
-import com.maxcom.mpm.paypal.model.MpmTbitacoraCargoOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraConsultaOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraSolPaypal;
 import com.maxcom.mpm.paypal.util.HibernateUtil;
@@ -108,29 +107,34 @@ public class BitacoraDaoImpl implements BitacoraDao{
     }
     
     @Override
-    public MpmTbitacoraCargoOnline getTransaccionByIdTransaccion(String idTransaccion) throws Exception {
+    public MpmTbitacoraSolPaypal getTransaccionByIdTransaccion(String idTransaccion) throws Exception {
         logger.info("   BitacoraDaoImpl:getTransaccionByIdTransaccion(E)");
-        MpmTbitacoraCargoOnline cargo = null;
+        MpmTbitacoraSolPaypal solicitud = null;
         Session session = null;
         try{
             session = HibernateUtil.getSessionFactoryOracle().openSession();
             
-            Criteria cr = session.createCriteria(MpmTbitacoraCargoOnline.class);
+            Criteria cr = session.createCriteria(MpmTbitacoraSolPaypal.class);
             cr.add(Restrictions.eq("idTransaccion", idTransaccion));
-            List<MpmTbitacoraCargoOnline> list = cr.list();
+            List<MpmTbitacoraSolPaypal> list = cr.list();
             
             logger.info("BitacoraDaoImpl:getTransaccionByIdTransaccion  idTransaccion lista -> "+list.size());
             
-            if(list.size()>1){
+            /*if(list.size()>1){
                 logger.error("Error - Error - Hay solicitudes repetidas con el mismo idTransaccion");
                 throw new Exception("Error - Hay solicitudes repetidas con el mismo idTransaccion");
             }else if(list.size()==1){
-                cargo = (MpmTbitacoraCargoOnline) list.get(0);
-                return cargo;
-            }     
+                solicitud = (MpmTbitacoraSolPaypal) list.get(0);
+                return solicitud;
+            }*/     
             
-            //Si la solicitud/transaccion no existe
+            if(list.size()>0){
+                solicitud = (MpmTbitacoraSolPaypal) list.get(0);
+                return solicitud;                
+            }
+            
         }catch(Exception e){
+            e.printStackTrace();
             logger.error("   Error en BitacoraDaoImpl:getTransaccionByIdTransaccion - "+e.getMessage());
             throw e;
         }finally{

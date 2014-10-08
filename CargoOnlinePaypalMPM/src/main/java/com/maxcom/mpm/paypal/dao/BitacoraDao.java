@@ -15,7 +15,7 @@ public interface BitacoraDao {
     
     public long actualizarTransaccion(MpmTbitacoraSolPaypal solicitud) throws Exception;    
     
-    public MpmTbitacoraCargoOnline getTransaccionByIdTransaccion(String idTransaccion) throws Exception;
+    public MpmTbitacoraSolPaypal getTransaccionByIdTransaccion(String idTransaccion) throws Exception;
     
     public long guardarSolicitud(MpmTbitacoraConsultaOnline consulta) throws Exception;
     

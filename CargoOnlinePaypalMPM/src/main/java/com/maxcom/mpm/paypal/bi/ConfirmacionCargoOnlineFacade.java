@@ -248,7 +248,8 @@ public class ConfirmacionCargoOnlineFacade implements ICargoOnline {
     
     private boolean isTransaccionExistente(TransaccionTO transaccion) throws Exception{
         //this.respuesta = new RespuestaTO();
-        long idSolicitud = bitacoraService.buscarTransaccion(transaccion,respuesta);
+        //long idSolicitud = bitacoraService.buscarTransaccion(transaccion,respuesta);
+        long idSolicitud = 0;
         
         return idSolicitud>0;        
     }
