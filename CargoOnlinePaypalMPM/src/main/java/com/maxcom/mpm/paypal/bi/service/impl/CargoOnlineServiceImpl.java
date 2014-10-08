@@ -151,10 +151,10 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             
             respuesta.setCargos(cargos);
             respuesta.setFecha(Calendar.getInstance().getTime());
-            respuesta.setFechaHora(respuestaSol.getFechaHora());
+            respuesta.setFechaHoraOperacionPaypal(respuestaSol.getFechaHora());
             respuesta.setIdOperacionMPM(transaccion.getIdOrden());
             respuesta.setEstatus(respuestaSol.getAck());
-            respuesta.setIdOperacion(respuestaSol.getCorrelationID());
+            respuesta.setIdOperacionPaypal(respuestaSol.getCorrelationID());
             respuesta.setIdTransaccion(transaccion.getIdTransaccion());
             respuesta.setInfoCliente(infoCliente);
             respuesta.setObservaciones("Transaccion procesada.");

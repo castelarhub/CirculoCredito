@@ -15,7 +15,7 @@ public class DetalleErrorTO {
     @XmlTransient
     private long idCobranzaOnlineDetalle;
     
-    private String idEstatus;
+    //private String idEstatus;
     
     @XmlTransient
     private String observaciones;
@@ -63,20 +63,4 @@ public class DetalleErrorTO {
     public void setCargo(CargoTO cargo) {
         this.cargo = cargo;
     }
-
-    /**
-     * @return the idEstatus
-     */
-    public String getIdEstatus() {
-        return idEstatus;
-    }
-
-    /**
-     * @param idEstatus the idEstatus to set
-     */
-    public void setIdEstatus(String idEstatus) {
-        this.idEstatus = idEstatus;
-    }
-    
-    
 }

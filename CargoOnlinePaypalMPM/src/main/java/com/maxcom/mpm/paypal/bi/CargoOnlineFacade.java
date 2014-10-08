@@ -74,21 +74,22 @@ public class CargoOnlineFacade implements ICargoOnline {
                 return respuesta;
             }
             
+            if(isTransaccionExistente(transaccion)){
+                return this.respuesta;
+            }
+            
             //Validando datos minimos requeridos
             if (!this.isTransaccionCompleta(transaccion)) {
                 this.guardarBitacoraSolicitud(transaccion);
+                this.respuesta.setIdOperacionMPM(transaccion.getIdOrden());
                 this.guardarBitacoraRespuesta(this.respuesta);
                 return respuesta;
-            }
-            
-            if(isTransaccionExistente(transaccion)){
-                return this.respuesta;
             }
             
             this.guardarBitacoraSolicitud(transaccion);
             
             //Validando credenciales de la solicitud
-            if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {                
+            if (!this.isAutenticacionValida(transaccion.getAutenticacion())) {
                 this.respuesta = new RespuestaSolicitudTO("-", "-", null, "-", 
                                                           "-", null, transaccion.getIdOrden(), transaccion.getIdTransaccion(), 
                                                           "ETRAN", "Error - Credenciales invalidas", 
@@ -246,6 +247,12 @@ public class CargoOnlineFacade implements ICargoOnline {
     }
     
     private boolean isTransaccionExistente(TransaccionSolicitudTO transaccion) throws Exception{
+        
+        if(transaccion.getIdTransaccion()== null){
+            return false;
+        }
+        
+        this.respuesta = new RespuestaSolicitudTO();
         
         long idSolicitud = bitacoraService.buscarTransaccion(transaccion,this.respuesta);
         

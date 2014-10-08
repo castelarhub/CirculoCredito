@@ -19,9 +19,9 @@ public class RespuestaDetallePagoTO extends RespuestaTO{
     //private String estatus;//Estatus SUCCESS
     
     @XmlTransient
-    private String idOperacion;//Numero de operacion de Paypal.
+    private String idOperacionPaypal;//Numero de operacion de Paypal.
     @XmlTransient
-    private String fechaHora;//Fecha y hora de operacion Paypal.    
+    private String fechaHoraOperacionPaypal;//Fecha y hora de operacion Paypal.    
     
     public RespuestaDetallePagoTO(){        
     }
@@ -32,8 +32,8 @@ public class RespuestaDetallePagoTO extends RespuestaTO{
         this.infoCliente = infoCliente;
         this.cargos = cargos;
         this.orderTotal = orderTotal;
-        this.idOperacion = idOperacion;
-        this.fechaHora = fechaHora;
+        this.idOperacionPaypal = idOperacion;
+        this.fechaHoraOperacionPaypal = fechaHora;
     }
     
     /**
@@ -93,31 +93,31 @@ public class RespuestaDetallePagoTO extends RespuestaTO{
     }
 
     /**
-     * @return the idOperacion
+     * @return the idOperacionPaypal
      */
-    public String getIdOperacion() {
-        return idOperacion;
+    public String getIdOperacionPaypal() {
+        return idOperacionPaypal;
     }
 
     /**
-     * @param idOperacion the idOperacion to set
+     * @param idOperacionPaypal the idOperacionPaypal to set
      */
-    public void setIdOperacion(String idOperacion) {
-        this.idOperacion = idOperacion;
+    public void setIdOperacionPaypal(String idOperacionPaypal) {
+        this.idOperacionPaypal = idOperacionPaypal;
     }
 
     /**
-     * @return the fechaHora
+     * @return the fechaHoraOperacionPaypal
      */
-    public String getFechaHora() {
-        return fechaHora;
+    public String getFechaHoraOperacionPaypal() {
+        return fechaHoraOperacionPaypal;
     }
 
     /**
-     * @param fechaHora the fechaHora to set
+     * @param fechaHoraOperacionPaypal the fechaHoraOperacionPaypal to set
      */
-    public void setFechaHora(String fechaHora) {
-        this.fechaHora = fechaHora;
+    public void setFechaHoraOperacionPaypal(String fechaHoraOperacionPaypal) {
+        this.fechaHoraOperacionPaypal = fechaHoraOperacionPaypal;
     }
 
     /**

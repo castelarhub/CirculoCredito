@@ -149,11 +149,9 @@ public class BitacoraServiceImpl implements BitacoraService {
     public long buscarTransaccion(TransaccionSolicitudTO transaccion, RespuestaSolicitudTO respuesta) throws Exception {
         MpmTbitacoraSolPaypal soliExistente = bitacora.getTransaccionByIdTransaccion(transaccion.getIdTransaccion());
         
-        if(respuesta==null){
-            respuesta = new RespuestaSolicitudTO();
-        }
-        
         if(null!=soliExistente){
+            
+            respuesta.setIdOperacionMPM(soliExistente.getIdBitacoraSolPaypal());
             
             respuesta.setEstatus(soliExistente.getEstatus());
             respuesta.setEstatusPaypal(soliExistente.getEstatusPaypal());
@@ -161,32 +159,35 @@ public class BitacoraServiceImpl implements BitacoraService {
             respuesta.setFechaHoraOperacionPaypal(soliExistente.getFechaOperacionPaypal());
             respuesta.setIdTransaccion(soliExistente.getIdTransaccion());
             respuesta.setObservaciones(soliExistente.getObservaciones());
-            respuesta.setRespuesta(soliExistente.getRespuesta());
+            //respuesta.setRespuesta(soliExistente.getRespuesta());
             
-            respuesta.setEstatus("EXISTENTE-"+soliExistente.getRespuesta());
+            respuesta.setRespuesta("EXISTENTE-"+soliExistente.getRespuesta());
             
-            if(!soliExistente.getRespuesta().equalsIgnoreCase("RTRAN")){
-                List<DetalleErrorTO> listDetalleError = new ArrayList<>();
-                DetalleErrorTO detalleError = null;
-                CargoTO cargoAux = null;
-                
-                for(MpmTbitacoraDetaSolPaypal solAux : soliExistente.getMpmTbitacoraDetaSolPaypals()){
-                    cargoAux = new CargoTO();
-                    cargoAux.setCantidad(solAux.getCantidad());
-                    cargoAux.setDescripcion(solAux.getDescripcion());
-                    cargoAux.setPrecio( solAux.getPrecio().doubleValue());
-                    
-                    detalleError.setCargo(cargoAux);
-                    
-                    listDetalleError.add(detalleError);
+            if(soliExistente.getRespuesta()!=null){
+                if(!soliExistente.getRespuesta().equalsIgnoreCase("RTRAN")){
+                    List<DetalleErrorTO> listDetalleError = new ArrayList<>();
+                    DetalleErrorTO detalleError = null;
+                    CargoTO cargoAux = null;
+
+                    for(MpmTbitacoraDetaSolPaypal solAux : soliExistente.getMpmTbitacoraDetaSolPaypals()){
+                        cargoAux = new CargoTO();
+                        detalleError = new DetalleErrorTO();
+                        cargoAux.setCantidad(solAux.getCantidad());
+                        cargoAux.setDescripcion(solAux.getDescripcion());
+                        cargoAux.setPrecio( solAux.getPrecio().doubleValue());
+
+                        detalleError.setCargo(cargoAux);
+
+                        listDetalleError.add(detalleError);
+                    }
+
+                    respuesta.setDetalleError(listDetalleError);
+
+                }else{
+                    respuesta.setIdOperacionMPM(soliExistente.getIdBitacoraSolPaypal());
+                    respuesta.setIdOperacionPaypal(soliExistente.getIdOperacionPaypal());
+                    respuesta.setToken(soliExistente.getTokenPaypal());
                 }
-                
-                respuesta.setDetalleError(listDetalleError);
-                
-            }else{
-                respuesta.setIdOperacionMPM(soliExistente.getIdBitacoraSolPaypal());
-                respuesta.setIdOperacionPaypal(soliExistente.getIdOperacionPaypal());
-                respuesta.setToken(soliExistente.getTokenPaypal());
             }
                                         
             return soliExistente.getIdBitacoraSolPaypal();
