@@ -79,5 +79,8 @@
         <property name="observaciones" type="string">
           <column length="250" name="OBSERVACIONES"/>
         </property>        
+        <property name="tipoTarjeta" type="string">
+          <column length="30" name="TIPO_TARJETA"/>
+        </property>        
     </class>
 </hibernate-mapping>

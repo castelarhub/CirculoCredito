@@ -19,6 +19,8 @@ public class CargoTO {
     private String nombreCliente;
     @XmlElement(required=true)
     private String numeroTarjeta;
+    @XmlElement(required=true)
+    private String tipoTarjeta;    
     @XmlElement(name="mesExpiracion",required=true)
     private String mesExpiracionTarjeta;
     @XmlElement(name="anioExpiracion",required=true)
@@ -141,6 +143,20 @@ public class CargoTO {
      */
     public void setAnioExpiracionTarjeta(String anioExpiracionTarjeta) {
         this.anioExpiracionTarjeta = anioExpiracionTarjeta;
+    }
+
+    /**
+     * @return the tipoTarjeta
+     */
+    public String getTipoTarjeta() {
+        return tipoTarjeta;
+    }
+
+    /**
+     * @param tipoTarjeta the tipoTarjeta to set
+     */
+    public void setTipoTarjeta(String tipoTarjeta) {
+        this.tipoTarjeta = tipoTarjeta;
     }
 
 }

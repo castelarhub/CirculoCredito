@@ -1,5 +1,6 @@
 package com.maxcom.mpm.util;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,6 +20,8 @@ public class Utilerias {
     
     public static final Pattern VALID_CUSTOMER_NAME_REGEX = 
         Pattern.compile("^\\p{L}+(?: \\p{L}+)*$", Pattern.CASE_INSENSITIVE);
+    
+    public static final List tiposTarjetaValidas = Arrays.asList("V","MC","AMEX");
     
     /**
      * Valida si una cadena no es nula o esta vacia.
@@ -97,5 +100,11 @@ public class Utilerias {
         return ((mes>9)?mes+"":("0"+mes))+"-"+ anio ;
     }
       
+    
+    public static boolean isValidCardType(String tipoTarjeta){
+        
+        return tiposTarjetaValidas.contains(tipoTarjeta.toUpperCase());
+        
+    }            
     
 }

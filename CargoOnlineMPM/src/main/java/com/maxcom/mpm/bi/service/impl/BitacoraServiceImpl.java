@@ -66,6 +66,7 @@ public class BitacoraServiceImpl implements BitacoraService {
                 cargo.setNombreCliente(cargoAux.getNombreCliente());
                 cargo.setNumeroTarjeta(cargoAux.getNumeroTarjeta());
                 cargo.setReferencia(cargoAux.getReferencia());
+                cargo.setTipoTarjeta(cargoAux.getTipoTarjeta());
             }
             
             bitacora.guardarSolicitud(cargo);

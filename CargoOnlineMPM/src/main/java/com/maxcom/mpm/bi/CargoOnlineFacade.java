@@ -11,6 +11,7 @@ import com.maxcom.mpm.dto.CargoTO;
 import com.maxcom.mpm.dto.DetalleErrorTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
+import static com.maxcom.mpm.util.Utilerias.isValidCardType;
 import static com.maxcom.mpm.util.Utilerias.isValidCustomerName;
 import static com.maxcom.mpm.util.Utilerias.isValidIntegerNumber;
 import static com.maxcom.mpm.util.Utilerias.isValidNumberMonth;
@@ -207,6 +208,10 @@ public class CargoOnlineFacade implements ICargoOnline {
                 sb.append("Formato de dato incorrecto para el campo nombreCliente, solo se aceptan caracteres alfanumericos y maximo un espacio entre las palabras - ");
             }
             
+            if(!isValidCardType(cargo.getTipoTarjeta())){
+                sb.append("Tipo de tarjeta no valido, solo se acepta: V, MC o AMEX - ");
+            }
+            
             if(!isValidIntegerNumber(cargo.getMesExpiracionTarjeta())){
                 sb.append("Solo se permiten caracteres numericos en el campo mesExpiracion - ");
             }else{
@@ -252,6 +257,10 @@ public class CargoOnlineFacade implements ICargoOnline {
             
             if (!isValidString(cargo.getNumeroTarjeta())) {
                 sb.append("Se requiere el campo numeroTarjeta - ");
+            }
+            
+            if (!isValidString(cargo.getTipoTarjeta())) {
+                sb.append("Se requiere el campo tipoTarjeta - ");
             }
             
             if (!isValidString(cargo.getMesExpiracionTarjeta())) {

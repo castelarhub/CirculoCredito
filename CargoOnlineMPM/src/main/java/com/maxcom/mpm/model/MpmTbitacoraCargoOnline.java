@@ -35,6 +35,7 @@ public class MpmTbitacoraCargoOnline  implements java.io.Serializable {
      private String solicitudXml;
      private String respuestaXml;
      private String observaciones;
+     private String tipoTarjeta;
 
     public MpmTbitacoraCargoOnline() {
     }
@@ -261,6 +262,20 @@ public class MpmTbitacoraCargoOnline  implements java.io.Serializable {
      */
     public void setRespuestaXml(String respuestaXml) {
         this.respuestaXml = respuestaXml;
+    }
+
+    /**
+     * @return the tipoTarjeta
+     */
+    public String getTipoTarjeta() {
+        return tipoTarjeta;
+    }
+
+    /**
+     * @param tipoTarjeta the tipoTarjeta to set
+     */
+    public void setTipoTarjeta(String tipoTarjeta) {
+        this.tipoTarjeta = tipoTarjeta;
     }
 
 

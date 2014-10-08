@@ -30,6 +30,7 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
         this.transaccionBanco.setReferencia(cargo.getReferencia());
         this.transaccionBanco.setNombreCliente(cargo.getNombreCliente());
         this.transaccionBanco.setNumeroTarjeta(cargo.getNumeroTarjeta());
+        this.transaccionBanco.setTipoTarjeta(cargo.getTipoTarjeta());
         this.transaccionBanco.setMesExpiracionTarjeta(cargo.getMesExpiracionTarjeta());
         this.transaccionBanco.setAnioExpiracionTarjeta(cargo.getAnioExpiracionTarjeta());
         this.transaccionBanco.setCodigoSeguridadTarjeta(cargo.getCodigoSeguridadTarjeta());
