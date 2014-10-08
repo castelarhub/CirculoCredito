@@ -136,6 +136,7 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
                 infoCliente.setPayerID(respuestaSol.getPayerInfo().getPayerID());
                 infoCliente.setTelefono(respuestaSol.getPayerInfo().getTelefono());
             }
+            respuesta.setInfoCliente(infoCliente);            
             
             List<CargoTO> cargos = new ArrayList<>();
             if(respuestaSol.getListItem()!=null){
@@ -149,15 +150,43 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
                 }
             }
             
+            
+            String estatusPaypal = respuestaSol.getAck();
+            estatusPaypal = estatusPaypal.toUpperCase();
+            
+            String estatusCliente;
+            StringBuilder observaciones = new StringBuilder();
+            
+            //Analizando respuesta
+            switch(estatusPaypal){
+                case "SUCCESS":
+                    estatusCliente = "SUCCESS";//
+                    observaciones.append("Transaccion procesada correctamente.");
+                    break;                
+                default:
+                    estatusCliente = "ERROR";//
+                    observaciones.append("Transaccion procesada. Se encontraron los siguientes errores: ");
+            }
+            
+            //Si hay errores se agregan a la respuesta
+            if(respuestaSol.getListaErrores()!=null){
+                for(TipoErrorTO error:respuestaSol.getListaErrores()){
+                    observaciones.append(error.getCodigoError());
+                    observaciones.append(" -> ");
+                    observaciones.append(error.getMensajeLargo());
+                    observaciones.append(" ; ");
+                }
+            }
+            
             respuesta.setCargos(cargos);
             respuesta.setFecha(Calendar.getInstance().getTime());
             respuesta.setFechaHoraOperacionPaypal(respuestaSol.getFechaHora());
             respuesta.setIdOperacionMPM(transaccion.getIdOrden());
-            respuesta.setEstatus(respuestaSol.getAck());
+            respuesta.setEstatus(estatusCliente);
+            respuesta.setEstatusPaypal(estatusPaypal);
             respuesta.setIdOperacionPaypal(respuestaSol.getCorrelationID());
             respuesta.setIdTransaccion(transaccion.getIdTransaccion());
-            respuesta.setInfoCliente(infoCliente);
-            respuesta.setObservaciones("Transaccion procesada.");
+            respuesta.setObservaciones(observaciones.toString());
             respuesta.setOrderTotal(respuestaSol.getOrderTotal());
             respuesta.setRespuesta("RTRAN");
             respuesta.setToken(respuestaSol.getToken());

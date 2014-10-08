@@ -18,8 +18,10 @@
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
     <property name="hibernate.connection.zeroDateTimeBehavior">convertToNull</property>
+    <mapping resource="com/maxcom/mpm/paypal/model/MpmCusersWs.hbm.xml"/>    
     <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraSolPaypal.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraDetaSolPaypal.hbm.xml"/>
-    <mapping resource="com/maxcom/mpm/paypal/model/MpmCusersWs.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraRecPaypal.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraRecPayerPaypal.hbm.xml"/>    
   </session-factory>
 </hibernate-configuration>

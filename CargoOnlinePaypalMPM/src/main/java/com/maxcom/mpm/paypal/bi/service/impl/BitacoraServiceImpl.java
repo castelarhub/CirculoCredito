@@ -1,17 +1,18 @@
 package com.maxcom.mpm.paypal.bi.service.impl;
 
-import com.maxcom.mpm.paypal.bi.service.BitacoraService;
+import com.maxcom.mpm.paypal.bi.service.BitacoraService; 
 import com.maxcom.mpm.paypal.dao.BitacoraDao;
 import com.maxcom.mpm.paypal.dao.impl.BitacoraDaoImpl;
 import com.maxcom.mpm.paypal.dto.CargoTO;
-import com.maxcom.mpm.paypal.dto.ConsultaCargoTO;
-import com.maxcom.mpm.paypal.dto.ConsultaRespuestaTO;
-import com.maxcom.mpm.paypal.dto.ConsultaTransaccionTO;
 import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
+import com.maxcom.mpm.paypal.dto.PayerInfoTO;
+import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
+import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
-import com.maxcom.mpm.paypal.model.MpmTbitacoraConsultaOnline;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraDetaSolPaypal;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraRecPayerPaypal;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraRecPaypal;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraSolPaypal;
 import com.maxcom.mpm.paypal.util.Constantes;
 import static com.maxcom.mpm.paypal.util.Utilerias.isValidString;
@@ -195,28 +196,35 @@ public class BitacoraServiceImpl implements BitacoraService {
         
         return 0;
         
-    }    
-
-    @Override
-    public void guardarSolicitud(ConsultaTransaccionTO transaccion) throws Exception {
-        logger.info("   BitacoraServiceImpl:guardarSolicitud(E)");
+    }
         
+    @Override
+    public void guardarSolicitud(TransaccionDetallePagoTO transaccion) throws Exception {
+        logger.info("   BitacoraServiceImpl:guardarSolicitud(E)");
+        MpmTbitacoraRecPaypal detalle = new MpmTbitacoraRecPaypal();
         try {
-            MpmTbitacoraConsultaOnline consulta = new MpmTbitacoraConsultaOnline();
-            consulta.setFechaCreacion(new Date());
-            consulta.setCreadoPor(Constantes.CREADO_POR_ORDEN);
             
-            consulta.setIdEstado("NEW");
-            ConsultaCargoTO cargo = transaccion.getCargo();
-            //Si trae cargo se guardan en bitacora
-            if (cargo!=null) {
-                consulta.setReferencia(cargo.getReferencia());
-                consulta.setFechaCargo(cargo.getFechaCargo());
+            if (!isValidString(transaccion.getIdTransaccion())) {
+                detalle.setIdTransaccion("-");
+            } else {
+                detalle.setIdTransaccion(transaccion.getIdTransaccion());
             }
             
-            bitacora.guardarSolicitud(consulta);
+            detalle.setFechaCreacion(new Date());
+            detalle.setCreadoPor(Constantes.CREADO_POR_ORDEN);
             
-            transaccion.setIdOrden(consulta.getIdBitacoraConsulta());
+            detalle.setReferencia(transaccion.getReferencia());
+            detalle.setToken(transaccion.getToken());
+            
+            //En este punto aun no se sabe
+            detalle.setTienePagoReferenciado(false);
+            
+            //Estatus unicial antes de ser procesado
+            detalle.setEstatus("NEW");
+            
+            bitacora.guardarSolicitud(detalle);
+            
+            transaccion.setIdOrden(detalle.getIdBitacoraRecPaypal());
             
         } catch (Exception e) {
             logger.error("   Error en BitacoraServiceImpl:guardarSolicitud - " + e.getMessage());
@@ -227,47 +235,75 @@ public class BitacoraServiceImpl implements BitacoraService {
     }
 
     @Override
-    public long guardarRespuesta(ConsultaRespuestaTO respuesta) throws Exception {
+    public long guardarRespuesta(RespuestaDetallePagoTO respuesta) throws Exception {
         logger.info("   BitacoraServiceImpl:guardarRespuesta(E)");
-        MpmTbitacoraConsultaOnline consulta = null;
+        MpmTbitacoraRecPaypal detalle = null;
+        
         long id = 0;
         
         try {
-            consulta = bitacora.getConsultaById(respuesta.getIdConsultaOnline());
+            detalle = bitacora.getTransaccionRecById(respuesta.getIdOperacionMPM());
             
-            //si viene cero, entonces la consulta no existe
-            if(respuesta.getIdConsultaOnline()==0){
-                consulta = new MpmTbitacoraConsultaOnline();
-                consulta.setFechaCreacion(new Date());
-                consulta.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+            //si viene cero, entonces el cargo no existe.
+            if(respuesta.getIdOperacionMPM()==0){
+                detalle = new MpmTbitacoraRecPaypal();
+                if(respuesta.getIdTransaccion()==null){
+                    detalle.setIdTransaccion("SIN idTransaccion-"+new Date().getTime());
+                }else{
+                    detalle.setIdTransaccion(respuesta.getIdTransaccion());
+                }
+                detalle.setFechaCreacion(new Date());
+                detalle.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+                
             }
-                        
-            consulta.setIdEstado(respuesta.getIdEstatus());
             
-            consulta.setBanCdRespuesta(respuesta.getBanCdRespuesta());
-            consulta.setBanMonto(respuesta.getMonto());
-            consulta.setBanNbRespuesta(respuesta.getBanNbRespuesta());
-            consulta.setBanNumeroAutorizacion(respuesta.getAutorizacion());
-            consulta.setBanNumeroOperacion(respuesta.getBanNumeroOperacion());
-            consulta.setBanResultado(respuesta.getRespuesta());
-            consulta.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);
-            consulta.setFechaModificacion(new Date());
-            consulta.setObservaciones(respuesta.getObservaciones());
-            consulta.setRespuestaXml(respuesta.getRespuestaXml());
+            detalle.setEstatus(respuesta.getEstatus());
+            detalle.setEstatusPaypal(respuesta.getEstatusPaypal());
+            detalle.setTokenPaypal(respuesta.getToken());
+            detalle.setFechaModificacion(new Date());
+            detalle.setFechaOperacionPaypal(respuesta.getFechaHoraOperacionPaypal());
+            detalle.setIdOperacionPaypal(respuesta.getIdOperacionPaypal());
+            detalle.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);
+            detalle.setObservaciones(respuesta.getObservaciones());
+            detalle.setRespuesta(respuesta.getRespuesta());
+            detalle.setOrderTotal(BigDecimal.valueOf(respuesta.getOrderTotal()));
+            detalle.setTienePagoReferenciado(respuesta.isTieneAcuerdoPagoReferenciado());
             
-            if(respuesta.getDetalleError()!=null){
-                consulta.setIdRespuestaCargo(respuesta.getDetalleError().getIdEstatus());
+            PayerInfoTO payerInfo = respuesta.getInfoCliente();
+            
+            if(payerInfo!=null){
+                Set<MpmTbitacoraRecPayerPaypal> hsDetalle = new HashSet<>();
+                MpmTbitacoraRecPayerPaypal detalleRecAux = new MpmTbitacoraRecPayerPaypal();
+                
+                detalleRecAux.setCalle(payerInfo.getCalle());
+                detalleRecAux.setCp(payerInfo.getCodigoPostal());
+                detalleRecAux.setCreadoPor(Constantes.CREADO_POR_DETALLE);
+                detalleRecAux.setCuenta(payerInfo.getCuenta());
+                detalleRecAux.setEntidadFederativa(payerInfo.getEntidadFederativa());
+                detalleRecAux.setEstatus(payerInfo.getEstatus());
+                detalleRecAux.setFechaCreacion(new Date());
+                detalleRecAux.setNombre(payerInfo.getNombre());
+                detalleRecAux.setPais(payerInfo.getPais());
+                detalleRecAux.setPayerId(payerInfo.getPayerID());
+                detalleRecAux.setTelefono(payerInfo.getTelefono());
+                
+                detalleRecAux.setMpmTbitacoraRecPaypal(detalle);
+                
+                hsDetalle.add(detalleRecAux);
+                
+                detalle.setMpmTbitacoraRecPayerPaypals(hsDetalle);
             }
+            
             
             //Si no existe se crea, de lo contrario se actualiza
-            if(respuesta.getIdConsultaOnline()==0){
-                id = bitacora.guardarSolicitud(consulta);
+            if(respuesta.getIdOperacionMPM()==0){
+                id = bitacora.guardarSolicitud(detalle);
             }else{
-                id = bitacora.actualizarTransaccionConsulta(consulta);
+                id = bitacora.actualizarTransaccion(detalle);
             }
             
+            
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("   Error en BitacoraServiceImpl:guardarRespuesta - " + e.toString());
             throw e;
         } finally {
@@ -275,6 +311,62 @@ public class BitacoraServiceImpl implements BitacoraService {
         }
 
         return id;
+    }
+
+    @Override
+    public long buscarTransaccion(TransaccionDetallePagoTO transaccion, RespuestaDetallePagoTO respuesta) throws Exception {
+        MpmTbitacoraRecPaypal detalleExistente = bitacora.getTransaccionRecByIdTransaccion(transaccion.getIdTransaccion());
+        
+        if(null!=detalleExistente){
+            
+            respuesta.setIdOperacionMPM(detalleExistente.getIdBitacoraRecPaypal());
+            
+            respuesta.setEstatus(detalleExistente.getEstatus());            
+            respuesta.setFecha(detalleExistente.getFechaCreacion());
+            respuesta.setIdTransaccion(detalleExistente.getIdTransaccion());
+            respuesta.setObservaciones(detalleExistente.getObservaciones());
+            //respuesta.setRespuesta(soliExistente.getRespuesta());
+            
+            respuesta.setRespuesta("EXISTENTE-"+detalleExistente.getRespuesta());
+            
+            if(detalleExistente.getRespuesta()!=null){
+                if(detalleExistente.getRespuesta().equalsIgnoreCase("RTRAN")){
+                    
+                    Set<MpmTbitacoraRecPayerPaypal> hsDetalle = detalleExistente.getMpmTbitacoraRecPayerPaypals();
+                    
+                    if(hsDetalle!=null){
+                        PayerInfoTO payerInfoAux = new PayerInfoTO();
+                        
+                        for(MpmTbitacoraRecPayerPaypal detalleAux: hsDetalle){
+                            payerInfoAux.setCalle(detalleAux.getCalle());
+                            //payerInfoAux.setCiudad("-");
+                            payerInfoAux.setCodigoPostal(detalleAux.getCp());
+                            payerInfoAux.setCuenta(detalleAux.getCuenta());
+                            payerInfoAux.setEntidadFederativa(detalleAux.getEntidadFederativa());
+                            payerInfoAux.setEstatus(detalleAux.getEstatus());
+                            payerInfoAux.setNombre(detalleAux.getNombre());
+                            payerInfoAux.setPais(detalleAux.getPais());
+                            payerInfoAux.setPayerID(detalleAux.getPayerId());
+                            payerInfoAux.setTelefono(detalleAux.getTelefono());
+                        }
+                        respuesta.setInfoCliente(payerInfoAux);
+                    }
+                    
+                    respuesta.setIdOperacionMPM(detalleExistente.getIdBitacoraRecPaypal());
+                    respuesta.setIdOperacionPaypal(detalleExistente.getIdOperacionPaypal());
+                    respuesta.setToken(detalleExistente.getTokenPaypal());
+                    respuesta.setOrderTotal(detalleExistente.getOrderTotal().doubleValue());
+                    respuesta.setTieneAcuerdoPagoReferenciado(detalleExistente.getTienePagoReferenciado());
+                    respuesta.setEstatusPaypal(detalleExistente.getEstatusPaypal());
+                    respuesta.setFechaHoraOperacionPaypal(detalleExistente.getFechaOperacionPaypal());                    
+                    
+                }
+            }
+                                        
+            return detalleExistente.getIdBitacoraRecPaypal();
+        }
+        
+        return 0;
     }
 
 }

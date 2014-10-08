@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 08-oct-2014 10:22:57 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="com.maxcom.mpm.paypal.model.MpmTbitacoraRecPayerPaypal" table="MPM_TBITACORA_REC_PAYER_PAYPAL" schema="ADMIN_MPM">
+        <id name="idBitacoraRecPayerPaypal" type="long">
+            <column name="ID_BITACORA_REC_PAYER_PAYPAL" precision="16" scale="0" />
+            <generator class="sequence" >
+              <param name="sequence">MPM_TBITA_REC_PAYER_PAYPAL_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="mpmTbitacoraRecPaypal" class="com.maxcom.mpm.paypal.model.MpmTbitacoraRecPaypal" fetch="select">
+            <column name="ID_BITACORA_REC_PAYPAL" precision="16" scale="0">
+                <comment>Identificador de referencia a MPM_TBITACORA_REC_PAYPAL</comment>
+            </column>
+        </many-to-one>
+        <property name="payerId" type="string">
+            <column name="PAYER_ID" length="50">
+                <comment>Identificador unico de cada usuario de paypal</comment>
+            </column>
+        </property>
+        <property name="cuenta" type="string">
+            <column name="CUENTA" length="100">
+                <comment>Cuenta con la que esta registrado un usuario en paypal</comment>
+            </column>
+        </property>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" length="100">
+                <comment>Nombre del usuario registrado en paypal</comment>
+            </column>
+        </property>
+        <property name="calle" type="string">
+            <column name="CALLE" length="100">
+                <comment>Nombre de la calle</comment>
+            </column>
+        </property>
+        <property name="entidadFederativa" type="string">
+            <column name="ENTIDAD_FEDERATIVA" length="50">
+                <comment>Estado o ciudad registrado en paypal</comment>
+            </column>
+        </property>
+        <property name="pais" type="string">
+            <column name="PAIS" length="50">
+                <comment>Pais registrado en paypal</comment>
+            </column>
+        </property>
+        <property name="cp" type="string">
+            <column name="CP" length="30">
+                <comment>Codigo postal registrado en paypal</comment>
+            </column>
+        </property>
+        <property name="telefono" type="string">
+            <column name="TELEFONO" length="30">
+                <comment>Telefono regiostrado en paypal</comment>
+            </column>
+        </property>
+        <property name="estatus" type="string">
+            <column name="ESTATUS" length="50">
+                <comment>Estado del ...</comment>
+            </column>
+        </property>
+        <property name="creadoPor" type="string">
+            <column name="CREADO_POR" length="30" not-null="true">
+                <comment>Usuario que realizo el registro</comment>
+            </column>
+        </property>
+        <property name="modificadoPor" type="string">
+            <column name="MODIFICADO_POR" length="30">
+                <comment>Usuario que realizo el ultimo cambio</comment>
+            </column>
+        </property>
+        <property name="fechaCreacion" type="date">
+            <column name="FECHA_CREACION" length="7" not-null="true">
+                <comment>Fecha en que se realizo el registro</comment>
+            </column>
+        </property>
+        <property name="fechaModificacion" type="date">
+            <column name="FECHA_MODIFICACION" length="7">
+                <comment>Fecha en que se realizo el ultimo cambio</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

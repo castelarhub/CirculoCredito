@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 08-oct-2014 10:22:57 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="com.maxcom.mpm.paypal.model.MpmTbitacoraRecPaypal" table="MPM_TBITACORA_REC_PAYPAL" schema="ADMIN_MPM">
+        <id name="idBitacoraRecPaypal" type="long">
+            <column name="ID_BITACORA_REC_PAYPAL" precision="16" scale="0" />
+            <generator class="sequence" >
+              <param name="sequence">MPM_TBITA_REC_PAYPAL_SEQ</param>
+            </generator>
+        </id>
+        <property name="idTransaccion" type="string">
+            <column name="ID_TRANSACCION" length="50" />
+        </property>
+        <property name="referencia" type="string">
+            <column name="REFERENCIA" length="100" />
+        </property>
+        <property name="token" type="string">
+            <column name="TOKEN" length="50" />
+        </property>
+        <property name="respuesta" type="string">
+            <column name="RESPUESTA" length="20" />
+        </property>
+        <property name="estatus" type="string">
+            <column name="ESTATUS" length="30" />
+        </property>
+        <property name="observaciones" type="string">
+            <column name="OBSERVACIONES" length="250" />
+        </property>
+        <property name="tokenPaypal" type="string">
+            <column name="TOKEN_PAYPAL" length="50" />
+        </property>
+        <property name="estatusPaypal" type="string">
+            <column name="ESTATUS_PAYPAL" length="50" />
+        </property>
+        <property name="idOperacionPaypal" type="string">
+            <column name="ID_OPERACION_PAYPAL" length="50" />
+        </property>
+        <property name="fechaOperacionPaypal" type="string">
+            <column name="FECHA_OPERACION_PAYPAL" length="50" />
+        </property>
+        <property name="orderTotal" type="big_decimal">
+            <column name="ORDER_TOTAL" precision="10" />
+        </property>
+        <property name="tienePagoReferenciado" type="java.lang.Boolean">
+            <column name="TIENE_PAGO_REFERENCIADO" precision="1" scale="0" />
+        </property>
+        <property name="creadoPor" type="string">
+            <column name="CREADO_POR" length="30" not-null="true" />
+        </property>
+        <property name="modificadoPor" type="string">
+            <column name="MODIFICADO_POR" length="30" />
+        </property>
+        <property name="fechaCreacion" type="date">
+            <column name="FECHA_CREACION" length="7" not-null="true" />
+        </property>
+        <property name="fechaModificacion" type="date">
+            <column name="FECHA_MODIFICACION" length="7" />
+        </property>
+        <set name="mpmTbitacoraRecPayerPaypals" table="MPM_TBITACORA_REC_PAYER_PAYPAL" inverse="true" cascade="all" lazy="false" fetch="select">
+            <key>
+                <column name="ID_BITACORA_REC_PAYPAL" precision="16" scale="0">
+                    <comment>Identificador de referencia a MPM_TBITACORA_REC_PAYPAL</comment>
+                </column>
+            </key>
+            <one-to-many class="com.maxcom.mpm.paypal.model.MpmTbitacoraRecPayerPaypal" />
+        </set>
+    </class>
+</hibernate-mapping>
