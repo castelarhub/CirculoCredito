@@ -67,7 +67,15 @@ public class TransaccionCobro {
         
         CreditCard tarjeta = new CreditCard();
         tarjeta.setCrypto(Constantes.CRYPTO);
-        tarjeta.setType(Constantes.TYPE_AMEX);
+        
+        //De acuerdo al tipo de tarjeta
+        if(entrada.getTipoTarjeta().equals(Constantes.TYPE_AMEX)){
+            tarjeta.setType(Constantes.TYPE_AMEX);
+        }else{
+            tarjeta.setType(Constantes.TYPE_V_MC);
+        }
+        
+        
         //Datos encriptados
         tarjeta.setName(getEncryptedString(entrada.getNombreCliente()));
         tarjeta.setNumber(getEncryptedString(entrada.getNumeroTarjeta()));
@@ -76,7 +84,14 @@ public class TransaccionCobro {
         tarjeta.setCvv_csc(getEncryptedString(entrada.getCodigoSeguridadTarjeta()));
                 
         Transacction transaccion = new Transacction();
-        transaccion.setMerchant(Constantes.MERCHANT_AMEX);
+        
+        //De acuerdo al tipo de tarjeta
+        if(entrada.getTipoTarjeta().equals(Constantes.TYPE_AMEX)){
+            transaccion.setMerchant(Constantes.MERCHANT_AMEX);
+        }else{
+            transaccion.setMerchant(Constantes.MERCHANT_V_MC);
+        }
+        
         transaccion.setReference(entrada.getReferencia());
         transaccion.setTp_operation(Constantes.TP_OPERACION);
         transaccion.setTarjeta(tarjeta);

@@ -5,6 +5,7 @@ public class TransaccionBancoTO {
     private String referencia;
     private String nombreCliente;
     private String numeroTarjeta;
+    private String tipoTarjeta;
     private String mesExpiracionTarjeta;
     private String anioExpiracionTarjeta;
     private String codigoSeguridadTarjeta;
@@ -14,12 +15,13 @@ public class TransaccionBancoTO {
     }
     
     public TransaccionBancoTO(String referencia, String nombreCliente, 
-                              String numeroTarjeta, String mesExpiracionTarjeta, 
+                              String numeroTarjeta,String tipoTarjeta, String mesExpiracionTarjeta, 
                               String anioExpiracionTarjeta, String codigoSeguridadTarjeta, 
                               double monto) {
         this.referencia = referencia;
         this.nombreCliente = nombreCliente;
         this.numeroTarjeta = numeroTarjeta;
+        this.tipoTarjeta = tipoTarjeta;
         this.mesExpiracionTarjeta = mesExpiracionTarjeta;
         this.anioExpiracionTarjeta = anioExpiracionTarjeta;
         this.codigoSeguridadTarjeta = codigoSeguridadTarjeta;
@@ -122,5 +124,19 @@ public class TransaccionBancoTO {
      */
     public void setAnioExpiracionTarjeta(String anioExpiracionTarjeta) {
         this.anioExpiracionTarjeta = anioExpiracionTarjeta;
+    }
+
+    /**
+     * @return the tipoTarjeta
+     */
+    public String getTipoTarjeta() {
+        return tipoTarjeta;
+    }
+
+    /**
+     * @param tipoTarjeta the tipoTarjeta to set
+     */
+    public void setTipoTarjeta(String tipoTarjeta) {
+        this.tipoTarjeta = tipoTarjeta;
     }
 }
