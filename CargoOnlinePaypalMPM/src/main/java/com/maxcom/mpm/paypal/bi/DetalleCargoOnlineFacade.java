@@ -15,9 +15,7 @@ import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
 import com.maxcom.mpm.paypal.dto.TransaccionTO;
 import static com.maxcom.mpm.paypal.util.Utilerias.isValidString;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

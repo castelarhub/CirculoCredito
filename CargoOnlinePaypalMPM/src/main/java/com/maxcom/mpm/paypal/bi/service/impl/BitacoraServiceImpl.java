@@ -6,8 +6,10 @@ import com.maxcom.mpm.paypal.dao.impl.BitacoraDaoImpl;
 import com.maxcom.mpm.paypal.dto.CargoTO;
 import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
 import com.maxcom.mpm.paypal.dto.PayerInfoTO;
+import com.maxcom.mpm.paypal.dto.RespuestaConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
+import com.maxcom.mpm.paypal.dto.TransaccionConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraDetaSolPaypal;
@@ -367,6 +369,21 @@ public class BitacoraServiceImpl implements BitacoraService {
         }
         
         return 0;
+    }
+
+    @Override
+    public void guardarSolicitud(TransaccionConfirmacionPagoTO transaccion) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public long guardarRespuesta(RespuestaConfirmacionPagoTO respuesta) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public long buscarTransaccion(TransaccionConfirmacionPagoTO transaccion, RespuestaConfirmacionPagoTO respueta) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
