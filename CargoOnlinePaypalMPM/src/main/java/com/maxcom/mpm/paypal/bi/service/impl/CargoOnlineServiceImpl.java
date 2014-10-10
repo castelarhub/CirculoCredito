@@ -232,14 +232,42 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
                 informacionPago.setTransactionType(infoPagoRespuesta.getTransactionType());
             }
             
+            String estatusPaypal = respuestaConfirmacion.getAck();
+            estatusPaypal = estatusPaypal.toUpperCase();
+            
+            String estatusCliente;
+            StringBuilder observaciones = new StringBuilder();
+            
+            //Analizando respuesta
+            switch(estatusPaypal){
+                case "SUCCESS":
+                    estatusCliente = "SUCCESS";//
+                    observaciones.append("Transaccion procesada correctamente.");
+                    break;                
+                default:
+                    estatusCliente = "ERROR";//
+                    observaciones.append("Transaccion procesada. Se encontraron los siguientes errores: ");
+            }
+            
+            //Si hay errores se agregan a la respuesta
+            if(respuestaConfirmacion.getListaErrores()!=null){
+                for(TipoErrorTO error:respuestaConfirmacion.getListaErrores()){
+                    observaciones.append(error.getCodigoError());
+                    observaciones.append(" -> ");
+                    observaciones.append(error.getMensajeLargo());
+                    observaciones.append(" ; ");
+                }
+            }
+            
             respuesta.setInformacionPago(informacionPago);
             respuesta.setFecha(Calendar.getInstance().getTime());
-            respuesta.setFechaHora(respuestaConfirmacion.getFechaHora());
+            respuesta.setFechaHoraOperacionPaypal(respuestaConfirmacion.getFechaHora());
             respuesta.setIdOperacionMPM(transaccion.getIdOrden());
-            respuesta.setEstatus(respuestaConfirmacion.getAck());
-            respuesta.setIdOperacion(respuestaConfirmacion.getCorrelationID());
+            respuesta.setEstatus(estatusCliente);
+            respuesta.setEstatusPaypal(estatusPaypal);
+            respuesta.setIdOperacionPaypal(respuestaConfirmacion.getCorrelationID());
             respuesta.setIdTransaccion(transaccion.getIdTransaccion());
-            respuesta.setObservaciones("Transaccion procesada.");
+            respuesta.setObservaciones(observaciones.toString());
             respuesta.setRespuesta("RTRAN");
             respuesta.setToken(respuestaConfirmacion.getToken());
             

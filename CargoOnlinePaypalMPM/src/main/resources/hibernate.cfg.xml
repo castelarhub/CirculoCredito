@@ -23,5 +23,7 @@
     <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraDetaSolPaypal.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraRecPaypal.hbm.xml"/>
     <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraRecPayerPaypal.hbm.xml"/>    
+    <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraConfPaypal.hbm.xml"/>
+    <mapping resource="com/maxcom/mpm/paypal/model/MpmTbitacoraConfPagoPaypal.hbm.xml"/>    
   </session-factory>
 </hibernate-configuration>

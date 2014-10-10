@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 09-oct-2014 10:04:06 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="com.maxcom.mpm.paypal.model.MpmTbitacoraConfPagoPaypal" table="MPM_TBITACORA_CONF_PAGO_PAYPAL" schema="ADMIN_MPM">
+        <id name="idBitacoraConfPagoPaypal" type="long">
+            <column name="ID_BITACORA_CONF_PAGO_PAYPAL" precision="16" scale="0" />
+            <generator class="sequence" >
+              <param name="sequence">MPM_TBITA_CONF_PAGO_PAYPAL_SEQ</param>
+            </generator>
+        </id>
+        <many-to-one name="mpmTbitacoraConfPaypal" class="com.maxcom.mpm.paypal.model.MpmTbitacoraConfPaypal" fetch="select">
+            <column name="ID_BITACORA_CONF_PAYPAL" precision="16" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="transactionId" type="string">
+            <column name="TRANSACTION_ID" length="50" />
+        </property>
+        <property name="paymentStatus" type="string">
+            <column name="PAYMENT_STATUS" length="50" />
+        </property>
+        <property name="transactionType" type="string">
+            <column name="TRANSACTION_TYPE" length="50" />
+        </property>
+        <property name="paymentType" type="string">
+            <column name="PAYMENT_TYPE" length="50" />
+        </property>
+        <property name="paymentDate" type="string">
+            <column name="PAYMENT_DATE" length="50" />
+        </property>
+        <property name="grossAmount" type="big_decimal">
+            <column name="GROSS_AMOUNT" precision="10" />
+        </property>
+        <property name="feeAmount" type="big_decimal">
+            <column name="FEE_AMOUNT" precision="10" />
+        </property>
+        <property name="creadoPor" type="string">
+            <column name="CREADO_POR" length="30" not-null="true" />
+        </property>
+        <property name="modificadoPor" type="string">
+            <column name="MODIFICADO_POR" length="30" />
+        </property>
+        <property name="fechaCreacion" type="date">
+            <column name="FECHA_CREACION" length="7" not-null="true" />
+        </property>
+        <property name="fechaModificacion" type="date">
+            <column name="FECHA_MODIFICACION" length="7" />
+        </property>
+    </class>
+</hibernate-mapping>

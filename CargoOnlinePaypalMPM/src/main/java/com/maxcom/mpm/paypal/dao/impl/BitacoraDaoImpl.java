@@ -1,6 +1,7 @@
 package com.maxcom.mpm.paypal.dao.impl;
 
 import com.maxcom.mpm.paypal.dao.BitacoraDao;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraConfPaypal;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraRecPaypal;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraSolPaypal;
 import com.maxcom.mpm.paypal.util.HibernateUtil;
@@ -252,6 +253,120 @@ public class BitacoraDaoImpl implements BitacoraDao{
         }
         //Si no existe se regresa nulo
         return null;        
+    }
+
+    @Override
+    public long guardarSolicitud(MpmTbitacoraConfPaypal solicitud) throws Exception {
+        logger.info("   BitacoraDaoImpl:guardarSolicitud(E)");
+        org.hibernate.Transaction tx = null;
+        Session session = null;
+        try {
+            
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            
+            tx = session.beginTransaction();
+            session.save(solicitud);
+            session.flush();
+            tx.commit();
+            logger.info("       Orden insetada -> " + solicitud.getIdBitacoraConfPaypal());
+        } catch (HibernateException e) {
+            logger.error("      Error en guardarSolicitud - " + e.getMessage());
+            if (null != tx) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            if(session!=null){
+                session.close();
+            }
+            
+            logger.info("   BitacoraDaoImpl:guardarSolicitud(S)");
+        }
+        return solicitud.getIdBitacoraConfPaypal();
+    }
+
+    @Override
+    public MpmTbitacoraConfPaypal getTransaccionConfById(long idBitacoraConfPaypal) throws Exception {
+        logger.info("   BitacoraDaoImpl:getTransaccionById(E)");
+        MpmTbitacoraConfPaypal solicitud = null;
+        Session session = null;
+        try{
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            
+            solicitud = (MpmTbitacoraConfPaypal) session.get(MpmTbitacoraConfPaypal.class, idBitacoraConfPaypal);
+            
+            session.flush();
+        }catch(Exception e){
+            logger.error("   Error en BitacoraDaoImpl:getTransaccionRecById - "+e.getMessage());
+            throw e;
+        }finally{
+            if(session!=null){
+                session.close();
+            }
+            logger.info("   BitacoraDaoImpl:getTransaccionById(E)");            
+        }
+        return solicitud;
+    }
+
+    @Override
+    public long actualizarTransaccion(MpmTbitacoraConfPaypal solicitud) throws Exception {
+        logger.info("   BitacoraDaoImpl:actualizarTransaccion(E)");
+        org.hibernate.Transaction tx = null;
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            tx = session.beginTransaction();
+            session.update(solicitud);
+            session.flush();
+            tx.commit();
+            logger.info("       Se actualiza -> " + solicitud.getIdBitacoraConfPaypal());
+        } catch (HibernateException e) {
+            logger.error("      Error en actualizarTransaccion - " + e.getMessage());
+            if (null != tx) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            if(session!=null){
+                session.close();
+            }
+            logger.info("   BitacoraDaoImpl:actualizarTransaccion(S)");
+        }
+        return solicitud.getIdBitacoraConfPaypal();
+    }
+
+    @Override
+    public MpmTbitacoraConfPaypal getTransaccionConfByIdTransaccion(String idTransaccion) throws Exception {
+        logger.info("   BitacoraDaoImpl:getTransaccionByIdTransaccion(E)");
+        MpmTbitacoraConfPaypal solicitud = null;
+        Session session = null;
+        try{
+            session = HibernateUtil.getSessionFactoryOracle().openSession();
+            
+            Criteria cr = session.createCriteria(MpmTbitacoraConfPaypal.class);
+            cr.add(Restrictions.eq("idTransaccion", idTransaccion));
+            List<MpmTbitacoraConfPaypal> list = cr.list();
+            
+            logger.info("BitacoraDaoImpl:getTransaccionRecByIdTransaccion  idTransaccion lista -> "+list.size());
+            
+            if(list.size()>0){
+                solicitud = (MpmTbitacoraConfPaypal) list.get(0);
+                return solicitud;                
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            logger.error("   Error en BitacoraDaoImpl:getTransaccionRecByIdTransaccion - "+e.getMessage());
+            throw e;
+        }finally{
+            if(session!=null){
+                session.flush();
+                session.close();
+            }
+            logger.info("   BitacoraDaoImpl:getTransaccionRecByIdTransaccion(S)");
+        }
+        //Si no existe se regresa nulo
+        return null;
     }
     
 }

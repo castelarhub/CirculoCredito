@@ -5,6 +5,7 @@ import com.maxcom.mpm.paypal.dao.BitacoraDao;
 import com.maxcom.mpm.paypal.dao.impl.BitacoraDaoImpl;
 import com.maxcom.mpm.paypal.dto.CargoTO;
 import com.maxcom.mpm.paypal.dto.DetalleErrorTO;
+import com.maxcom.mpm.paypal.dto.InformacionPagoTO;
 import com.maxcom.mpm.paypal.dto.PayerInfoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.RespuestaDetallePagoTO;
@@ -12,6 +13,8 @@ import com.maxcom.mpm.paypal.dto.RespuestaSolicitudTO;
 import com.maxcom.mpm.paypal.dto.TransaccionConfirmacionPagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionDetallePagoTO;
 import com.maxcom.mpm.paypal.dto.TransaccionSolicitudTO;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraConfPagoPaypal;
+import com.maxcom.mpm.paypal.model.MpmTbitacoraConfPaypal;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraDetaSolPaypal;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraRecPayerPaypal;
 import com.maxcom.mpm.paypal.model.MpmTbitacoraRecPaypal;
@@ -158,6 +161,7 @@ public class BitacoraServiceImpl implements BitacoraService {
             
             respuesta.setEstatus(soliExistente.getEstatus());
             respuesta.setEstatusPaypal(soliExistente.getEstatusPaypal());
+            respuesta.setEstatus(soliExistente.getEstatus());
             respuesta.setFecha(soliExistente.getFechaCreacion());
             respuesta.setFechaHoraOperacionPaypal(soliExistente.getFechaOperacionPaypal());
             respuesta.setIdTransaccion(soliExistente.getIdTransaccion());
@@ -296,7 +300,6 @@ public class BitacoraServiceImpl implements BitacoraService {
                 detalle.setMpmTbitacoraRecPayerPaypals(hsDetalle);
             }
             
-            
             //Si no existe se crea, de lo contrario se actualiza
             if(respuesta.getIdOperacionMPM()==0){
                 id = bitacora.guardarSolicitud(detalle);
@@ -353,15 +356,14 @@ public class BitacoraServiceImpl implements BitacoraService {
                         }
                         respuesta.setInfoCliente(payerInfoAux);
                     }
-                    
                     respuesta.setIdOperacionMPM(detalleExistente.getIdBitacoraRecPaypal());
                     respuesta.setIdOperacionPaypal(detalleExistente.getIdOperacionPaypal());
                     respuesta.setToken(detalleExistente.getTokenPaypal());
                     respuesta.setOrderTotal(detalleExistente.getOrderTotal().doubleValue());
                     respuesta.setTieneAcuerdoPagoReferenciado(detalleExistente.getTienePagoReferenciado());
                     respuesta.setEstatusPaypal(detalleExistente.getEstatusPaypal());
-                    respuesta.setFechaHoraOperacionPaypal(detalleExistente.getFechaOperacionPaypal());                    
-                    
+                    respuesta.setEstatus(detalleExistente.getEstatus());
+                    respuesta.setFechaHoraOperacionPaypal(detalleExistente.getFechaOperacionPaypal());
                 }
             }
                                         
@@ -373,17 +375,163 @@ public class BitacoraServiceImpl implements BitacoraService {
 
     @Override
     public void guardarSolicitud(TransaccionConfirmacionPagoTO transaccion) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("   BitacoraServiceImpl:guardarSolicitud(E)");
+        MpmTbitacoraConfPaypal confirmacion = new MpmTbitacoraConfPaypal();
+        try {
+            
+            if (!isValidString(transaccion.getIdTransaccion())) {
+                confirmacion.setIdTransaccion("-");
+            } else {
+                confirmacion.setIdTransaccion(transaccion.getIdTransaccion());
+            }
+            
+            confirmacion.setFechaCreacion(new Date());
+            confirmacion.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+            
+            confirmacion.setReferencia(transaccion.getReferencia());
+            confirmacion.setToken(transaccion.getToken());
+            confirmacion.setPayerId(transaccion.getPayerId());
+            confirmacion.setOrdenTotal(BigDecimal.valueOf(transaccion.getOrderTotal()));
+            
+            //Estatus unicial antes de ser procesado
+            confirmacion.setEstatus("NEW");
+            
+            bitacora.guardarSolicitud(confirmacion);
+            
+            transaccion.setIdOrden(confirmacion.getIdBitacoraConfPaypal());
+            
+        } catch (Exception e) {
+            logger.error("   Error en BitacoraServiceImpl:guardarSolicitud - " + e.getMessage());
+            throw e;
+        } finally {
+            logger.info("   BitacoraServiceImpl:guardarSolicitud(S)");
+        }
     }
 
     @Override
     public long guardarRespuesta(RespuestaConfirmacionPagoTO respuesta) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.info("   BitacoraServiceImpl:guardarRespuesta(E)");
+        MpmTbitacoraConfPaypal confirmacion = null;
+        
+        long id = 0;
+        
+        try {
+            confirmacion = bitacora.getTransaccionConfById(respuesta.getIdOperacionMPM());
+            
+            //si viene cero, entonces el cargo no existe.
+            if(respuesta.getIdOperacionMPM()==0){
+                confirmacion = new MpmTbitacoraConfPaypal();
+                if(respuesta.getIdTransaccion()==null){
+                    confirmacion.setIdTransaccion("SIN idTransaccion-"+new Date().getTime());
+                }else{
+                    confirmacion.setIdTransaccion(respuesta.getIdTransaccion());
+                }
+                confirmacion.setFechaCreacion(new Date());
+                confirmacion.setCreadoPor(Constantes.CREADO_POR_ORDEN);
+            }
+            
+            confirmacion.setEstatus(respuesta.getEstatus());
+            confirmacion.setEstatusPaypal(respuesta.getEstatusPaypal());
+            confirmacion.setTokenPaypal(respuesta.getToken());
+            confirmacion.setFechaModificacion(new Date());
+            confirmacion.setFechaOperacionPaypal(respuesta.getFechaHoraOperacionPaypal());
+            confirmacion.setIdOperacionPaypal(respuesta.getIdOperacionPaypal());
+            confirmacion.setModificadoPor(Constantes.MODIFICADO_POR_ORDEN);
+            confirmacion.setObservaciones(respuesta.getObservaciones());
+            confirmacion.setRespuesta(respuesta.getRespuesta());
+            confirmacion.setBillingAgreementId(respuesta.getBillingAgreementId());
+            
+            InformacionPagoTO infoPago = respuesta.getInformacionPago();
+            
+            if(infoPago!=null){
+                Set<MpmTbitacoraConfPagoPaypal> hsDetallePago = new HashSet<>();
+                MpmTbitacoraConfPagoPaypal detallePagoAux = new MpmTbitacoraConfPagoPaypal();
+                
+                detallePagoAux.setCreadoPor(Constantes.CREADO_POR_DETALLE);
+                detallePagoAux.setFechaCreacion(new Date());
+                detallePagoAux.setFeeAmount(BigDecimal.valueOf(infoPago.getFeeAmount()));
+                detallePagoAux.setGrossAmount(BigDecimal.valueOf(infoPago.getGrossAmount()));
+                detallePagoAux.setPaymentDate(infoPago.getPaymentDate());
+                detallePagoAux.setPaymentStatus(infoPago.getPaymentStatus());
+                detallePagoAux.setPaymentType(infoPago.getPaymentType());
+                detallePagoAux.setTransactionId(infoPago.getTransactionID());
+                detallePagoAux.setTransactionType(infoPago.getTransactionType());
+                
+                detallePagoAux.setMpmTbitacoraConfPaypal(confirmacion);                
+                
+                hsDetallePago.add(detallePagoAux);
+                
+                confirmacion.setMpmTbitacoraConfPagoPaypals(hsDetallePago);
+            }
+            
+            //Si no existe se crea, de lo contrario se actualiza
+            if(respuesta.getIdOperacionMPM()==0){
+                id = bitacora.guardarSolicitud(confirmacion);
+            }else{
+                id = bitacora.actualizarTransaccion(confirmacion);
+            }
+            
+        } catch (Exception e) {
+            logger.error("   Error en BitacoraServiceImpl:guardarRespuesta - " + e.toString());
+            throw e;
+        } finally {
+            logger.info("   BitacoraServiceImpl:guardarRespuesta(S)");
+        }
+
+        return id;
     }
 
     @Override
-    public long buscarTransaccion(TransaccionConfirmacionPagoTO transaccion, RespuestaConfirmacionPagoTO respueta) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public long buscarTransaccion(TransaccionConfirmacionPagoTO transaccion, RespuestaConfirmacionPagoTO respuesta) throws Exception {
+        MpmTbitacoraConfPaypal confirmacionExistente = bitacora.getTransaccionConfByIdTransaccion(transaccion.getIdTransaccion());
+        
+        if(null!=confirmacionExistente){
+            
+            respuesta.setIdOperacionMPM(confirmacionExistente.getIdBitacoraConfPaypal());
+            
+            confirmacionExistente.setEstatus(confirmacionExistente.getEstatus());            
+            respuesta.setFecha(confirmacionExistente.getFechaCreacion());
+            respuesta.setIdTransaccion(confirmacionExistente.getIdTransaccion());
+            respuesta.setObservaciones(confirmacionExistente.getObservaciones());
+            //respuesta.setRespuesta(soliExistente.getRespuesta());
+            
+            respuesta.setRespuesta("EXISTENTE-"+confirmacionExistente.getRespuesta());
+            
+            if(confirmacionExistente.getRespuesta()!=null){
+                if(confirmacionExistente.getRespuesta().equalsIgnoreCase("RTRAN")){
+                    
+                    Set<MpmTbitacoraConfPagoPaypal> hsDetallePago = confirmacionExistente.getMpmTbitacoraConfPagoPaypals();
+                    
+                    if(hsDetallePago!=null){
+                        InformacionPagoTO infoPago = new InformacionPagoTO();
+                        
+                        for(MpmTbitacoraConfPagoPaypal detalleAux: hsDetallePago){
+                            
+                            infoPago.setFeeAmount(detalleAux.getFeeAmount().doubleValue());
+                            infoPago.setGrossAmount(detalleAux.getGrossAmount().doubleValue());
+                            infoPago.setPaymentDate(detalleAux.getPaymentDate());
+                            infoPago.setPaymentStatus(detalleAux.getPaymentStatus());
+                            infoPago.setPaymentType(detalleAux.getPaymentType());
+                            infoPago.setTransactionID(detalleAux.getTransactionId());
+                            infoPago.setTransactionType(detalleAux.getTransactionType());
+                            
+                        }
+                        respuesta.setInformacionPago(infoPago);
+                    }
+                    respuesta.setIdOperacionMPM(confirmacionExistente.getIdBitacoraConfPaypal());
+                    respuesta.setIdOperacionPaypal(confirmacionExistente.getIdOperacionPaypal());
+                    respuesta.setToken(confirmacionExistente.getTokenPaypal());
+                    respuesta.setEstatusPaypal(confirmacionExistente.getEstatusPaypal());
+                    respuesta.setEstatus(confirmacionExistente.getEstatus());
+                    respuesta.setFechaHoraOperacionPaypal(confirmacionExistente.getFechaOperacionPaypal());
+                    
+                    respuesta.setBillingAgreementId(confirmacionExistente.getBillingAgreementId());
+                    
+                }
+            }
+            return confirmacionExistente.getIdBitacoraConfPaypal();
+        }
+        return 0;
     }
 
 }
