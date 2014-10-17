@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.3 (tags/2.3-7528; 2013-04-29T19:34:10+0000) JAXWS-RI/2.2.8 JAXWS/2.2 svn-revision#unknown. --><xs:schema xmlns:tns="http://ws.respuesta.mpm.maxcom.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.respuesta.mpm.maxcom.com/">
+
+<xs:element name="procesarCargos" type="tns:procesarCargos"/>
+
+<xs:element name="procesarCargosResponse" type="tns:procesarCargosResponse"/>
+
+<xs:complexType name="procesarCargos">
+<xs:sequence>
+<xs:element name="transaccion" type="tns:Transaccion"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Transaccion">
+<xs:sequence>
+<xs:element name="idCobranza" type="xs:long"/>
+<xs:element name="listaCargosAceptados" type="tns:Cargo" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="listaCargosRechazados" type="tns:Cargo" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Cargo">
+<xs:sequence>
+<xs:element name="idCobranzaDetalle" type="xs:long"/>
+<xs:element name="referencia" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreCliente" type="xs:string" minOccurs="0"/>
+<xs:element name="cuenta" type="xs:string" minOccurs="0"/>
+<xs:element name="email" type="xs:string" minOccurs="0"/>
+<xs:element name="importe" type="xs:double"/>
+<xs:element name="tipoCuenta" type="xs:int"/>
+<xs:element name="marcaTarjeta" type="xs:int"/>
+<xs:element name="entidadFinanciera" type="xs:boolean"/>
+<xs:element name="idRespuestaCargo" type="xs:string" minOccurs="0"/>
+<xs:element name="descripcionRespuesta" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="procesarCargosResponse">
+<xs:sequence>
+<xs:element name="respuesta" type="tns:Respuesta" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Respuesta">
+<xs:sequence>
+<xs:element name="idCobranza" type="xs:long"/>
+<xs:element name="acuseSap" type="xs:string" minOccurs="0"/>
+<xs:element name="idEstatus" type="xs:string" minOccurs="0"/>
+<xs:element name="observaciones" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
