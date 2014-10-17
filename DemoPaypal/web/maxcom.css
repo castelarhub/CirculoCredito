@@ -1,0 +1,12 @@
+ div
+            {
+                /*  border:1px solid;*/
+                border-radius:25px;
+                box-shadow: 10px 10px 5px #888888;
+                background-color: #ffffff;
+            }
+        a { color:#ca0040;  }
+        
+        body { font-size : 11px; font-family: Verdana; color: #666666; }
+        
+        th { font-size : 12px; font-family: Verdana; color: #ffffff;}
