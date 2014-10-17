@@ -255,6 +255,18 @@ public class CargoRecurrenteFacade implements CargoRecurrenteI {
                 sb.append("Formato de dato incorrecto para el campo nombreCliente, solo se aceptan caracteres alfanumericos y espacios. ");
             }
             
+            /*
+            List<Integer> marcaTarjetasValidas = Arrays.asList(2,3,4,5);
+            List<Integer> tipoCuentasValidas = Arrays.asList(2,3,5);
+            if(!marcaTarjetasValidas.contains(cargo.getMarcaTarjeta())){
+                sb.append("Marca de tarjeta no valido. Las marcas de tarjetas aceptadas son: 2(VISA), 3(MC), 4(AMEX) y 5(Paypal) ");
+            }            
+            
+            if(!tipoCuentasValidas.contains(cargo.getTipoCuenta())){
+                sb.append("Tipo de cuenta no valido. Los tipos de cuenta aceptados son: 2(Credito), 3(Debido) y 5(Pago electronico Paypal)");
+            }
+            */
+            
             return sb;
             
     }

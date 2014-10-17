@@ -173,7 +173,7 @@ public class BitacoraServiceImpl implements BitacoraService {
                 idCobranzaDetalle = detalle.getIdCobranzadeta();
                 
                 //Estatus de la respuesta de los cargos con error
-                if(hmDetalleErrorTO.containsKey(idCobranzaDetalle)){                    
+                if(hmDetalleErrorTO.containsKey(idCobranzaDetalle)){
                     //
                     mpmCrespuestasCargos = new MpmCrespuestasCargos();
                     mpmCrespuestasCargos.setIdRespuestaCargo(hmDetalleErrorTO.get(idCobranzaDetalle).getIdEstatus());
@@ -183,6 +183,8 @@ public class BitacoraServiceImpl implements BitacoraService {
                     mpmCestadosDetalle = new MpmCestados();
                     mpmCestadosDetalle.setIdEstado("REJ");
                     detalle.setMpmCestados(mpmCestadosDetalle);
+                    
+                    detalle.setFechaRespuesta(new Date());
                     
                 }                
             }

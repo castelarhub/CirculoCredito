@@ -65,7 +65,7 @@
         <comment>Atributo de auditoria, usuario que realizó acción de inserción del registro.</comment>
       </column>
     </property>
-    <property name="fechaCreacion" type="date">
+    <property name="fechaCreacion" type="timestamp">
       <column length="7" name="FECHA_CREACION" not-null="true">
         <comment>Atributo de auditoria, fecha, hora de creación del registro.</comment>
       </column>
@@ -80,17 +80,17 @@
         <comment>Atributo de auditoria, nombre del usuario que realizó la ultima modificación al registro.</comment>
       </column>
     </property>
-    <property name="fechaModificacion" type="date">
+    <property name="fechaModificacion" type="timestamp">
       <column length="7" name="FECHA_MODIFICACION">
         <comment>Atributo de auditoria, fecha y hora de ultima modificación realizada en el registro.</comment>
       </column>
     </property>
-    <property name="fechaRespuesta" type="date">
+    <property name="fechaRespuesta" type="timestamp">
       <column length="7" name="FECHA_RESPUESTA">
         <comment>Fecha de registro de la respuesta de la entidad financiera</comment>
       </column>
     </property>
-    <property name="fechaNotificacion" type="date">
+    <property name="fechaNotificacion" type="timestamp">
       <column length="7" name="FECHA_NOTIFICACION">
         <comment>Fecha de envío de respuesta a SAP</comment>
       </column>
