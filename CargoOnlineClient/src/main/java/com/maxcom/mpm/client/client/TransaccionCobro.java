@@ -42,14 +42,18 @@ public class TransaccionCobro {
         respuestaBancoTO.setSolicitud_xml(xmlPago);
         respuestaBancoTO.setRespuesta_xml(getLinearizationXML(respuestaMitXml));
         
-        respuestaBancoTO.setReference(repuestaMit.getReference());
+        respuestaBancoTO.setReference(repuestaMit.getReference());//Numero de referencia
         respuestaBancoTO.setResponse(repuestaMit.getResponse());
         respuestaBancoTO.setAmount(repuestaMit.getAmount());
-        respuestaBancoTO.setAuth(repuestaMit.getAuth());
+        respuestaBancoTO.setAuth(repuestaMit.getAuth());//No. de Autorizacion
         respuestaBancoTO.setCd_error(repuestaMit.getCd_error());
         respuestaBancoTO.setCd_response(repuestaMit.getCd_response());
         respuestaBancoTO.setNb_error(repuestaMit.getNb_error());
-        respuestaBancoTO.setFoliocpagos(repuestaMit.getFoliocpagos());
+        respuestaBancoTO.setFoliocpagos(repuestaMit.getFoliocpagos());//No. de Operacion
+        
+        respuestaBancoTO.setCc_name(repuestaMit.getCc_name());//Nombre del TH
+        respuestaBancoTO.setCc_number(repuestaMit.getCc_number());//Ultimos 4 digitos de la tarjetas
+        respuestaBancoTO.setFriendly_response(repuestaMit.getFriendly_response());
         
         return respuestaBancoTO;
     }
