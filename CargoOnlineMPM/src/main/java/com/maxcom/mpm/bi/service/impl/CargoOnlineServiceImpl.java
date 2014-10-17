@@ -8,6 +8,7 @@ import com.maxcom.mpm.client.dto.TransaccionBancoTO;
 import com.maxcom.mpm.dto.CargoTO;
 import com.maxcom.mpm.dto.RespuestaTO;
 import com.maxcom.mpm.dto.TransaccionTO;
+import com.maxcom.mpm.util.Utilerias;
 import java.util.Calendar;
 
 public class CargoOnlineServiceImpl implements CargoOnlineService {
@@ -51,32 +52,47 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
             case "DENIED":
                 resultadoWS = "RECHAZADA";//Transacción rechazada por el banco emisor. 
                 observaciones.append("Transaccion procesada. Cargo rechazado. ");
-                observaciones.append(" Nb_error: ");
-                observaciones.append(respuestaBanco.getNb_error());
-                observaciones.append(" - ");
+                
+                if(Utilerias.isValidString(respuestaBanco.getNb_error())){
+                    //observaciones.append(" Nb_error: ");
+                    observaciones.append(" - ");
+                    observaciones.append(respuestaBanco.getNb_error());
+                }
+                /*
                 observaciones.append(" cd_error: ");
                 observaciones.append(respuestaBanco.getCd_error());
                 observaciones.append(" - ");
                 observaciones.append(" cd_response: ");
                 observaciones.append(respuestaBanco.getCd_response());
-                observaciones.append(" - ");                
-                observaciones.append(" f_response: ");
-                observaciones.append(respuestaBanco.getFriendly_response());
+                observaciones.append(" - ");
+                */
+                
+                if(Utilerias.isValidString(respuestaBanco.getFriendly_response())){
+                // observaciones.append(" f_response: ");
+                    observaciones.append(" - ");
+                    observaciones.append(respuestaBanco.getFriendly_response());
+                }
+                
                 break;
             case "ERROR":
                 resultadoWS = "ERROR";//Error en la información proporcionada al solicitar el servicio web.
                 observaciones.append("Transaccion procesada. Cargo con Error. ");
-                observaciones.append(" Nb_error: ");
-                observaciones.append(respuestaBanco.getNb_error());                
-                observaciones.append(" - ");
-                observaciones.append(" cd_error: ");
+                if(Utilerias.isValidString(respuestaBanco.getNb_error())){
+                    //observaciones.append(" Nb_error: ");
+                    observaciones.append(" - ");
+                    observaciones.append(respuestaBanco.getNb_error());
+                }
+                /*observaciones.append(" cd_error: ");
                 observaciones.append(respuestaBanco.getCd_error());
                 observaciones.append(" - ");
                 observaciones.append(" cd_response: ");
-                observaciones.append(respuestaBanco.getCd_response());                
-                observaciones.append(" - ");                
-                observaciones.append(" f_response: ");
-                observaciones.append(respuestaBanco.getFriendly_response());                
+                observaciones.append(respuestaBanco.getCd_response());
+                */
+                if(Utilerias.isValidString(respuestaBanco.getFriendly_response())){
+                // observaciones.append(" f_response: ");
+                    observaciones.append(" - ");
+                    observaciones.append(respuestaBanco.getFriendly_response());
+                }
                 break;
             default: 
                 observaciones.append("Transaccion procesada. Error, estatus del cargo desconocido.");
