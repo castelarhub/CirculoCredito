@@ -51,46 +51,45 @@ public class CargoOnlineServiceImpl implements CargoOnlineService {
                 break;
             case "DENIED":
                 resultadoWS = "RECHAZADA";//Transacción rechazada por el banco emisor. 
-                observaciones.append("Transaccion procesada. Cargo rechazado. ");
+                //observaciones.append("Transaccion procesada. Cargo rechazado. ");
+                observaciones.append("\"No se realizo ningún Cargo a su tarjeta\"\n");
+                observaciones.append("La operación fue declinada por su banco emisor.\n");
                 
+                /*Se validara con el banco si este mensaje debe aparecer o no 
                 if(Utilerias.isValidString(respuestaBanco.getNb_error())){
-                    //observaciones.append(" Nb_error: ");
                     observaciones.append(" - ");
                     observaciones.append(respuestaBanco.getNb_error());
                 }
-                /*
-                observaciones.append(" cd_error: ");
-                observaciones.append(respuestaBanco.getCd_error());
-                observaciones.append(" - ");
-                observaciones.append(" cd_response: ");
-                observaciones.append(respuestaBanco.getCd_response());
-                observaciones.append(" - ");
-                */
                 
                 if(Utilerias.isValidString(respuestaBanco.getFriendly_response())){
-                // observaciones.append(" f_response: ");
                     observaciones.append(" - ");
                     observaciones.append(respuestaBanco.getFriendly_response());
                 }
                 
+                observaciones.append("\n");
+                */
+                
+                observaciones.append("Favor de intentar con otra tarjeta.");                
+                
                 break;
             case "ERROR":
                 resultadoWS = "ERROR";//Error en la información proporcionada al solicitar el servicio web.
-                observaciones.append("Transaccion procesada. Cargo con Error. ");
+                //observaciones.append("Transaccion procesada. Cargo con Error. ");
+                
+                observaciones.append("Ocurrió un error al realizar el pago\n");
+                observaciones.append("\"No se realizo ningún Cargo a su tarjeta\"\n");
+                observaciones.append("Favor de intentarlo más tarde.\n");
+                
                 if(Utilerias.isValidString(respuestaBanco.getNb_error())){
-                    //observaciones.append(" Nb_error: ");
+                    observaciones.append(" -> ");
+                    observaciones.append(respuestaBanco.getCd_error());
                     observaciones.append(" - ");
                     observaciones.append(respuestaBanco.getNb_error());
                 }
-                /*observaciones.append(" cd_error: ");
-                observaciones.append(respuestaBanco.getCd_error());
-                observaciones.append(" - ");
-                observaciones.append(" cd_response: ");
-                observaciones.append(respuestaBanco.getCd_response());
-                */
                 if(Utilerias.isValidString(respuestaBanco.getFriendly_response())){
-                // observaciones.append(" f_response: ");
-                    observaciones.append(" - ");
+                    observaciones.append(" -> ");
+                    observaciones.append(respuestaBanco.getCd_error());
+                    observaciones.append(" - ");                    
                     observaciones.append(respuestaBanco.getFriendly_response());
                 }
                 break;

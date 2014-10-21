@@ -3,6 +3,7 @@ package com.maxcom.mpm.dto;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
@@ -26,8 +27,10 @@ public class RespuestaTO {
     private String referencia;//Numero de referencia de la transaccion. Debe corresponder al enviado.
     private String autorizacion;//Numero de autorizacion del banco.
     private String monto;//Importe de la transaccion que cobro el banco.
-    @XmlTransient
+    
+    @XmlElement(name="numeroOperacion")
     private String folioCPagos;//Numero asignado de la operacion del banco. 
+    
     @XmlTransient
     private String solicitudXml;//Solicitud enviada al banco
     @XmlTransient
