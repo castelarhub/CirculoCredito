@@ -158,7 +158,7 @@ public class SolicitudPagoExpress {
             item.setQuantity(new BigInteger(String.valueOf(articulo.getCantidad())));
             item.setName(articulo.getDescripcion());
             
-            itemTotal += articulo.getCantidad() * Double.parseDouble(amount.getValue());
+            itemTotal += articulo.getCantidad() * buildAmount(articulo.getPrecio());
             this.paymentDetails.getPaymentDetailsItem().add(item);
             orderTotal = itemTotal;
         }

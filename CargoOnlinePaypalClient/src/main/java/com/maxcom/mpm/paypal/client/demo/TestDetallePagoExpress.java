@@ -18,7 +18,7 @@ public class TestDetallePagoExpress {
         
         try {
             trasaccion.setReferencia("XX-XXXXX");
-            trasaccion.setToken("EC-399331809R441821P");
+            trasaccion.setToken("EC-6T046143FN302694S");
             
             respuesta = cargo.recuperaDetallePagoExpress(trasaccion);
             

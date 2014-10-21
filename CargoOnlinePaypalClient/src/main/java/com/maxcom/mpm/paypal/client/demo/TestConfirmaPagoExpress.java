@@ -16,10 +16,10 @@ public class TestConfirmaPagoExpress {
         try {
             
             trasaccion.setPayerId("SMAEDNCBXGV3Q");
-            trasaccion.setToken("EC-399331809R441821P");
+            trasaccion.setToken("EC-6T046143FN302694S");
             trasaccion.setReferencia("REF-1234");
-            trasaccion.setItemTotal(5.0);
-            trasaccion.setOrderTotal(5.0);
+            trasaccion.setItemTotal(70001.45);
+            trasaccion.setOrderTotal(70001.45);
             
             respuesta = cargo.confirmarPagoExpress(trasaccion);
             

@@ -20,5 +20,18 @@ public class Utilerias {
         orderTotal.setCurrencyID(currencyCodeType);
         return orderTotal;
     }
+    
+    public static double buildAmount(Double amount) throws Exception{
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        
+        nf.setMaximumFractionDigits(2);
+        nf.setMinimumFractionDigits(2);
+        
+        String numFomato = nf.format(amount);
+        
+        Number parse = nf.parse(numFomato);
+        
+        return parse.doubleValue();
+    }
 
 }

@@ -18,9 +18,9 @@ public class TestSolicitudPagoExpress {
         try {
             
             trasaccion.setDescripcion("Descripcion orden xyz fsdsfds");
-            trasaccion.setReferencia("REF-1234356");
-            trasaccion.setUrlCancel("http://canceloBaruch.com");
-            trasaccion.setUrlReturn("http://aceptoBaruch.com");
+            trasaccion.setReferencia("REF-1234356-01");
+            trasaccion.setUrlCancel("http://canceloBaruch.com/?uno=123");
+            trasaccion.setUrlReturn("http://aceptoBaruch.com/?uno=234");
             
             List <ArticuloTO> lista = new ArrayList<ArticuloTO>();
             ArticuloTO articulo = null;
@@ -28,13 +28,13 @@ public class TestSolicitudPagoExpress {
             articulo = new ArticuloTO();
             articulo.setCantidad(2);
             articulo.setDescripcion("Patito de hule con goma");
-            articulo.setPrecio(-4.20d);
+            articulo.setPrecio(35000.20d);
             lista.add(articulo);
             
             articulo = new ArticuloTO();
             articulo.setCantidad(1);
             articulo.setDescripcion("Paquete convenga");
-            articulo.setPrecio(-1.05d);
+            articulo.setPrecio(1.05d);
             lista.add(articulo);
             
             trasaccion.setListaArticulos(lista);
