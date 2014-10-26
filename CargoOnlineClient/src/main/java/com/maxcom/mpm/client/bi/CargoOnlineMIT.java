@@ -21,7 +21,6 @@ public class CargoOnlineMIT implements CargoOnlineBanco{
             clienteCobro = null;
             
         } catch (Exception ex) {
-            ex.printStackTrace();
             throw ex;
         }        
         return respuestaBanco;

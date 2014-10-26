@@ -2,41 +2,44 @@ package com.maxcom.mpm.client.mapping;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Business {
-    private String id_company;
-    private String id_branch;
+    @XmlElement(name="id_company")
+    private String idCompany;
+    @XmlElement(name="id_branch")
+    private String idBranch;
     private String country;
     private String user;
     private String pwd;
 
     /**
-     * @return the id_company
+     * @return the idCompany
      */
-    public String getId_company() {
-        return id_company;
+    public String getIdCompany() {
+        return idCompany;
     }
 
     /**
-     * @param id_company the id_company to set
+     * @param idCompany the idCompany to set
      */
-    public void setId_company(String id_company) {
-        this.id_company = id_company;
+    public void setIdCompany(String idCompany) {
+        this.idCompany = idCompany;
     }
 
     /**
-     * @return the id_branch
+     * @return the idBranch
      */
-    public String getId_branch() {
-        return id_branch;
+    public String getIdBranch() {
+        return idBranch;
     }
 
     /**
-     * @param id_branch the id_branch to set
+     * @param idBranch the idBranch to set
      */
-    public void setId_branch(String id_branch) {
-        this.id_branch = id_branch;
+    public void setIdBranch(String idBranch) {
+        this.idBranch = idBranch;
     }
 
     /**

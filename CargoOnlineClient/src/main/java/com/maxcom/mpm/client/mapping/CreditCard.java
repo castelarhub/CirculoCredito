@@ -13,7 +13,7 @@ public class CreditCard {
     private String expmonth;
     private String expyear;
     @XmlElement(name="cvv-csc")
-    private String cvv_csc;
+    private String cvvCsc;
 
     /**
      * @return the crypto
@@ -100,17 +100,17 @@ public class CreditCard {
     }
 
     /**
-     * @return the cvv_csc
+     * @return the cvvCsc
      */
-    public String getCvv_csc() {
-        return cvv_csc;
+    public String getCvvCsc() {
+        return cvvCsc;
     }
 
     /**
-     * @param cvv_csc the cvv_csc to set
+     * @param cvvCsc the cvvCsc to set
      */
-    public void setCvv_csc(String cvv_csc) {
-        this.cvv_csc = cvv_csc;
+    public void setCvvCsc(String cvvCsc) {
+        this.cvvCsc = cvvCsc;
     }
     
 }

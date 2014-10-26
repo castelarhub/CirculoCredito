@@ -1,42 +1,40 @@
 package com.maxcom.mpm.client.dto;
 
 public class RespuestaBancoTO {
-    
-    private String reference;
-    private String response;
     private String foliocpagos;
+    private String response;    
     private String auth;
-    private String cd_response;
-    private String cd_error;
-    private String nb_error;
+    private String reference;    
+    private String cdResponse;
+    private String cdError;
+    private String nbError;
     private String time;
     private String date;
-    private String nb_company;
-    private String nb_merchant;
-    private String nb_street;
-    private String cc_type;
-    private String tp_operation;
-    private String cc_name;
-    private String cc_number;
-    private String cc_expmonth;
-    private String cc_expyear;
+    private String nbCompany;
+    private String nbMerchant;
+    private String nbStreet;
+    private String ccType;
+    private String tpOperation;
+    private String ccName;
+    private String ccNumber;
+    private String ccExpmonth;
+    private String ccExpyear;
     private String amount;
     private String voucher;
     private String tokenb5;
     private String tokenb6;
-    private String voucher_comercio;
-    private String voucher_cliente;
-    private String friendly_response;
-    private String emv_key_date;
-    private String icc_csn;
-    private String icc_atc;
-    private String icc_arpc;
-    private String icc_issuer_script;
-    private String authorized_amount;
-    private String account_balance_1;
-    //Solicitud y respuesta general
-    private String solicitud_xml;
-    private String respuesta_xml;
+    private String voucherComercio;
+    private String voucherCliente;
+    private String friendlyResponse;
+    private String emvKeyDate;
+    private String iccCsn;
+    private String iccAtc;
+    private String iccArpc;
+    private String iccIssuerScript;
+    private String authorizedAmount;
+    private String accountBalance1;
+    private String solicitudXml;
+    private String respuestaXml;
 
     /**
      * @return the reference
@@ -95,45 +93,45 @@ public class RespuestaBancoTO {
     }
 
     /**
-     * @return the cd_response
+     * @return the cdResponse
      */
-    public String getCd_response() {
-        return cd_response;
+    public String getCdResponse() {
+        return cdResponse;
     }
 
     /**
-     * @param cd_response the cd_response to set
+     * @param cdResponse the cdResponse to set
      */
-    public void setCd_response(String cd_response) {
-        this.cd_response = cd_response;
+    public void setCdResponse(String cdResponse) {
+        this.cdResponse = cdResponse;
     }
 
     /**
-     * @return the cd_error
+     * @return the cdError
      */
-    public String getCd_error() {
-        return cd_error;
+    public String getCdError() {
+        return cdError;
     }
 
     /**
-     * @param cd_error the cd_error to set
+     * @param cdError the cdError to set
      */
-    public void setCd_error(String cd_error) {
-        this.cd_error = cd_error;
+    public void setCdError(String cdError) {
+        this.cdError = cdError;
     }
 
     /**
-     * @return the nb_error
+     * @return the nbError
      */
-    public String getNb_error() {
-        return nb_error;
+    public String getNbError() {
+        return nbError;
     }
 
     /**
-     * @param nb_error the nb_error to set
+     * @param nbError the nbError to set
      */
-    public void setNb_error(String nb_error) {
-        this.nb_error = nb_error;
+    public void setNbError(String nbError) {
+        this.nbError = nbError;
     }
 
     /**
@@ -165,129 +163,129 @@ public class RespuestaBancoTO {
     }
 
     /**
-     * @return the nb_company
+     * @return the nbCompany
      */
-    public String getNb_company() {
-        return nb_company;
+    public String getNbCompany() {
+        return nbCompany;
     }
 
     /**
-     * @param nb_company the nb_company to set
+     * @param nbCompany the nbCompany to set
      */
-    public void setNb_company(String nb_company) {
-        this.nb_company = nb_company;
+    public void setNbCompany(String nbCompany) {
+        this.nbCompany = nbCompany;
     }
 
     /**
-     * @return the nb_merchant
+     * @return the nbMerchant
      */
-    public String getNb_merchant() {
-        return nb_merchant;
+    public String getNbMerchant() {
+        return nbMerchant;
     }
 
     /**
-     * @param nb_merchant the nb_merchant to set
+     * @param nbMerchant the nbMerchant to set
      */
-    public void setNb_merchant(String nb_merchant) {
-        this.nb_merchant = nb_merchant;
+    public void setNbMerchant(String nbMerchant) {
+        this.nbMerchant = nbMerchant;
     }
 
     /**
-     * @return the nb_street
+     * @return the nbStreet
      */
-    public String getNb_street() {
-        return nb_street;
+    public String getNbStreet() {
+        return nbStreet;
     }
 
     /**
-     * @param nb_street the nb_street to set
+     * @param nbStreet the nbStreet to set
      */
-    public void setNb_street(String nb_street) {
-        this.nb_street = nb_street;
+    public void setNbStreet(String nbStreet) {
+        this.nbStreet = nbStreet;
     }
 
     /**
-     * @return the cc_type
+     * @return the ccType
      */
-    public String getCc_type() {
-        return cc_type;
+    public String getCcType() {
+        return ccType;
     }
 
     /**
-     * @param cc_type the cc_type to set
+     * @param ccType the ccType to set
      */
-    public void setCc_type(String cc_type) {
-        this.cc_type = cc_type;
+    public void setCcType(String ccType) {
+        this.ccType = ccType;
     }
 
     /**
-     * @return the tp_operation
+     * @return the tpOperation
      */
-    public String getTp_operation() {
-        return tp_operation;
+    public String getTpOperation() {
+        return tpOperation;
     }
 
     /**
-     * @param tp_operation the tp_operation to set
+     * @param tpOperation the tpOperation to set
      */
-    public void setTp_operation(String tp_operation) {
-        this.tp_operation = tp_operation;
+    public void setTpOperation(String tpOperation) {
+        this.tpOperation = tpOperation;
     }
 
     /**
-     * @return the cc_name
+     * @return the ccName
      */
-    public String getCc_name() {
-        return cc_name;
+    public String getCcName() {
+        return ccName;
     }
 
     /**
-     * @param cc_name the cc_name to set
+     * @param ccName the ccName to set
      */
-    public void setCc_name(String cc_name) {
-        this.cc_name = cc_name;
+    public void setCcName(String ccName) {
+        this.ccName = ccName;
     }
 
     /**
-     * @return the cc_number
+     * @return the ccNumber
      */
-    public String getCc_number() {
-        return cc_number;
+    public String getCcNumber() {
+        return ccNumber;
     }
 
     /**
-     * @param cc_number the cc_number to set
+     * @param ccNumber the ccNumber to set
      */
-    public void setCc_number(String cc_number) {
-        this.cc_number = cc_number;
+    public void setCcNumber(String ccNumber) {
+        this.ccNumber = ccNumber;
     }
 
     /**
-     * @return the cc_expmonth
+     * @return the ccExpmonth
      */
-    public String getCc_expmonth() {
-        return cc_expmonth;
+    public String getCcExpmonth() {
+        return ccExpmonth;
     }
 
     /**
-     * @param cc_expmonth the cc_expmonth to set
+     * @param ccExpmonth the ccExpmonth to set
      */
-    public void setCc_expmonth(String cc_expmonth) {
-        this.cc_expmonth = cc_expmonth;
+    public void setCcExpmonth(String ccExpmonth) {
+        this.ccExpmonth = ccExpmonth;
     }
 
     /**
-     * @return the cc_expyear
+     * @return the ccExpyear
      */
-    public String getCc_expyear() {
-        return cc_expyear;
+    public String getCcExpyear() {
+        return ccExpyear;
     }
 
     /**
-     * @param cc_expyear the cc_expyear to set
+     * @param ccExpyear the ccExpyear to set
      */
-    public void setCc_expyear(String cc_expyear) {
-        this.cc_expyear = cc_expyear;
+    public void setCcExpyear(String ccExpyear) {
+        this.ccExpyear = ccExpyear;
     }
 
     /**
@@ -347,171 +345,171 @@ public class RespuestaBancoTO {
     }
 
     /**
-     * @return the voucher_comercio
+     * @return the voucherComercio
      */
-    public String getVoucher_comercio() {
-        return voucher_comercio;
+    public String getVoucherComercio() {
+        return voucherComercio;
     }
 
     /**
-     * @param voucher_comercio the voucher_comercio to set
+     * @param voucherComercio the voucherComercio to set
      */
-    public void setVoucher_comercio(String voucher_comercio) {
-        this.voucher_comercio = voucher_comercio;
+    public void setVoucherComercio(String voucherComercio) {
+        this.voucherComercio = voucherComercio;
     }
 
     /**
-     * @return the voucher_cliente
+     * @return the voucherCliente
      */
-    public String getVoucher_cliente() {
-        return voucher_cliente;
+    public String getVoucherCliente() {
+        return voucherCliente;
     }
 
     /**
-     * @param voucher_cliente the voucher_cliente to set
+     * @param voucherCliente the voucherCliente to set
      */
-    public void setVoucher_cliente(String voucher_cliente) {
-        this.voucher_cliente = voucher_cliente;
+    public void setVoucherCliente(String voucherCliente) {
+        this.voucherCliente = voucherCliente;
     }
 
     /**
-     * @return the friendly_response
+     * @return the friendlyResponse
      */
-    public String getFriendly_response() {
-        return friendly_response;
+    public String getFriendlyResponse() {
+        return friendlyResponse;
     }
 
     /**
-     * @param friendly_response the friendly_response to set
+     * @param friendlyResponse the friendlyResponse to set
      */
-    public void setFriendly_response(String friendly_response) {
-        this.friendly_response = friendly_response;
+    public void setFriendlyResponse(String friendlyResponse) {
+        this.friendlyResponse = friendlyResponse;
     }
 
     /**
-     * @return the emv_key_date
+     * @return the emvKeyDate
      */
-    public String getEmv_key_date() {
-        return emv_key_date;
+    public String getEmvKeyDate() {
+        return emvKeyDate;
     }
 
     /**
-     * @param emv_key_date the emv_key_date to set
+     * @param emvKeyDate the emvKeyDate to set
      */
-    public void setEmv_key_date(String emv_key_date) {
-        this.emv_key_date = emv_key_date;
+    public void setEmvKeyDate(String emvKeyDate) {
+        this.emvKeyDate = emvKeyDate;
     }
 
     /**
-     * @return the icc_csn
+     * @return the iccCsn
      */
-    public String getIcc_csn() {
-        return icc_csn;
+    public String getIccCsn() {
+        return iccCsn;
     }
 
     /**
-     * @param icc_csn the icc_csn to set
+     * @param iccCsn the iccCsn to set
      */
-    public void setIcc_csn(String icc_csn) {
-        this.icc_csn = icc_csn;
+    public void setIccCsn(String iccCsn) {
+        this.iccCsn = iccCsn;
     }
 
     /**
-     * @return the icc_atc
+     * @return the iccAtc
      */
-    public String getIcc_atc() {
-        return icc_atc;
+    public String getIccAtc() {
+        return iccAtc;
     }
 
     /**
-     * @param icc_atc the icc_atc to set
+     * @param iccAtc the iccAtc to set
      */
-    public void setIcc_atc(String icc_atc) {
-        this.icc_atc = icc_atc;
+    public void setIccAtc(String iccAtc) {
+        this.iccAtc = iccAtc;
     }
 
     /**
-     * @return the icc_arpc
+     * @return the iccArpc
      */
-    public String getIcc_arpc() {
-        return icc_arpc;
+    public String getIccArpc() {
+        return iccArpc;
     }
 
     /**
-     * @param icc_arpc the icc_arpc to set
+     * @param iccArpc the iccArpc to set
      */
-    public void setIcc_arpc(String icc_arpc) {
-        this.icc_arpc = icc_arpc;
+    public void setIccArpc(String iccArpc) {
+        this.iccArpc = iccArpc;
     }
 
     /**
-     * @return the icc_issuer_script
+     * @return the iccIssuerScript
      */
-    public String getIcc_issuer_script() {
-        return icc_issuer_script;
+    public String getIccIssuerScript() {
+        return iccIssuerScript;
     }
 
     /**
-     * @param icc_issuer_script the icc_issuer_script to set
+     * @param iccIssuerScript the iccIssuerScript to set
      */
-    public void setIcc_issuer_script(String icc_issuer_script) {
-        this.icc_issuer_script = icc_issuer_script;
+    public void setIccIssuerScript(String iccIssuerScript) {
+        this.iccIssuerScript = iccIssuerScript;
     }
 
     /**
-     * @return the authorized_amount
+     * @return the authorizedAmount
      */
-    public String getAuthorized_amount() {
-        return authorized_amount;
+    public String getAuthorizedAmount() {
+        return authorizedAmount;
     }
 
     /**
-     * @param authorized_amount the authorized_amount to set
+     * @param authorizedAmount the authorizedAmount to set
      */
-    public void setAuthorized_amount(String authorized_amount) {
-        this.authorized_amount = authorized_amount;
+    public void setAuthorizedAmount(String authorizedAmount) {
+        this.authorizedAmount = authorizedAmount;
     }
 
     /**
-     * @return the account_balance_1
+     * @return the accountBalance1
      */
-    public String getAccount_balance_1() {
-        return account_balance_1;
+    public String getAccountBalance1() {
+        return accountBalance1;
     }
 
     /**
-     * @param account_balance_1 the account_balance_1 to set
+     * @param accountBalance1 the accountBalance1 to set
      */
-    public void setAccount_balance_1(String account_balance_1) {
-        this.account_balance_1 = account_balance_1;
+    public void setAccountBalance1(String accountBalance1) {
+        this.accountBalance1 = accountBalance1;
     }
 
     /**
-     * @return the solicitud_xml
+     * @return the solicitudXml
      */
-    public String getSolicitud_xml() {
-        return solicitud_xml;
+    public String getSolicitudXml() {
+        return solicitudXml;
     }
 
     /**
-     * @param solicitud_xml the solicitud_xml to set
+     * @param solicitudXml the solicitudXml to set
      */
-    public void setSolicitud_xml(String solicitud_xml) {
-        this.solicitud_xml = solicitud_xml;
+    public void setSolicitudXml(String solicitudXml) {
+        this.solicitudXml = solicitudXml;
     }
 
     /**
-     * @return the respuesta_xml
+     * @return the respuestaXml
      */
-    public String getRespuesta_xml() {
-        return respuesta_xml;
+    public String getRespuestaXml() {
+        return respuestaXml;
     }
 
     /**
-     * @param respuesta_xml the respuesta_xml to set
+     * @param respuestaXml the respuestaXml to set
      */
-    public void setRespuesta_xml(String respuesta_xml) {
-        this.respuesta_xml = respuesta_xml;
+    public void setRespuestaXml(String respuestaXml) {
+        this.respuestaXml = respuestaXml;
     }
     
 }

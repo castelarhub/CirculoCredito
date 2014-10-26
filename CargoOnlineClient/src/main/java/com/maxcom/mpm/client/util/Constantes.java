@@ -3,25 +3,30 @@ package com.maxcom.mpm.client.util;
 public final class Constantes {
     
     //Urls de los servicios
-    public final static String URL_COBRO = "https://dev3.mitec.com.mx/pgs/cobroXml";
-    //public final static String URL_COBRO = "http://localhost:8070/pgs/cobroXml";
+    public static final String URL_COBRO = "https://dev3.mitec.com.mx/pgs/cobroXml";
     
     //Constantes del negocio
-    public final static String ID_COMPANY="D234";
-    public final static String ID_BRANCH="002";
-    public final static String COUNTRY="MEX";
-    public final static String USER="D234CWUS1";
-    public final static String PWD="D234CWUS1";
+    public static final String ID_COMPANY="D234";
+    public static final String ID_BRANCH="002";
+    public static final String COUNTRY="MEX";
+    public static final String USER="D234CWUS1";
+    public static final String PWD="D234CWUS1";
     
     //Constantes de la tarjeta
-    public final static String CRYPTO="3";
-    public final static String TYPE_V_MC="V/MC";//Visa y Mastercard
-    public final static String TYPE_AMEX="AMEX";//American Express
+    public static final String CRYPTO="3";
+    //Visa y Mastercard
+    public static final String TYPE_V_MC="V/MC";
+    //American Express
+    public static final String TYPE_AMEX="AMEX";
     
-    //Constantes de la transaccion
-    public final static String MERCHANT_V_MC="10023221";//Visa y Mastercard
-    public final static String MERCHANT_AMEX="10023329";//American Express
-    public final static String TP_OPERACION="2";
-    public final static String CURRENCY="MXN";
+    //Visa y Mastercard
+    public static final String MERCHANT_V_MC="10023221";
+    //American Express
+    public static final String MERCHANT_AMEX="10023329";
+    public static final String TP_OPERACION="2";
+    public static final String CURRENCY="MXN";
+    
+    private Constantes(){
+    }    
     
 }

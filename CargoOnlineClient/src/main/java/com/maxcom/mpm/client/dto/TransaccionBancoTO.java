@@ -10,10 +10,24 @@ public class TransaccionBancoTO {
     private String anioExpiracionTarjeta;
     private String codigoSeguridadTarjeta;
     private double monto;
-
+    
+    /**
+     * Constructor
+     */
     public TransaccionBancoTO(){
     }
     
+    /**
+     * Constructor
+     * @param referencia
+     * @param nombreCliente
+     * @param numeroTarjeta
+     * @param tipoTarjeta
+     * @param mesExpiracionTarjeta
+     * @param anioExpiracionTarjeta
+     * @param codigoSeguridadTarjeta
+     * @param monto 
+     */
     public TransaccionBancoTO(String referencia, String nombreCliente, 
                               String numeroTarjeta,String tipoTarjeta, String mesExpiracionTarjeta, 
                               String anioExpiracionTarjeta, String codigoSeguridadTarjeta, 

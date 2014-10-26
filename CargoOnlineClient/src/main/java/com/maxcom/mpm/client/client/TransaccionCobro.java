@@ -39,21 +39,25 @@ public class TransaccionCobro {
         //Mapeando respuesta
         respuestaBancoTO = new RespuestaBancoTO();
         
-        respuestaBancoTO.setSolicitud_xml(xmlPago);
-        respuestaBancoTO.setRespuesta_xml(getLinearizationXML(respuestaMitXml));
+        respuestaBancoTO.setSolicitudXml(xmlPago);
+        respuestaBancoTO.setRespuestaXml(getLinearizationXML(respuestaMitXml));
         
-        respuestaBancoTO.setReference(repuestaMit.getReference());//Numero de referencia
+        //Numero de referencia
+        respuestaBancoTO.setReference(repuestaMit.getReference());
         respuestaBancoTO.setResponse(repuestaMit.getResponse());
         respuestaBancoTO.setAmount(repuestaMit.getAmount());
-        respuestaBancoTO.setAuth(repuestaMit.getAuth());//No. de Autorizacion
-        respuestaBancoTO.setCd_error(repuestaMit.getCd_error());
-        respuestaBancoTO.setCd_response(repuestaMit.getCd_response());
-        respuestaBancoTO.setNb_error(repuestaMit.getNb_error());
-        respuestaBancoTO.setFoliocpagos(repuestaMit.getFoliocpagos());//No. de Operacion
-        
-        respuestaBancoTO.setCc_name(repuestaMit.getCc_name());//Nombre del TH
-        respuestaBancoTO.setCc_number(repuestaMit.getCc_number());//Ultimos 4 digitos de la tarjetas
-        respuestaBancoTO.setFriendly_response(repuestaMit.getFriendly_response());
+        //No. de Autorizacion
+        respuestaBancoTO.setAuth(repuestaMit.getAuth());
+        respuestaBancoTO.setCdError(repuestaMit.getCdError());
+        respuestaBancoTO.setCdResponse(repuestaMit.getCdResponse());
+        respuestaBancoTO.setNbError(repuestaMit.getNbError());
+        //No. de Operacion
+        respuestaBancoTO.setFoliocpagos(repuestaMit.getFoliocpagos());
+        //Nombre del TH
+        respuestaBancoTO.setCcName(repuestaMit.getCcName());
+        //Ultimos 4 digitos de la tarjetas
+        respuestaBancoTO.setCcNumber(repuestaMit.getCcNumber());
+        respuestaBancoTO.setFriendlyResponse(repuestaMit.getFriendlyResponse());
         
         return respuestaBancoTO;
     }
@@ -62,8 +66,8 @@ public class TransaccionCobro {
         Payment pago = new Payment();
         
         Business negocio = new Business();
-        negocio.setId_company(Constantes.ID_COMPANY);
-        negocio.setId_branch(Constantes.ID_BRANCH);
+        negocio.setIdCompany(Constantes.ID_COMPANY);
+        negocio.setIdBranch(Constantes.ID_BRANCH);
         negocio.setCountry(Constantes.COUNTRY);        
         negocio.setUser(Constantes.USER);
         //Datos encriptados
@@ -85,7 +89,7 @@ public class TransaccionCobro {
         tarjeta.setNumber(getEncryptedString(entrada.getNumeroTarjeta()));
         tarjeta.setExpmonth(getEncryptedString(entrada.getMesExpiracionTarjeta()));
         tarjeta.setExpyear(getEncryptedString(entrada.getAnioExpiracionTarjeta()));
-        tarjeta.setCvv_csc(getEncryptedString(entrada.getCodigoSeguridadTarjeta()));
+        tarjeta.setCvvCsc(getEncryptedString(entrada.getCodigoSeguridadTarjeta()));
                 
         Transacction transaccion = new Transacction();
         
@@ -97,9 +101,9 @@ public class TransaccionCobro {
         }
         
         transaccion.setReference(entrada.getReferencia());
-        transaccion.setTp_operation(Constantes.TP_OPERACION);
+        transaccion.setTpOperation(Constantes.TP_OPERACION);
         transaccion.setTarjeta(tarjeta);
-        transaccion.setAmount(String.valueOf(entrada.getMonto()));//
+        transaccion.setAmount(String.valueOf(entrada.getMonto()));
         transaccion.setCurrency(Constantes.CURRENCY);
         
         pago.setNegocio(negocio);
@@ -123,15 +127,17 @@ public class TransaccionCobro {
     
     private ResponseCenterOfPayment formarRespuestaPago(String respuestaXML) throws JAXBException{
         StringReader sr = new StringReader(respuestaXML);
+        ResponseCenterOfPayment reponse = null;
         
         JAXBContext context2 = JAXBContext.newInstance(ResponseCenterOfPayment.class);
         Unmarshaller u = context2.createUnmarshaller ();
-        ResponseCenterOfPayment reponse =(ResponseCenterOfPayment) u.unmarshal(sr);
+        reponse =(ResponseCenterOfPayment) u.unmarshal(sr);
         
         return reponse;
     }
     
     private String enviarPago(String xmlPago) throws JAXBException{
+        String textEntity =  null;
         Client client = Client.create();
         WebResource webResource = client.resource(Constantes.URL_COBRO);
         
@@ -140,7 +146,7 @@ public class TransaccionCobro {
         ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).
                                   type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).
                                   post(ClientResponse.class, formData);
-        String textEntity = response.getEntity(String.class);
+        textEntity = response.getEntity(String.class);
         
         return textEntity;
         

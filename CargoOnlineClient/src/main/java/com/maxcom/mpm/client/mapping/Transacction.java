@@ -8,13 +8,12 @@ import javax.xml.bind.annotation.XmlElement;
 public class Transacction {
     private String merchant;
     private String reference;
-    private String tp_operation;
+    @XmlElement(name="tp_operation")
+    private String tpOperation;
     @XmlElement(name="creditcard")
     private CreditCard tarjeta;
     private String amount;
     private String currency;
-    //private String usrtransacction;
-    //private String version;
 
     /**
      * @return the merchant
@@ -45,17 +44,17 @@ public class Transacction {
     }
 
     /**
-     * @return the tp_operation
+     * @return the tpOperation
      */
-    public String getTp_operation() {
-        return tp_operation;
+    public String getTpOperation() {
+        return tpOperation;
     }
 
     /**
-     * @param tp_operation the tp_operation to set
+     * @param tpOperation the tpOperation to set
      */
-    public void setTp_operation(String tp_operation) {
-        this.tp_operation = tp_operation;
+    public void setTpOperation(String tpOperation) {
+        this.tpOperation = tpOperation;
     }
 
     /**
